@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HomeStart Cooking Onboarding</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <button class="menu-button" id="menuButton" type="button" aria-label="Open menu" aria-controls="drawer" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <button class="brand" type="button" data-view="onboarding" aria-label="HomeStart onboarding">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>HomeStart</span>
+        </button>
+        <div class="topbar-status">
+          <span id="savedCount">0 saved</span>
+        </div>
+      </header>
+
+      <div class="drawer-scrim" id="drawerScrim" hidden></div>
+      <aside class="drawer" id="drawer" aria-label="App menu" aria-hidden="true">
+        <div class="drawer-header">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <strong>HomeStart</strong>
+        </div>
+        <nav class="drawer-nav">
+          <button class="nav-link active" type="button" data-view="onboarding">Onboarding flow</button>
+          <button class="nav-link" type="button" data-view="rationale">UX rationale</button>
+        </nav>
+        <div class="drawer-note">
+          <span>Beta focus</span>
+          <strong>Beginner-friendly weeknight cooking</strong>
+          <p>Designed around time pressure, low confidence, and recipe abandonment.</p>
+        </div>
+      </aside>
+
+      <main>
+        <section class="page active" id="onboardingPage" aria-labelledby="onboardingTitle">
+          <div class="onboarding-layout">
+            <section class="intro-panel" aria-label="HomeStart overview">
+              <div>
+                <p class="eyebrow">Personalized cooking start</p>
+                <h1 id="onboardingTitle">Build a home-cooking habit that fits real weekdays.</h1>
+                <p class="lede">A short setup helps HomeStart recommend recipes, grocery lists, and step-by-step guidance that match your current routine.</p>
+              </div>
+              <img class="hero-image" src="assets/food-prep.png" width="520" height="360" alt="Illustration of simple vegetables and prep tools on a plate">
+              <div class="promise-strip" aria-label="First week target">
+                <span>First week target</span>
+                <strong>Save one recipe. Cook once. Adjust from there.</strong>
+              </div>
+              <dl class="signal-list">
+                <div>
+                  <dt>72%</dt>
+                  <dd>name time as the biggest blocker</dd>
+                </div>
+                <div>
+                  <dt>54%</dt>
+                  <dd>abandon recipes halfway through</dd>
+                </div>
+                <div>
+                  <dt>65%</dt>
+                  <dd>identify as beginner cooks</dd>
+                </div>
+              </dl>
+            </section>
+
+            <section class="flow-panel" aria-live="polite">
+              <div class="progress-header">
+                <div>
+                  <p class="eyebrow" id="stepEyebrow">Step 1 of 5</p>
+                  <h2 id="stepTitle"></h2>
+                </div>
+                <span class="step-count" id="stepCount"></span>
+              </div>
+              <div class="progress-track" aria-hidden="true">
+                <span id="progressBar"></span>
+              </div>
+              <div class="screen-body" id="screenBody"></div>
+              <div class="flow-actions">
+                <button class="secondary-button" id="backButton" type="button">Back</button>
+                <button class="primary-button" id="nextButton" type="button">Next</button>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="page rationale-page" id="rationalePage" aria-labelledby="rationaleTitle">
+          <div class="rationale-hero">
+            <p class="eyebrow">Design rationale</p>
+            <h1 id="rationaleTitle">Onboarding that lowers intimidation and gets to a first saved recipe.</h1>
+            <p class="lede">This view mirrors the presentation notes in <code>docs/onboarding-rationale.md</code> and explains the assumptions, journey, research translation, and product decisions behind the prototype.</p>
+          </div>
+
+          <section class="rationale-section">
+            <h2>Problem Framing</h2>
+            <div class="rationale-grid">
+              <article>
+                <h3>Recipes are not the core shortage.</h3>
+                <p>The bigger barrier is uncertainty about whether a recipe will fit the user's time, confidence, and real weekday energy.</p>
+              </article>
+              <article>
+                <h3>The first win should be small.</h3>
+                <p>The flow aims for one saved recipe and one cook attempt in the first week, not a complete lifestyle change.</p>
+              </article>
+              <article>
+                <h3>The app should only ask what it can use.</h3>
+                <p>Questions map directly to supported features: step-by-step recipes, skill-based recommendations, and grocery list generation.</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="rationale-section">
+            <h2>Core Assumptions</h2>
+            <div class="rationale-grid">
+              <article>
+                <h3>The user is motivated, not confident.</h3>
+                <p>Christina wants healthier, lower-cost meals, but recipe complexity and past false starts make her cautious.</p>
+              </article>
+              <article>
+                <h3>Weekday time is the primary design constraint.</h3>
+                <p>The app should plan around 30-45 minutes total, including cleanup, because that is the practical ceiling for early habit formation.</p>
+              </article>
+              <article>
+                <h3>Personalization must feel lightweight.</h3>
+                <p>Early users should answer a few concrete questions and immediately see the payoff in a short recipe set.</p>
+              </article>
+              <article>
+                <h3>Frequency is not intent.</h3>
+                <p>A user who cooks 1-2 nights may want quick dinners, meal prep, prep shortcuts, or flexible fallbacks. The app should ask.</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="rationale-section">
+            <h2>Design Principles</h2>
+            <div class="decision-list">
+              <article>
+                <span>Start current</span>
+                <p>Ask about today's routine without assuming what habit the user wants next.</p>
+              </article>
+              <article>
+                <span>Make time real</span>
+                <p>Use a usual range in onboarding, then re-rank by the time available right now.</p>
+              </article>
+              <article>
+                <span>Permit uncertainty</span>
+                <p>Use "not sure" choices where the user may not have a confident answer.</p>
+              </article>
+              <article>
+                <span>Respect constraints</span>
+                <p>Separate restrictions from preferences so the first recommendations are trustworthy.</p>
+              </article>
+              <article>
+                <span>Show payoff</span>
+                <p>End with a small set of recipes and a direct save action.</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="rationale-section">
+            <h2>Behavioral Signals</h2>
+            <div class="decision-list">
+              <article>
+                <span>Baseline</span>
+                <p>How often the user currently cooks. This should not imply a desired rhythm.</p>
+              </article>
+              <article>
+                <span>Effort pattern</span>
+                <p>Whether the user wants quick dinners, meal prep once, prep shortcuts, or flexible fallbacks.</p>
+              </article>
+              <article>
+                <span>Time context</span>
+                <p>The user's usual range is a default; today's available time re-ranks the recipe set.</p>
+              </article>
+              <article>
+                <span>Breakdown point</span>
+                <p>After time and energy, where dinner fails: deciding, ingredients, prep, cooking flow, or cleanup.</p>
+              </article>
+              <article>
+                <span>Hard-night fallback</span>
+                <p>What cooking needs to beat: takeout, eating out, snack dinner, or pantry odds and ends.</p>
+              </article>
+              <article>
+                <span>Restart friction</span>
+                <p>Why cooking is hard to repeat after a high-effort meal or batch prep session.</p>
+              </article>
+              <article>
+                <span>Failure point</span>
+                <p>Whether recipes break down through timing, vague instructions, prep load, or surprise ingredients.</p>
+              </article>
+              <article>
+                <span>Guardrails</span>
+                <p>Dietary restrictions, health intent, servings, and ingredient tolerance.</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="rationale-section">
+            <h2>Journey Map</h2>
+            <div class="journey-table" role="table" aria-label="User journey">
+              <div role="row">
+                <strong role="columnheader">Bucket</strong>
+                <strong role="columnheader">User question</strong>
+                <strong role="columnheader">Product job</strong>
+                <strong role="columnheader">Success signal</strong>
+              </div>
+              <div role="row">
+                <span>Start</span>
+                <span>"Is this actually for someone like me?"</span>
+                <span>Make the web app feel practical, not chef-like.</span>
+                <span>User starts onboarding.</span>
+              </div>
+              <div role="row">
+                <span>Calibrate</span>
+                <span>"What can I realistically handle?"</span>
+                <span>Learn habit baseline, effort pattern, constraints, skill, and food guardrails.</span>
+                <span>User completes setup questions.</span>
+              </div>
+              <div role="row">
+                <span>Recommend</span>
+                <span>"Which one feels easiest to start with?"</span>
+                <span>Show three explainable starter meals, not a broad feed.</span>
+                <span>User reviews recommendations.</span>
+              </div>
+              <div role="row">
+                <span>Commit</span>
+                <span>"Am I actually going to do this?"</span>
+                <span>Turn browsing into a low-pressure saved recipe.</span>
+                <span>User saves a recipe.</span>
+              </div>
+              <div role="row">
+                <span>Prepare</span>
+                <span>"What do I need before I can cook?"</span>
+                <span>Generate grocery list and reduce logistical friction.</span>
+                <span>User uses grocery list.</span>
+              </div>
+              <div role="row">
+                <span>Cook</span>
+                <span>"Can I finish without getting lost halfway?"</span>
+                <span>Use step-by-step guidance to get through prep, cooking, and cleanup.</span>
+                <span>User cooks once within 7 days.</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="rationale-section">
+            <h2>How The Idea Evolved</h2>
+            <div class="decision-list">
+              <article>
+                <span>Frequency vs intent</span>
+                <p>Critique: 1-2 nights does not mean the user wants a steadier rhythm. Change: frequency now captures the current baseline, while a separate preferred-pattern question captures quick dinners, meal prep once, prep shortcuts, or flexible fallbacks.</p>
+              </article>
+              <article>
+                <span>Meal prep dread</span>
+                <p>Critique: meal prep creates relief between sessions, then dread before the next large effort. Change: restart friction is captured so batch cooking is treated as a cycle with a reset cost, not only as a benefit.</p>
+              </article>
+              <article>
+                <span>Fallback meaning</span>
+                <p>Critique: the hard-night question needed a clearer purpose. Change: it now asks what cooking needs to replace and affects recipe ranking, plan summary chips, and match reasons.</p>
+              </article>
+              <article>
+                <span>Specific breakdowns</span>
+                <p>Critique: time and low energy are broad constraints that can explain everything. Change: the flow asks where dinner actually breaks down: choosing what to cook, getting ingredients, starting prep, keeping track while cooking, or facing cleanup.</p>
+              </article>
+              <article>
+                <span>Contextual time</span>
+                <p>Critique: fixed 30 or 45 minute recipes overfit one day and can fail when the user only has 10 minutes. Change: onboarding captures a usual range, then recommendations ask how much time the user has right now and re-rank without hiding longer usual-range recipes.</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="rationale-section">
+            <h2>Research Insights To Product Decisions</h2>
+            <div class="decision-list">
+              <article>
+                <span>65% beginners</span>
+                <p>Use plain-language skill choices and default recommendations to beginner-safe recipes.</p>
+              </article>
+              <article>
+                <span>72% time blocker</span>
+                <p>Ask for a usual weekday time range before asking about cuisine, tools, or broader tastes.</p>
+              </article>
+              <article>
+                <span>54% abandon recipes</span>
+                <p>Capture the failure mode and personalize step-by-step guidance instead of just recipe content.</p>
+              </article>
+              <article>
+                <span>41% want "healthier"</span>
+                <p>Translate a vague aspiration into concrete food directions like more vegetables or lighter takeout swaps.</p>
+              </article>
+              <article>
+                <span>22% hard restrictions</span>
+                <p>Separate restrictions from preferences so early recommendations avoid trust-breaking misses.</p>
+              </article>
+              <article>
+                <span>Meal prep dread</span>
+                <p>Ask about effort pattern and restart friction so batch cooking does not become a second-cycle failure.</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="rationale-section two-column">
+            <div>
+              <h2>User Stories</h2>
+              <ul>
+                <li>As a beginner cook, I want recipes matched to my skill so I do not feel set up to fail.</li>
+                <li>As a busy professional, I want meals that fit my usual time range and today's available time.</li>
+                <li>As someone trying to eat healthier, I want the app to turn my vague goal into practical suggestions.</li>
+                <li>As a household cook, I want serving size and restrictions reflected immediately.</li>
+              </ul>
+            </div>
+            <div>
+              <h2>Success Strategy</h2>
+              <ul>
+                <li>Completion: five short screens, familiar controls, no account wall.</li>
+                <li>Save: final screen is a personalized recipe shortlist with direct save buttons.</li>
+                <li>First cook: the first-week target is intentionally small and visible from the start.</li>
+              </ul>
+            </div>
+          </section>
+        </section>
+      </main>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,4 @@
+output/
+.vercel/
+node_modules/
+.DS_Store

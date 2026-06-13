@@ -1,0 +1,390 @@
+Small correction: the prompt says **web app**, not downloaded native app. So for the assignment, frame the first action as **“user opens the web app / starts account creation.”** For journey thinking, I’ll keep your wording as “downloads/opens the app,” but in the final case study, use **web app** to stay aligned with the brief. The brief also says the app supports step-by-step recipes, skill-based recommendations, and grocery list generation, and success is onboarding completion, saving one recipe, and cooking once within 7 days. 
+
+# 1. Raw user actions — unbucketed
+
+Starting point: Christina decides she wants to cook at home instead of ordering takeout.
+
+1. User downloads the app / opens the web app.
+2. User launches the app for the first time.
+3. User sees the welcome screen.
+4. User skims the value proposition.
+5. User decides whether this app feels relevant to her.
+6. User taps **Get started**.
+7. User creates an account or continues with Google/Apple/email.
+8. User lands in onboarding.
+9. User reads why the app is asking setup questions.
+10. User answers how often she currently cooks.
+11. User answers what she wants to accomplish.
+12. User selects a goal, such as saving money, eating healthier, or cooking once this week.
+13. User answers how much time she usually has on a weeknight.
+14. User considers whether prep and cleanup count in that time.
+15. User selects available time: 15, 30, 45 minutes, or flexible.
+16. User answers how much cleanup she is willing to tolerate.
+17. User selects cleanup preference: minimal, one-pan, or flexible.
+18. User answers her cooking skill level.
+19. User decides whether she identifies as a beginner.
+20. User selects the statement that best matches her ability.
+21. User answers what usually causes recipes to fail.
+22. User selects blockers: too many steps, too many ingredients, losing track, uncertainty, cleanup, etc.
+23. User enters dietary restrictions.
+24. User chooses whether she has no restrictions, vegetarian, dairy-free, gluten-free, nut-free, or other.
+25. User answers what “healthier” means to her.
+26. User chooses concrete health signals: more protein, more vegetables, lighter meals, less processed, lower sugar, or balanced.
+27. User answers how many people she is usually cooking for.
+28. User reviews onboarding answers implicitly through the app’s generated recommendations.
+29. User sees a small set of recommended starter meals.
+30. User scans recipe cards.
+31. User compares recipes by time, difficulty, ingredients, cleanup, and match reason.
+32. User looks for a recipe that feels realistic.
+33. User opens a recipe card.
+34. User scans the recipe overview.
+35. User checks total time.
+36. User checks ingredient count.
+37. User checks whether she owns the basic tools needed.
+38. User checks dietary fit.
+39. User checks number of steps.
+40. User checks whether the instructions look understandable.
+41. User decides whether the recipe feels doable.
+42. User goes back if the recipe feels too hard.
+43. User opens another recommendation.
+44. User selects one recipe.
+45. User saves the recipe.
+46. User sees confirmation that the recipe was saved.
+47. User is prompted to cook it within the week.
+48. User chooses a possible cooking day.
+49. User generates a grocery list.
+50. User reviews the grocery list.
+51. User removes ingredients she already has.
+52. User adds missing ingredients to shopping list.
+53. User checks pantry/fridge at home.
+54. User shops for missing groceries or adds them to a grocery order.
+55. User returns to the app before cooking.
+56. User opens the saved recipe.
+57. User gathers ingredients.
+58. User gathers tools.
+59. User starts the recipe.
+60. User follows step 1.
+61. User completes prep steps.
+62. User follows cooking steps.
+63. User checks timing.
+64. User checks doneness cues.
+65. User continues to the next step.
+66. User recovers if she gets confused.
+67. User finishes cooking.
+68. User plates the meal.
+69. User eats the meal.
+70. User cleans up.
+71. User marks the recipe as cooked or responds to a prompt confirming she cooked it.
+72. User feels either successful, neutral, or frustrated.
+73. User decides whether she would cook again.
+
+That is the real journey. The onboarding screens only cover part of it.
+
+The mistake would be designing only actions 8–29 and pretending the job is done. The business success metric includes **saving a recipe** and **cooking once within 7 days**, so the journey has to continue through planning, groceries, and execution. 
+
+---
+
+# 2. Bucket the actions
+
+Now we group the raw actions into meaningful journey buckets.
+
+## Bucket 1 — Entry and trust check
+
+Includes actions:
+
+1. Opens app
+2. Sees welcome screen
+3. Skims value proposition
+4. Decides whether the app feels relevant
+5. Taps get started
+6. Creates account
+
+**User question:**
+“Is this actually for someone like me?”
+
+**Product job:**
+Make the app feel practical, not aspirational or chef-like.
+
+---
+
+## Bucket 2 — Expectation setting
+
+Includes actions:
+
+7. Lands in onboarding
+8. Reads why setup questions matter
+9. Understands that the app will recommend realistic meals
+
+**User question:**
+“How much effort is this going to take?”
+
+**Product job:**
+Make onboarding feel short, useful, and low-risk.
+
+---
+
+## Bucket 3 — Habit and motivation capture
+
+Includes actions:
+
+10. Answers how often she cooks
+11. Selects what she wants to accomplish
+12. Chooses a goal
+
+**User question:**
+“What am I trying to change?”
+
+**Product job:**
+Understand current behavior and define a first realistic win.
+
+---
+
+## Bucket 4 — Constraint capture
+
+Includes actions:
+
+13. Answers available time
+14. Considers prep and cleanup
+15. Selects time window
+16. Answers cleanup tolerance
+17. Selects cleanup preference
+
+**User question:**
+“What can I actually handle on a normal weeknight?”
+
+**Product job:**
+Match recommendations to real constraints, especially time and cleanup.
+
+This is critical because the brief says **72% say time is their biggest blocker** and average weekday constraints are **30–45 minutes total, including cleanup**. 
+
+---
+
+## Bucket 5 — Skill and failure-point capture
+
+Includes actions:
+
+18. Answers skill level
+19. Decides whether she identifies as beginner
+20. Selects ability level
+21. Answers what causes recipes to fail
+22. Selects blockers
+
+**User question:**
+“Can I actually do this without messing it up?”
+
+**Product job:**
+Reduce intimidation and prevent halfway abandonment.
+
+This matters because **65% identify as beginner cooks** and **54% abandon recipes halfway through**. 
+
+---
+
+## Bucket 6 — Food guardrails
+
+Includes actions:
+
+23. Enters dietary restrictions
+24. Selects restriction type
+25. Defines what healthier means
+26. Selects health signals
+27. Selects number of servings
+
+**User question:**
+“Will this food fit my body, goals, and household?”
+
+**Product job:**
+Filter unsafe or irrelevant recipes and rank better-fit meals.
+
+---
+
+## Bucket 7 — Recommendation review
+
+Includes actions:
+
+28. Sees generated recommendations
+29. Scans recipe cards
+30. Compares by time, difficulty, ingredients, cleanup, and match reason
+31. Looks for something realistic
+
+**User question:**
+“Which of these feels easiest to start with?”
+
+**Product job:**
+Avoid overwhelming the user. Show a small number of explainable options.
+
+---
+
+## Bucket 8 — Recipe evaluation
+
+Includes actions:
+
+32. Opens recipe
+33. Scans overview
+34. Checks total time
+35. Checks ingredients
+36. Checks tools
+37. Checks dietary fit
+38. Checks number of steps
+39. Checks instruction clarity
+40. Decides whether recipe feels doable
+41. Goes back if it feels too hard
+42. Opens another recommendation
+
+**User question:**
+“Do I trust myself to finish this recipe?”
+
+**Product job:**
+Make effort, difficulty, and fit transparent before commitment.
+
+---
+
+## Bucket 9 — Commitment
+
+Includes actions:
+
+43. Selects one recipe
+44. Saves recipe
+45. Sees saved confirmation
+46. Chooses a possible cooking day
+
+**User question:**
+“Am I actually going to do this?”
+
+**Product job:**
+Move the user from browsing to commitment.
+
+This directly maps to the success metric: user saves at least one recipe. 
+
+---
+
+## Bucket 10 — Grocery readiness
+
+Includes actions:
+
+47. Generates grocery list
+48. Reviews list
+49. Removes ingredients already owned
+50. Adds missing ingredients
+51. Checks pantry/fridge
+52. Shops or orders groceries
+
+**User question:**
+“What do I need before I can cook?”
+
+**Product job:**
+Remove the logistical barrier between intention and action.
+
+The app supports grocery list generation, so this should be part of the first-meal journey. 
+
+---
+
+## Bucket 11 — Cooking execution
+
+Includes actions:
+
+53. Returns to app before cooking
+54. Opens saved recipe
+55. Gathers ingredients
+56. Gathers tools
+57. Starts recipe
+58. Follows step-by-step instructions
+59. Completes prep
+60. Completes cooking steps
+61. Checks timing
+62. Checks doneness
+63. Recovers if confused
+64. Finishes cooking
+
+**User question:**
+“Can I get through this without abandoning it halfway?”
+
+**Product job:**
+Guide the user through the recipe clearly enough that she finishes.
+
+The app supports step-by-step recipes, and recipe abandonment is one of the known problems. 
+
+---
+
+## Bucket 12 — First-meal completion
+
+Includes actions:
+
+65. Plates meal
+66. Eats meal
+67. Cleans up
+68. Marks recipe as cooked or confirms completion
+69. Feels successful, neutral, or frustrated
+70. Decides whether she would cook again
+
+**User question:**
+“Was this worth doing again?”
+
+**Product job:**
+Capture success and reinforce the habit.
+
+This maps to the final onboarding success metric: user cooks at least once in the first 7 days. 
+
+---
+
+# 3. Customer journey map
+
+## Journey map: first app open to first cooked meal
+
+| Journey stage                      | User actions                                                        | User mindset                       | Pain points / risks                                              | Product opportunity                                                                       | Success signal                             |
+| ---------------------------------- | ------------------------------------------------------------------- | ---------------------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------ |
+| 1. Entry and trust check           | Opens app, reads welcome, decides whether to start, creates account | “Is this app actually for me?”     | App feels too advanced, too lifestyle-oriented, or too much work | Use practical promise: “Start with one doable dinner.” Avoid chef language.               | User starts onboarding                     |
+| 2. Expectation setting             | Lands in onboarding, reads why questions are being asked            | “How long is this going to take?”  | User may drop if setup feels like a long quiz                    | Show short progress, explain value, use low-friction choices                              | User completes first onboarding step       |
+| 3. Habit and motivation capture    | Answers current cooking frequency and weekly goal                   | “What am I trying to improve?”     | User may feel judged for relying on takeout                      | Normalize current behavior; frame around one small win                                    | User selects goal                          |
+| 4. Constraint capture              | Selects time available and cleanup tolerance                        | “What can I realistically handle?” | Recipes may ignore real weeknight limits                         | Ask about total time including cleanup; recommend recipes within realistic constraints    | User provides time and cleanup preferences |
+| 5. Skill and failure-point capture | Selects skill level and what usually derails recipes                | “Can I actually finish this?”      | User may feel embarrassed by low skill                           | Use nonjudgmental ability statements; ask about failure points instead of labeling user   | User provides skill and blocker signals    |
+| 6. Food guardrails                 | Adds restrictions, health interpretation, servings                  | “Will these meals fit my needs?”   | “Healthy” is vague; restrictions may make results feel limited   | Turn vague health goals into concrete tags; hard-filter restrictions                      | User gives food constraints                |
+| 7. Recommendation review           | Sees 3 starter meals, compares fit                                  | “Which one looks easiest?”         | Too many choices cause paralysis                                 | Show 3 explainable recommendations, not a feed                                            | User opens a recipe                        |
+| 8. Recipe evaluation               | Checks time, ingredients, tools, steps, difficulty                  | “Do I trust this recipe?”          | Hidden complexity causes abandonment later                       | Make effort visible upfront: total time, ingredients, cleanup, skill level, match reason  | User chooses a recipe                      |
+| 9. Commitment                      | Saves recipe, chooses possible cook day                             | “I might actually do this.”        | Saving without a plan may not lead to cooking                    | Prompt for a low-pressure cook window within 7 days                                       | User saves recipe                          |
+| 10. Grocery readiness              | Generates list, edits pantry items, shops/orders groceries          | “What do I need?”                  | Missing ingredients block cooking                                | Auto-generate grocery list, allow pantry edits, make shopping concrete                    | User creates or uses grocery list          |
+| 11. Cooking execution              | Opens saved recipe, gathers ingredients, follows steps, cooks       | “Don’t lose me halfway.”           | Too many steps, unclear timing, uncertainty about doneness       | Step-by-step mode, clear progress, simple language, doneness cues                         | User completes recipe steps                |
+| 12. First-meal completion          | Plates food, eats, cleans up, confirms cooked                       | “That was doable — or it wasn’t.”  | If cleanup or effort felt worse than promised, trust breaks      | Ask simple completion prompt; reinforce win; use feedback to improve next recommendations | User marks recipe cooked within 7 days     |
+
+---
+
+# 4. Clean journey buckets for your Figma / case study
+
+For the actual presentation, I would simplify the journey into **6 major buckets**, because 12 is too much for an interview walkthrough.
+
+## Final bucketed journey
+
+| Bucket       | What happens                                                             | Why it matters                                |
+| ------------ | ------------------------------------------------------------------------ | --------------------------------------------- |
+| 1. Start     | User opens app and decides whether to begin                              | Must quickly feel relevant to a busy beginner |
+| 2. Calibrate | User shares cooking habits, time, cleanup, skill, blockers, restrictions | App learns what “doable” means                |
+| 3. Recommend | App shows a small set of personalized starter meals                      | Converts answers into immediate value         |
+| 4. Commit    | User saves one recipe and picks a rough cooking window                   | Moves user from browsing to intention         |
+| 5. Prepare   | User generates grocery list and gets ingredients                         | Removes logistical friction                   |
+| 6. Cook      | User follows step-by-step recipe and completes first meal                | Delivers the actual behavior change           |
+
+This is the journey I would use visually.
+
+The 5 onboarding screens should sit mostly inside **Bucket 2: Calibrate** and **Bucket 3: Recommend**, but they must intentionally support Buckets 4–6. That is the key product-design logic.
+
+---
+
+# 5. Where the onboarding flow fits
+
+The assignment asks for a **3–5 screen onboarding flow**. Based on the journey, onboarding should cover these actions:
+
+| Onboarding screen                      | Journey bucket              | User actions covered                       |
+| -------------------------------------- | --------------------------- | ------------------------------------------ |
+| Screen 1: Start with one doable dinner | Start / expectation setting | Understand value, begin setup              |
+| Screen 2: Weeknight reality            | Calibrate                   | Share time and cleanup constraints         |
+| Screen 3: Skill and blockers           | Calibrate                   | Share skill level and failure points       |
+| Screen 4: Food guardrails              | Calibrate                   | Share restrictions, health goals, servings |
+| Screen 5: Starter meals                | Recommend / commit          | Review recommendations and save one recipe |
+
+The onboarding should **not** try to cover grocery shopping and cooking in detail. But it should point directly into them through:
+
+* **Save recipe**
+* **Generate grocery list**
+* **Pick a cook day**
+* **Open step-by-step mode**
+
+That is how the onboarding connects to the full journey instead of ending at a dead recommendations page.
