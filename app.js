@@ -1,12 +1,18 @@
 const STORAGE_KEY = "homestart-onboarding-v1";
 const LEGACY_STORAGE_KEYS = ["homestart-state", "homestart-onboarding"];
 const WELCOME_STEP = -1;
+const ONBOARDING_FLOW_VERSION = 3;
 const TIME_WINDOW_MIN = 0;
 const TIME_WINDOW_MAX = 60;
 const TIME_WINDOW_STEP = 10;
 const TIME_WINDOW_MIN_GAP = 10;
+const PROGRESS_START_RGB = [143, 155, 138];
+const PROGRESS_END_RGB = [240, 109, 47];
+const DASHBOARD_WELCOME_FADE_DELAY = 950;
+const DASHBOARD_WELCOME_REMOVE_DELAY = 1700;
 
 const initialState = {
+  onboardingVersion: ONBOARDING_FLOW_VERSION,
   started: false,
   answeredSteps: [],
   frequency: "",
@@ -357,7 +363,9 @@ const servingsChoices = [
   { value: "2", label: "2 servings" },
   { value: "3", label: "3 servings" },
   { value: "4", label: "4 servings" },
+  { value: "5", label: "5 servings" },
   { value: "6", label: "6 servings" },
+  { value: "7", label: "7 servings" },
   { value: "8", label: "8 servings" }
 ];
 
@@ -429,9 +437,9 @@ const steps = [
     eyebrow: "Review recipe",
     category: "Review recipe",
     title: "Review your first recipe",
-    copy: "Review your first recipe and save when you’re ready.",
+    copy: "Browse a few starter recipes. Save one if it feels right, or continue to the dashboard and decide later.",
     render: renderReviewRecipe,
-    isValid: () => state.savedRecipes.length > 0,
+    isValid: () => true,
     progressColor: "herb",
     illustrationStage: "Plate the win",
     icons: ["salad", "check", "sparkles"],
@@ -450,6 +458,9 @@ let savedDockOpen = false;
 let toastTimer;
 let progressTimer;
 let completionTimer;
+let setupAutoAdvanceTimer;
+let reviewCarouselTimer;
+let activeReviewRecipeId = "";
 let lastAnsweredKey = "";
 
 const els = {
@@ -465,7 +476,7 @@ const els = {
   progressHeader: document.querySelector(".progress-header"),
   progressTrack: document.querySelector(".progress-track"),
   stepEyebrow: document.querySelector("#stepEyebrow"),
-  stepTitle: document.querySelector("#stepTitle"),
+  stepTitle: document.querySelector("#onboardingTitle"),
   stepCount: document.querySelector("#stepCount"),
   progressBar: document.querySelector("#progressBar"),
   screenBody: document.querySelector("#screenBody"),
@@ -520,8 +531,10 @@ function migrateState(savedState = {}) {
     : [];
   const sourceAnsweredSteps = getSavedStepIndexes(source.answeredSteps);
   const sourceCompleted = Boolean(source.completed);
+  const usesCurrentStepModel = source.onboardingVersion === ONBOARDING_FLOW_VERSION;
   const hasSavedRecipeProgress = next.savedRecipes.length > 0;
   next.answeredSteps = normalizeAnsweredSteps(next.answeredSteps, source);
+  next.onboardingVersion = ONBOARDING_FLOW_VERSION;
 
   if (!next.cookingStyle && next.fallback) {
     next.cookingStyle = next.fallback;
@@ -529,7 +542,7 @@ function migrateState(savedState = {}) {
 
   const shouldMapTimeWindow =
     sourceCompleted ||
-    sourceAnsweredSteps.some((index) => index >= 0 && index <= 2) ||
+    (usesCurrentStepModel ? sourceAnsweredSteps.includes(0) : sourceAnsweredSteps.some((index) => index >= 0 && index <= 2)) ||
     (sourceAnsweredSteps.length === 0 && hasLegacyProgress(source) && Boolean(source.timeBudget || source.timeRangeMin || source.timeRangeMax));
 
   if (shouldMapTimeWindow) {
@@ -562,12 +575,17 @@ function migrateState(savedState = {}) {
 
   next.servings = String(clampNumber(next.servings, 1, 8));
   next.ingredientLimit = normalizeChoice(next.ingredientLimit, ["5", "6-8", "flexible", "not-sure"], defaults.ingredientLimit);
-  const shouldMapPlanTiming = sourceCompleted || sourceAnsweredSteps.some((index) => index >= 4) || hasSavedRecipeProgress;
+  const shouldMapPlanTiming =
+    sourceCompleted ||
+    (usesCurrentStepModel
+      ? sourceAnsweredSteps.includes(ONBOARDING_REVIEW_STEP_INDEX)
+      : sourceAnsweredSteps.some((index) => index >= 4)) ||
+    hasSavedRecipeProgress;
   next.firstCookDay = shouldMapPlanTiming ? normalizeFirstCookDay(next.firstCookDay, planTimingChoices[0].value) : "";
   next.dashboardMode = normalizeChoice(next.dashboardMode, ["simple", "advanced"], defaults.dashboardMode);
   next.dashboardPreset = normalizeChoice(next.dashboardPreset, [...simplePresets.map((preset) => preset.id), "custom"], defaults.dashboardPreset);
-  next.savedPresetFilter = normalizeChoice(next.savedPresetFilter, ["all", ...simplePresets.map((preset) => preset.id)], defaults.savedPresetFilter);
-  next.savedSearch = typeof next.savedSearch === "string" ? next.savedSearch : "";
+  next.savedPresetFilter = defaults.savedPresetFilter;
+  next.savedSearch = "";
   next.completed = Boolean(next.completed);
   next.started = Boolean(next.started || next.completed || hasLegacyProgress(source));
 
@@ -595,8 +613,44 @@ function resetStateObject() {
   Object.assign(state, freshState);
 }
 
+const iconSvgPaths = {
+  basket: '<path d="M6 10h12l-1.3 9H7.3L6 10Z"/><path d="M9 10V8a3 3 0 0 1 6 0v2"/>',
+  blender: '<path d="M8 3h8l-1 8H9L8 3Z"/><path d="M10 11h4v7h-4z"/><path d="M8 21h8"/><path d="M16 6h2a2 2 0 0 1 0 4h-2"/>',
+  bookmark: '<path d="M7 4h10v16l-5-3-5 3V4Z"/>',
+  "calendar-days": '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"/>',
+  carrot: '<path d="M14 7c3 3 4 7 2 9s-6 1-9-2l7-7Z"/><path d="M14 7c1-2 3-3 5-2-1 2-2 3-5 2ZM14 7c-1-2-1-4 1-5 1 2 1 4-1 5Z"/>',
+  check: '<path d="m5 12 4 4L19 6"/>',
+  "chef-hat": '<path d="M7 13c-2-.5-3-2-3-4a4 4 0 0 1 6-3 4.5 4.5 0 0 1 8 2.5A3.5 3.5 0 0 1 17 15H7v-2Z"/><path d="M7 15v5h10v-5"/>',
+  "clock-3": '<circle cx="12" cy="12" r="9"/><path d="M12 7v5h5"/>',
+  "cooking-pot": '<path d="M6 8h12l-1 10H7L6 8Z"/><path d="M8 8V6h8v2M4 10h2M18 10h2M9 3v2M12 3v2M15 3v2"/>',
+  flame: '<path d="M12 22c4-2 6-5 6-9 0-4-3-7-5-10-.5 3-2 5-4 7-2 2-3 4-3 6 0 3 2 5 6 6Z"/><path d="M12 22c2-1 3-3 3-5 0-2-1-4-3-5-.3 2-2 3-2 5s.8 4 2 5Z"/>',
+  "help-circle": '<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.6 2.6 0 0 1 5 1c0 2-2.5 2-2.5 4M12 17h.01"/>',
+  layers: '<path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 16l9 5 9-5"/>',
+  leaf: '<path d="M5 19c8 0 14-6 14-14-8 0-14 6-14 14Z"/><path d="M5 19 19 5"/>',
+  list: '<path d="M8 6h12M8 12h12M8 18h12"/><path d="M4 6h.01M4 12h.01M4 18h.01"/>',
+  "list-checks": '<path d="m4 6 1.5 1.5L8 5M11 6h9M4 12l1.5 1.5L8 11M11 12h9M4 18l1.5 1.5L8 17M11 18h9"/>',
+  "milk-off": '<path d="M8 2h8M9 2v6l-2 3v9h10v-9l-2-3V6"/><path d="m4 4 16 16"/>',
+  moon: '<path d="M20 14.5A8 8 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/>',
+  potato: '<path d="M8 5c4-3 10 0 11 5 1 6-4 10-9 9-5-1-7-7-5-11 .7-1.4 1.7-2.4 3-3Z"/><path d="M10 9h.01M14 8h.01M9 14h.01M15 15h.01"/>',
+  "refresh-cw": '<path d="M20 12a8 8 0 0 1-14 5"/><path d="M4 17h5v-5"/><path d="M4 12a8 8 0 0 1 14-5"/><path d="M20 7h-5v5"/>',
+  "rotate-ccw": '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v6h6"/>',
+  salad: '<path d="M4 11h16c-.5 6-4 9-8 9s-7.5-3-8-9Z"/><path d="M8 11c0-3 2-5 4-7 2 2 4 4 4 7M9 7h6"/>',
+  "sliders-horizontal": '<path d="M4 7h7M15 7h5M4 17h5M13 17h7"/><circle cx="13" cy="7" r="2"/><circle cx="11" cy="17" r="2"/>',
+  soup: '<path d="M5 11h14c-.5 5-3.5 8-7 8s-6.5-3-7-8Z"/><path d="M8 11V9M12 11V8M16 11V9M7 20h10"/>',
+  sparkles: '<path d="m12 3 1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3Z"/><path d="m5 14 .8 2.2L8 17l-2.2.8L5 20l-.8-2.2L2 17l2.2-.8L5 14ZM19 13l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8Z"/>',
+  timer: '<path d="M10 2h4M12 14l3-3"/><circle cx="12" cy="14" r="8"/>',
+  utensils: '<path d="M4 3v7M7 3v7M4 7h3M5.5 10v11"/><path d="M14 3v18M14 3c4 2 6 5 6 9h-6"/>',
+  "users-2": '<path d="M15 19c0-2.2-2-4-5-4s-5 1.8-5 4"/><circle cx="10" cy="8" r="3"/><path d="M19 18c0-1.7-1.2-3-3-3"/><path d="M15 5a3 3 0 0 1 0 6"/>',
+  wheat: '<path d="M12 2v20M8 6c0 2 2 4 4 4M16 6c0 2-2 4-4 4M7 11c0 2 2 4 5 4M17 11c0 2-2 4-5 4M8 17c1.5 1.5 2.5 2 4 2M16 17c-1.5 1.5-2.5 2-4 2"/>',
+  "wheat-off": '<path d="M12 2v7M12 15v7M8 6c0 2 2 4 4 4M16 6c0 2-2 4-4 4M7 11c0 2 2 4 5 4M17 11c0 .8-.3 1.5-.8 2.1M8 17c1.5 1.5 2.5 2 4 2"/><path d="m4 4 16 16"/>',
+  zap: '<path d="M13 2 4 14h7l-1 8 10-13h-7l1-7Z"/>'
+};
+
 function iconMarkup(name) {
-  return name ? `<i data-lucide="${escapeAttribute(name)}" aria-hidden="true"></i>` : "";
+  if (!name) return "";
+  const key = String(name);
+  const paths = iconSvgPaths[key] || iconSvgPaths.sparkles;
+  return `<svg class="lucide local-icon" data-icon-name="${escapeAttribute(key)}" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>`;
 }
 
 function refreshIcons() {
@@ -635,20 +689,31 @@ function normalizeAnsweredSteps(value, source) {
   if (source.completed) {
     return steps.map((_, index) => index);
   }
-  const mappedSavedSteps = mapLegacyStepIndexes(savedSteps);
+  const mappedSavedSteps =
+    source.onboardingVersion === ONBOARDING_FLOW_VERSION
+      ? savedSteps.filter((index) => index < steps.length)
+      : source.onboardingVersion === 2
+        ? mapSingleQuestionStepIndexes(savedSteps)
+        : mapLegacyStepIndexes(savedSteps);
 
   const inferred = [];
   const hasSourceTimeMin = Object.prototype.hasOwnProperty.call(source, "timeRangeMin");
   const hasSourceTimeMax = Object.prototype.hasOwnProperty.call(source, "timeRangeMax");
   const legacyProgress = hasLegacyProgress(source);
-  if (source.frequency || source.cookingStyle || source.fallback) inferred.push(0);
+  if (
+    source.frequency &&
+    (source.cookingStyle || source.fallback) &&
+    (source.timeBudget || (hasSourceTimeMin && source.timeRangeMin) || (hasSourceTimeMax && source.timeRangeMax) || source.currentTime)
+  ) {
+    inferred.push(0);
+  }
   if (
     legacyProgress &&
     (source.timeBudget || (hasSourceTimeMin && source.timeRangeMin) || (hasSourceTimeMax && source.timeRangeMax) || source.restartFriction || source.currentTime)
   ) {
-    inferred.push(0);
+    if (source.frequency && (source.cookingStyle || source.fallback)) inferred.push(0);
   }
-  if (source.skill || source.guidance || source.abandonReason) inferred.push(1);
+  if (source.skill && (source.guidance || source.abandonReason)) inferred.push(1);
   if (
     legacyProgress &&
     ((Array.isArray(source.restrictions) && source.restrictions.some((item) => item !== "none")) ||
@@ -656,7 +721,7 @@ function normalizeAnsweredSteps(value, source) {
       (source.ingredientLimit && source.ingredientLimit !== "6-8") ||
       (source.servings && String(source.servings) !== initialState.servings))
   ) {
-    inferred.push(2);
+    if (Array.isArray(source.restrictions) && source.restrictions.length > 0 && source.ingredientLimit && source.servings) inferred.push(2);
   }
   if (Array.isArray(source.savedRecipes) && source.savedRecipes.length > 0) inferred.push(ONBOARDING_REVIEW_STEP_INDEX);
   return Array.from(new Set([...mappedSavedSteps, ...inferred])).sort((a, b) => a - b);
@@ -672,20 +737,25 @@ function getSavedStepIndexes(value) {
 
 function mapLegacyStepIndexes(values = []) {
   const mapped = new Set();
+
   values.forEach((index) => {
-    if (index >= 0 && index <= 2) {
-      mapped.add(0);
+    if (index >= 0 && index <= ONBOARDING_REVIEW_STEP_INDEX) {
+      mapped.add(index);
     }
-    if (index === 3) {
-      mapped.add(1);
-    }
-    if (index === 4) {
-      mapped.add(2);
-    }
-    if (index >= 5) {
+    if (index > ONBOARDING_REVIEW_STEP_INDEX) {
       mapped.add(ONBOARDING_REVIEW_STEP_INDEX);
     }
   });
+  return Array.from(mapped).sort((a, b) => a - b);
+}
+
+function mapSingleQuestionStepIndexes(values = []) {
+  const mapped = new Set();
+  const saved = new Set(values);
+  if ([0, 1, 2].every((index) => saved.has(index))) mapped.add(0);
+  if ([3, 4].every((index) => saved.has(index))) mapped.add(1);
+  if ([5, 6, 7].every((index) => saved.has(index))) mapped.add(2);
+  if (saved.has(8)) mapped.add(ONBOARDING_REVIEW_STEP_INDEX);
   return Array.from(mapped).sort((a, b) => a - b);
 }
 
@@ -718,7 +788,14 @@ function getSelectedPlanTimingChoice() {
 
 function persistState() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        ...state,
+        savedSearch: "",
+        savedPresetFilter: initialState.savedPresetFilter
+      })
+    );
   } catch {
     showToast("Your browser blocked saving, but you can keep exploring.");
   }
@@ -741,6 +818,12 @@ function showToast(message) {
   els.toast.textContent = message;
   els.toast.classList.add("visible");
   toastTimer = window.setTimeout(() => els.toast.classList.remove("visible"), 2200);
+}
+
+function hideToast() {
+  if (!els.toast) return;
+  window.clearTimeout(toastTimer);
+  els.toast.classList.remove("visible");
 }
 
 function openDrawer() {
@@ -785,10 +868,11 @@ function resetTransientState() {
   completionTimer = null;
   lastAnsweredKey = "";
   delete document.body.dataset.lastAnswer;
+  delete document.body.dataset.dashboardHandoff;
   delete els.flowPanel.dataset.lastAnswer;
   document.body.classList.remove("has-recent-answer");
   els.flowPanel.classList.remove("has-recent-answer", "is-completing");
-  document.querySelectorAll(".food-celebration").forEach((layer) => layer.remove());
+  document.querySelectorAll(".food-celebration, .dashboard-welcome-screen").forEach((layer) => layer.remove());
 }
 
 function resetExperience() {
@@ -840,19 +924,29 @@ function syncIntroPanelVisibility(surface = state.completed && activeView === "o
   const introPanel = els.onboardingLayout.querySelector(".intro-panel");
   if (!introPanel) return;
 
-  introPanel.hidden = Boolean(state.completed && surface === "dashboard");
+  const isDashboardHandoff = ["celebrating", "welcoming"].includes(document.body.dataset.dashboardHandoff || "");
+  introPanel.hidden = Boolean(state.completed || isDashboardHandoff || surface === "dashboard");
 }
 
 function syncFrameState(surface = state.completed && activeView === "onboarding" ? "dashboard" : "onboarding") {
+  const isDashboardHandoff = ["celebrating", "welcoming"].includes(document.body.dataset.dashboardHandoff || "");
+  const onboardingStatus = isDashboardHandoff
+    ? "handoff"
+    : state.completed
+      ? "complete"
+      : state.started
+        ? "started"
+        : "welcome";
+
   document.body.dataset.appView = activeView;
   document.body.dataset.homeSurface = surface;
-  document.body.dataset.onboardingStatus = state.completed ? "complete" : state.started ? "started" : "welcome";
+  document.body.dataset.onboardingStatus = onboardingStatus;
   document.body.dataset.onboardingStep = currentStep === WELCOME_STEP ? "welcome" : String(currentStep + 1);
   document.body.dataset.savedDock = savedDockOpen ? "open" : "collapsed";
   syncIntroPanelVisibility(surface);
   applyProgressData(document.body, surface);
   applyProgressData(els.flowPanel, surface);
-  document.body.classList.toggle("is-onboarding-complete", state.completed);
+  document.body.classList.toggle("is-onboarding-complete", state.completed && !isDashboardHandoff);
   document.body.classList.toggle("has-recent-answer", Boolean(lastAnsweredKey));
 }
 
@@ -861,6 +955,7 @@ function applyProgressData(target, surface = "onboarding") {
   const progressIndex = getProgressIndex(surface);
   const progressTotal = steps.length;
   const progressRatio = progressTotal === 0 ? 0 : progressIndex / progressTotal;
+  const progressPalette = buildProgressPalette(progressRatio);
   const step = currentStep === WELCOME_STEP ? null : steps[currentStep];
 
   target.dataset.progressIndex = String(progressIndex);
@@ -868,6 +963,61 @@ function applyProgressData(target, surface = "onboarding") {
   target.dataset.progressRatio = progressRatio.toFixed(2);
   target.dataset.progressColor = state.completed ? "complete" : step?.progressColor || "welcome";
   target.dataset.pingScale = lastAnsweredKey ? "1.08" : "1";
+  target.style.setProperty("--progress-color", progressPalette.color);
+  target.style.setProperty("--progress-shadow-color", progressPalette.shadowColor);
+  target.style.setProperty("--progress-saturation", progressPalette.saturation.toFixed(2));
+  target.style.setProperty("--progress-heat", `${Math.round(progressPalette.heat)}%`);
+  target.style.setProperty("--ping-scale", progressPalette.pingScale.toFixed(2));
+  target.style.setProperty("--ping-intensity", progressPalette.pingIntensity.toFixed(2));
+  target.style.setProperty("--ping-color", progressPalette.pingColor);
+}
+
+function buildProgressPalette(progressRatio) {
+  const easedRatio = smoothStep(clamp01(progressRatio));
+  const rgb = interpolateRgb(PROGRESS_START_RGB, PROGRESS_END_RGB, easedRatio);
+  const saturation = interpolateNumber(0.78, 1.3, easedRatio);
+  const heat = interpolateNumber(14, 100, easedRatio);
+  const pingScale = interpolateNumber(1.14, 1.78, easedRatio);
+  const pingIntensity = interpolateNumber(0.14, 0.34, easedRatio);
+  const shadowColor = rgbaFromRgb(rgb, interpolateNumber(0.14, 0.32, easedRatio));
+  const pingColor = rgbaFromRgb(rgb, interpolateNumber(0.18, 0.34, easedRatio));
+
+  return {
+    color: rgbToHex(rgb),
+    shadowColor,
+    saturation,
+    heat,
+    pingScale,
+    pingIntensity,
+    pingColor
+  };
+}
+
+function smoothStep(value) {
+  const clamped = clamp01(value);
+  return clamped * clamped * (3 - 2 * clamped);
+}
+
+function clamp01(value) {
+  return Math.min(1, Math.max(0, value));
+}
+
+function interpolateNumber(start, end, ratio) {
+  return start + (end - start) * ratio;
+}
+
+function interpolateRgb(startRgb, endRgb, ratio) {
+  return startRgb.map((startChannel, index) => Math.round(interpolateNumber(startChannel, endRgb[index], ratio)));
+}
+
+function rgbaFromRgb(rgb, alpha) {
+  return `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha.toFixed(2)})`;
+}
+
+function rgbToHex(rgb) {
+  return `#${rgb
+    .map((channel) => channel.toString(16).padStart(2, "0"))
+    .join("")}`;
 }
 
 function getProgressIndex(surface = "onboarding") {
@@ -901,6 +1051,7 @@ function renderStep(options = {}) {
   els.flowPanel.classList.toggle("is-welcome", currentStep === WELCOME_STEP);
   els.flowPanel.classList.toggle("is-onboarding-question", currentStep !== WELCOME_STEP);
   syncFrameState("onboarding");
+  window.clearInterval(reviewCarouselTimer);
 
   if (currentStep === WELCOME_STEP) {
     renderWelcome();
@@ -908,11 +1059,7 @@ function renderStep(options = {}) {
   }
 
   const step = steps[currentStep];
-  if (currentStep === 0) {
-    ensureTimeWindowDefault();
-  }
-  const completedSections = getCompletedSectionCount();
-  const progressPercent = Math.round((completedSections / steps.length) * 100);
+  const progressPercent = Math.round((getProgressIndex("onboarding") / steps.length) * 100);
   const isComplete = isStepAnswered(currentStep);
 
   els.stepEyebrow.textContent = getMilestoneEyebrow(step);
@@ -926,8 +1073,11 @@ function renderStep(options = {}) {
   els.screenBody.dataset.screenStatus = isComplete ? "answered" : "in-progress";
   els.flowPanel.classList.toggle("is-step-complete", isComplete);
   els.screenBody.innerHTML = "";
+  window.clearTimeout(setupAutoAdvanceTimer);
 
-  renderCookingIllustration(els.screenBody, step);
+  if (currentStep === ONBOARDING_REVIEW_STEP_INDEX) {
+    renderCookingIllustration(els.screenBody, step);
+  }
 
   const copy = document.createElement("p");
   copy.className = "screen-copy";
@@ -940,6 +1090,8 @@ function renderStep(options = {}) {
   els.backButton.disabled = currentStep === 0;
   els.nextButton.textContent = currentStep === steps.length - 1 ? completionButtonText() : "Next";
   els.nextButton.disabled = !step.isValid();
+  els.nextButton.hidden = currentStep !== ONBOARDING_REVIEW_STEP_INDEX;
+  els.resetFlowButton.hidden = true;
   updateSavedCount();
   refreshIcons();
 
@@ -956,7 +1108,7 @@ function renderStep(options = {}) {
 
 function renderWelcome() {
   els.stepEyebrow.textContent = "Welcome";
-  els.stepTitle.textContent = "What does cooking look like for you this week?";
+  els.stepTitle.textContent = "Welcome, Christina!";
   els.stepCount.textContent = `0/${steps.length}`;
   els.progressBar.style.width = "0%";
   els.progressBar.dataset.progressValue = "0";
@@ -967,25 +1119,27 @@ function renderWelcome() {
   els.screenBody.innerHTML = "";
 
   const intro = document.createElement("div");
-  intro.className = "welcome-panel";
+  intro.className = "simple-welcome-panel";
   intro.dataset.onboardingScreen = "welcome";
   intro.innerHTML = `
-    <p class="screen-copy">No big meal-plan promise here. Answer a few tiny prompts, spend about two minutes, and HomeStart will turn that into a short recipe set that matches your time, confidence, food boundaries, and first cook day.</p>
-    <div class="welcome-stats" aria-label="Setup summary">
-      <article><strong>${steps.length}</strong><span>setup choices</span></article>
-      <article><strong>~2 min</strong><span>rough setup time</span></article>
-      <article><strong>1</strong><span>first saved recipe payoff</span></article>
+    <div class="simple-welcome-copy">
+      <h1>Welcome, Christina!</h1>
+      <p>Ready to turn real-life weeknights into one simple home-cooked win?</p>
     </div>
-    <p class="welcome-note">Keep it approximate. You can change filters later from the dashboard.</p>
   `;
 
-  renderCookingIllustration(intro);
+  renderCookingIllustration(intro, {
+    illustrationStage: "Warm up the kitchen",
+    icons: ["cooking-pot", "carrot", "sparkles"],
+    heat: "2"
+  });
   els.screenBody.append(intro);
   els.resetFlowButton.hidden = true;
   els.backButton.hidden = true;
   els.backButton.disabled = true;
   els.nextButton.disabled = false;
-  els.nextButton.textContent = "Start quick setup";
+  els.nextButton.hidden = false;
+  els.nextButton.textContent = "Get started";
   refreshIcons();
 }
 
@@ -994,6 +1148,12 @@ function renderCookingIllustration(container, step = null) {
   const stage = step?.illustrationStage || "Warm up the kitchen";
   const icons = step?.icons || ["salad", "carrot", "sparkles"];
   const heat = step?.heat || "1";
+  const heatLevel = {
+    1: "25%",
+    2: "50%",
+    3: "75%",
+    4: "100%"
+  }[String(heat)] || `${clampNumber(heat, 1, 100)}%`;
 
   visual.className = "cooking-illustration";
   visual.dataset.cookingStage = stage.toLowerCase().replaceAll(" ", "-");
@@ -1003,7 +1163,7 @@ function renderCookingIllustration(container, step = null) {
     <span class="ingredient-row" aria-hidden="true">
       ${icons.map((icon, index) => `<span class="ingredient-icon" data-ingredient-index="${index + 1}">${iconMarkup(icon)}</span>`).join("")}
     </span>
-    <span class="heat-meter" data-heat-level="${heat}" style="--heat-level: ${heat}"></span>
+    <span class="heat-meter" data-heat-level="${heat}" style="--heat-level: ${heatLevel}"></span>
   `;
   container.append(visual);
 }
@@ -1064,6 +1224,23 @@ function noteAnswer(key) {
   }, 800);
 }
 
+function scheduleSetupAutoAdvance() {
+  window.clearTimeout(setupAutoAdvanceTimer);
+  if (currentStep < 0 || currentStep >= ONBOARDING_REVIEW_STEP_INDEX || !steps[currentStep]?.isValid()) return;
+  setupAutoAdvanceTimer = window.setTimeout(() => {
+    if (currentStep < ONBOARDING_REVIEW_STEP_INDEX && steps[currentStep]?.isValid()) {
+      advanceToNextStep();
+    }
+  }, 450);
+}
+
+function advanceToNextStep() {
+  if (currentStep === WELCOME_STEP || currentStep >= ONBOARDING_REVIEW_STEP_INDEX) return;
+  markStepAnswered(currentStep);
+  currentStep = Math.min(ONBOARDING_REVIEW_STEP_INDEX, currentStep + 1);
+  renderStep({ scrollToPanel: true });
+}
+
 function completionButtonText() {
   if (state.savedRecipes.length > 0) {
     return state.completed ? "Dashboard" : "Open dashboard";
@@ -1091,7 +1268,8 @@ function renderOptionChoiceGroup({
   onSelect,
   onMultiSelect,
   columns = "default",
-  multi = false
+  multi = false,
+  autoAdvance = false
 }) {
   const grid = document.createElement("div");
   grid.className = `choice-grid quick-choice-grid ${columns === "compact" ? "compact" : ""}`.trim();
@@ -1120,9 +1298,7 @@ function renderOptionChoiceGroup({
 
     const label = document.createElement("strong");
     label.textContent = option.label;
-    const detail = document.createElement("span");
-    detail.textContent = option.detail || "";
-    button.append(label, detail);
+    button.append(label);
 
     button.addEventListener("click", () => {
       if (multi) {
@@ -1136,13 +1312,31 @@ function renderOptionChoiceGroup({
       }
       noteAnswer(key);
       persistState();
-      renderStep();
+      if (autoAdvance && steps[currentStep]?.isValid() && currentStep < ONBOARDING_REVIEW_STEP_INDEX) {
+        advanceToNextStep();
+      } else {
+        syncChoiceGridSelection(grid, key, multi);
+        els.nextButton.disabled = !steps[currentStep].isValid();
+        scheduleSetupAutoAdvance();
+      }
     });
 
     grid.append(button);
   });
 
   return grid;
+}
+
+function syncChoiceGridSelection(grid, key, multi = false) {
+  const selectedValues = multi ? getSelectedRestrictionValues() : [];
+  const selectedValue = key === "timeWindow" ? getSelectedTimeWindowChoice() : state[key];
+
+  grid.querySelectorAll("[data-answer-value]").forEach((button) => {
+    const selected = multi ? selectedValues.includes(button.dataset.answerValue) : selectedValue === button.dataset.answerValue;
+    button.classList.toggle("selected", selected);
+    button.classList.toggle("is-selected", selected);
+    button.setAttribute("aria-pressed", selected ? "true" : "false");
+  });
 }
 
 function renderTimeWindowRange() {
@@ -1248,7 +1442,8 @@ function renderSelect({ key, options, value }) {
     state[key] = select.value;
     noteAnswer(key);
     persistState();
-    renderStep();
+    els.nextButton.disabled = !steps[currentStep].isValid();
+    scheduleSetupAutoAdvance();
   });
   control.append(select);
 
@@ -1350,6 +1545,120 @@ function getSelectedRestrictionValues() {
   return state.restrictions.filter((item) => item !== "none");
 }
 
+function renderFrequencyQuestion(container) {
+  container.append(
+    renderQuestionSection({
+      heading: "How often do you cook dinner at home?",
+      content: renderOptionChoiceGroup({
+        key: "frequency",
+        options: frequencyChoices,
+        selectedValue: state.frequency,
+        onSelect: applyFrequencyChoice
+      })
+    })
+  );
+}
+
+function renderCookingStyleQuestion(container) {
+  container.append(
+    renderQuestionSection({
+      heading: "How would you prefer cooking to work for you?",
+      content: renderOptionChoiceGroup({
+        key: "cookingStyle",
+        options: cookingStyleChoices,
+        selectedValue: state.cookingStyle,
+        onSelect: applyCookingStyleChoice
+      })
+    })
+  );
+}
+
+function renderTimeWindowQuestion(container) {
+  container.append(
+    renderQuestionSection({
+      heading: "What dinner window actually works?",
+      content: renderOptionChoiceGroup({
+        key: "timeWindow",
+        options: timeWindowChoices,
+        selectedValue: getSelectedTimeWindowChoice(),
+        onSelect: applyTimeWindowChoice
+      })
+    })
+  );
+}
+
+function renderSkillQuestion(container) {
+  container.append(
+    renderQuestionSection({
+      heading: "Which skill level feels closest?",
+      content: renderOptionChoiceGroup({
+        key: "skill",
+        options: skillLevelChoices,
+        selectedValue: state.skill,
+        onSelect: applySkillLevelChoice
+      })
+    })
+  );
+}
+
+function renderGuidanceQuestion(container) {
+  container.append(
+    renderQuestionSection({
+      heading: "What instruction style would feel best at first?",
+      content: renderOptionChoiceGroup({
+        key: "guidance",
+        options: guidanceChoices,
+        selectedValue: state.guidance,
+        onSelect: applyGuidanceChoice
+      })
+    })
+  );
+}
+
+function renderRestrictionsQuestion(container) {
+  container.append(
+    renderQuestionSection({
+      heading: "Any hard dietary restrictions?",
+      intro: "Choose one now. If you need more than one, tap Back after the next screen and add another.",
+      content: renderOptionChoiceGroup({
+        key: "restrictions",
+        options: restrictionChoices,
+        multi: true,
+        selectedValues: getSelectedRestrictionValues(),
+        onMultiSelect: applyRestrictionChoice
+      })
+    })
+  );
+}
+
+function renderIngredientLimitQuestion(container) {
+  container.append(
+    renderQuestionSection({
+      heading: "How many ingredients feels manageable?",
+      content: renderOptionChoiceGroup({
+        key: "ingredientLimit",
+        options: ingredientLimitChoices,
+        selectedValue: state.ingredientLimit,
+        onSelect: setIngredientLimit
+      })
+    })
+  );
+}
+
+function renderServingsQuestion(container) {
+  container.append(
+    renderQuestionSection({
+      heading: "Default servings",
+      content: renderOptionChoiceGroup({
+        key: "servings",
+        options: servingsChoices,
+        selectedValue: state.servings,
+        columns: "compact"
+      })
+    })
+  );
+}
+
 function renderCookingRoutine(container) {
   container.append(
     renderQuestionSection({
@@ -1372,7 +1681,12 @@ function renderCookingRoutine(container) {
     }),
     renderQuestionSection({
       heading: "What dinner window actually works?",
-      content: renderTimeWindowRange()
+      content: renderOptionChoiceGroup({
+        key: "timeWindow",
+        options: timeWindowChoices,
+        selectedValue: getSelectedTimeWindowChoice(),
+        onSelect: applyTimeWindowChoice
+      })
     })
   );
 }
@@ -1423,63 +1737,213 @@ function renderFoodBoundaries(container) {
     }),
     renderQuestionSection({
       heading: "Default servings",
-      content: renderSelect({
+      content: renderOptionChoiceGroup({
         key: "servings",
         options: servingsChoices,
-        value: state.servings
+        selectedValue: state.servings,
+        columns: "compact"
       })
     })
   );
 }
 
 function renderReviewRecipe(container) {
-  const recommended = getRecommendedRecipes()[0];
+  const reviewRecipes = getRecommendedRecipes(8);
+  const recommended = reviewRecipes[0];
+  const reviewCopy = container.querySelector(":scope > .screen-copy");
+  const reviewIllustration = container.querySelector(":scope > .cooking-illustration");
   const recommendationSummary = [
-    `Window: ${timeWindowLabel()}`,
-    `Style: ${getCookingStyleLabel()}`,
-    `Support: ${skillSummaryLabel()}`,
-    `Servings: ${state.servings} serving${state.servings === "1" ? "" : "s"}`,
-    `Restrictions: ${getRestrictionSummary()}`,
-    `Why it fits: ${recommended ? getMatchReason(recommended) : "Complete setup first"}`
+    { label: "Window", value: timeWindowLabel() },
+    { label: "Style", value: getCookingStyleLabel() },
+    { label: "Support", value: skillSummaryLabel() },
+    { label: "Servings", value: `${state.servings} serving${state.servings === "1" ? "" : "s"}` },
+    { label: "Restrictions", value: getRestrictionSummary() },
+    { label: "Why it fits", value: recommended ? getMatchReason(recommended) : "Complete setup first" }
   ];
 
   const plan = document.createElement("div");
-  plan.className = "plan-summary";
+  plan.className = "plan-summary review-plan-summary";
   plan.innerHTML = `
     <strong>Your first dinner plan</strong>
-    <div class="summary-line"></div>
+    <dl class="summary-line compact-summary-list"></dl>
   `;
   const summaryLine = plan.querySelector(".summary-line");
   recommendationSummary.forEach((item) => {
-    const chip = document.createElement("span");
-    chip.className = "summary-chip";
-    chip.textContent = item;
-    summaryLine.append(chip);
+    const row = document.createElement("div");
+    row.className = "summary-chip summary-row";
+
+    const label = document.createElement("dt");
+    label.textContent = item.label;
+
+    const value = document.createElement("dd");
+    value.textContent = item.value;
+
+    row.append(label, value);
+    summaryLine.append(row);
   });
 
-  const grid = document.createElement("div");
-  grid.className = "recipe-grid";
-  if (recommended) {
-    grid.append(renderRecipeCard(recommended, { context: "onboarding", showSaveAction: false }));
-  } else {
-    const fallback = document.createElement("p");
-    fallback.textContent = "Complete the three setup screens and we can recommend a starter recipe.";
-    grid.append(fallback);
-  }
+  const layout = document.createElement("div");
+  layout.className = "review-two-column";
 
-  container.append(plan);
-  container.append(renderReviewActions(recommended));
+  const mainColumn = document.createElement("div");
+  mainColumn.className = "review-main-column";
+
+  const sideColumn = document.createElement("div");
+  sideColumn.className = "review-side-column";
+
+  if (reviewCopy) mainColumn.append(reviewCopy);
+  mainColumn.append(renderRecipeCarousel(reviewRecipes));
+  if (reviewIllustration) sideColumn.append(reviewIllustration);
+  sideColumn.append(plan);
+
   if (state.savedRecipes.length > 0) {
-    container.append(renderCookNudge());
+    mainColumn.append(renderCookNudge());
   }
-  container.append(grid);
 
   if (state.savedRecipes.length > 0) {
     const banner = document.createElement("div");
     banner.className = "completion-banner";
-    banner.innerHTML = `<strong>First recipe saved.</strong><span>Complete onboarding to open your dashboard.</span>`;
-    container.append(banner);
+    banner.innerHTML = `<strong>Recipe saved.</strong><span>You can open the dashboard now or save another idea.</span>`;
+    mainColumn.append(banner);
   }
+
+  layout.append(mainColumn, sideColumn);
+  container.append(layout);
+}
+
+function renderRecipeCarousel(baseRecipes = getRecommendedRecipes(8)) {
+  const categories = getReviewRecipeCategories(baseRecipes);
+  activeReviewRecipeId = activeReviewRecipeId && baseRecipes.some((recipe) => recipe.id === activeReviewRecipeId)
+    ? activeReviewRecipeId
+    : categories[0]?.recipes[0]?.id || baseRecipes[0]?.id || "";
+
+  const wrapper = document.createElement("section");
+  wrapper.className = "review-carousel";
+  wrapper.setAttribute("aria-label", "Recommended starter recipes");
+
+  const tabs = document.createElement("div");
+  tabs.className = "review-carousel-tabs";
+  tabs.setAttribute("role", "tablist");
+
+  const viewport = document.createElement("div");
+  viewport.className = "review-carousel-viewport";
+  viewport.tabIndex = 0;
+
+  const track = document.createElement("div");
+  track.className = "review-carousel-track";
+
+  const pauseAutoplay = () => {
+    wrapper.dataset.pauseUntil = String(Date.now() + 6000);
+  };
+
+  const setActiveCategory = (index, { scroll = false, user = false } = {}) => {
+    const boundedIndex = (index + categories.length) % categories.length;
+    wrapper.dataset.activeIndex = String(boundedIndex);
+    const category = categories[boundedIndex];
+    activeReviewRecipeId = category?.recipes[0]?.id || activeReviewRecipeId;
+
+    tabs.querySelectorAll("[data-carousel-tab]").forEach((tab, tabIndex) => {
+      const selected = tabIndex === boundedIndex;
+      tab.classList.toggle("is-active", selected);
+      tab.setAttribute("aria-selected", selected ? "true" : "false");
+    });
+
+    track.querySelectorAll("[data-carousel-panel]").forEach((panel, panelIndex) => {
+      panel.classList.toggle("is-active", panelIndex === boundedIndex);
+    });
+
+    if (scroll) {
+      viewport.scrollTo({ left: viewport.clientWidth * boundedIndex, behavior: "smooth" });
+    }
+    if (user) pauseAutoplay();
+  };
+
+  categories.forEach((category, index) => {
+    const tab = document.createElement("button");
+    tab.type = "button";
+    tab.className = `review-carousel-tab ${index === 0 ? "is-active" : ""}`;
+    tab.dataset.carouselTab = category.id;
+    tab.setAttribute("role", "tab");
+    tab.setAttribute("aria-selected", index === 0 ? "true" : "false");
+    tab.textContent = category.label;
+    tab.addEventListener("click", () => setActiveCategory(index, { scroll: true, user: true }));
+    tabs.append(tab);
+
+    const panel = document.createElement("div");
+    panel.className = `review-carousel-panel ${index === 0 ? "is-active" : ""}`;
+    panel.dataset.carouselPanel = category.id;
+    panel.setAttribute("role", "tabpanel");
+    category.recipes.slice(0, 2).forEach((recipe) => {
+      panel.append(renderRecipeCard(recipe, { context: "onboarding", showSaveAction: true }));
+    });
+    track.append(panel);
+  });
+
+  viewport.addEventListener("scroll", () => {
+    const index = Math.round(viewport.scrollLeft / Math.max(1, viewport.clientWidth));
+    setActiveCategory(index);
+    pauseAutoplay();
+  });
+
+  viewport.append(track);
+  wrapper.append(tabs, viewport);
+
+  reviewCarouselTimer = window.setInterval(() => {
+    if (Date.now() < Number(wrapper.dataset.pauseUntil || 0) || document.hidden || categories.length < 2) return;
+    const nextIndex = (Number(wrapper.dataset.activeIndex || 0) + 1) % categories.length;
+    setActiveCategory(nextIndex, { scroll: true });
+  }, 3600);
+
+  window.requestAnimationFrame(() => setActiveCategory(0));
+  return wrapper;
+}
+
+function getReviewRecipeCategories(baseRecipes = getRecommendedRecipes(8)) {
+  const preferredStyle = cookingStyleChoices.find((choice) => choice.value === state.cookingStyle)?.label || "Best fits";
+  const restriction = state.restrictions.find((item) => item !== "none");
+  const categories = [
+    {
+      id: "best",
+      label: "Best fits",
+      recipes: baseRecipes
+    },
+    {
+      id: "style",
+      label: preferredStyle,
+      recipes: recipes.filter((recipe) => {
+        if (state.cookingStyle === "meal-prep") return recipe.tags.includes("batchable") || recipe.serves >= 4;
+        if (state.cookingStyle === "prep-shortcuts") return recipe.tags.includes("prep-shortcut") || recipe.ingredients <= 6;
+        if (state.cookingStyle === "flexible-fallbacks") return recipe.tags.includes("flexible");
+        return recipe.tags.includes("quick") || recipe.time <= Number(state.timeRangeMax || 40);
+      })
+    },
+    {
+      id: "time",
+      label: `${timeWindowLabel()} ideas`,
+      recipes: recipes.filter((recipe) => recipe.time <= Number(state.timeRangeMax || 40))
+    },
+    {
+      id: "boundaries",
+      label: restriction ? `${restriction.replace("-", " ")} picks` : "Easy picks",
+      recipes: recipes.filter((recipe) => (restriction ? recipe.dietary.includes(restriction) : recipe.effort === "easy"))
+    }
+  ];
+
+  return categories
+    .map((category) => ({
+      ...category,
+      recipes: mergeRecipeLists(category.recipes, baseRecipes).slice(0, 4)
+    }))
+    .filter((category, index, list) => category.recipes.length > 0 && list.findIndex((item) => item.label === category.label) === index);
+}
+
+function mergeRecipeLists(primary = [], fallback = []) {
+  const seen = new Set();
+  return [...primary, ...fallback].filter((recipe) => {
+    if (!recipe || seen.has(recipe.id)) return false;
+    seen.add(recipe.id);
+    return true;
+  });
 }
 
 function timeWindowLabel() {
@@ -1487,19 +1951,19 @@ function timeWindowLabel() {
   return timeRangeLabel();
 }
 
-function renderReviewActions(recommendedRecipe) {
+function renderReviewActions() {
   const wrapper = document.createElement("div");
   wrapper.className = "review-actions";
 
   const saveAction = document.createElement("button");
   saveAction.type = "button";
   saveAction.className = "primary-button";
-  const hasRecipe = Boolean(recommendedRecipe);
-  const alreadySaved = hasRecipe && state.savedRecipes.includes(recommendedRecipe.id);
-  saveAction.textContent = alreadySaved ? "Recipe saved" : "Save recipe";
-  saveAction.disabled = !hasRecipe || alreadySaved;
+  saveAction.textContent = "Save recipe";
+  saveAction.disabled = !activeReviewRecipeId;
 
   saveAction.addEventListener("click", () => {
+    const recommendedRecipe = recipes.find((recipe) => recipe.id === activeReviewRecipeId) || getRecommendedRecipes(1)[0];
+    const alreadySaved = recommendedRecipe && state.savedRecipes.includes(recommendedRecipe.id);
     if (!recommendedRecipe || alreadySaved) return;
     toggleSavedRecipe(recommendedRecipe);
     if (!state.firstCookDay) {
@@ -1561,24 +2025,28 @@ function renderCookNudge() {
 function renderRecipeCard(recipe, options = {}) {
   const context = options.context || "dashboard";
   const showSaveAction = options.showSaveAction !== false;
+  const isOnboardingCard = context === "onboarding";
   const card = document.createElement("article");
   card.className = "recipe-card";
   card.dataset.recipeId = recipe.id;
   card.dataset.recipeTime = String(recipe.time);
   card.dataset.recipeEffort = recipe.effort;
   const saved = state.savedRecipes.includes(recipe.id);
-  const summaryMarkup = context === "dashboard" ? "" : `<p>${recipe.summary}</p>`;
+  const summaryMarkup = context === "dashboard" || isOnboardingCard
+    ? `<p class="ingredient-preview">${getIngredientPreview(recipe)}</p>`
+    : `<p>${recipe.summary}</p>`;
+  const timeWindowChipMarkup = isOnboardingCard ? `<span class="recipe-window-chip">${timeWindowLabel()}</span>` : "";
   card.innerHTML = `
     <img src="${recipe.image}" width="520" height="320" alt="Photo for ${recipe.title}">
     <div class="recipe-content">
       <h3>${recipe.title}</h3>
       <div class="recipe-meta">
         <span>${recipe.time} min</span>
+        ${timeWindowChipMarkup}
         <span>${recipe.skill}</span>
         <span>${recipe.ingredients} ingredients</span>
         <span>${recipe.serves} serving${recipe.serves === 1 ? "" : "s"}</span>
       </div>
-      <p class="match-reason">${context === "dashboard" ? getDashboardMatchReason(recipe) : getMatchReason(recipe)}</p>
       ${summaryMarkup}
     </div>
     ${
@@ -1620,7 +2088,7 @@ function toggleSavedRecipe(recipe) {
   }
 }
 
-function getRecommendedRecipes() {
+function getRecommendedRecipes(limit = 3) {
   const hardRestrictions = state.restrictions.filter((item) => item !== "none");
   const minTime = Number(state.timeRangeMin || 20);
   const maxTime = Number(state.timeRangeMax || 45);
@@ -1652,7 +2120,7 @@ function getRecommendedRecipes() {
     .map((item) => item.recipe);
 
   const fallback = recipes.filter((recipe) => !scored.some((item) => item.id === recipe.id));
-  return [...scored, ...fallback].slice(0, 3);
+  return [...scored, ...fallback].slice(0, limit);
 }
 
 function completeOnboarding() {
@@ -1661,18 +2129,31 @@ function completeOnboarding() {
   state.answeredSteps = steps.map((_, index) => index);
   syncDashboardDefaultsFromOnboarding();
   persistState();
+  window.clearTimeout(progressTimer);
+  progressTimer = null;
+  lastAnsweredKey = "";
+  delete document.body.dataset.lastAnswer;
+  delete els.flowPanel.dataset.lastAnswer;
+  document.body.classList.remove("has-recent-answer");
+  els.flowPanel.classList.remove("has-recent-answer");
+  removeDashboardRoot();
+  document.querySelectorAll(".dashboard-welcome-screen").forEach((screen) => screen.remove());
+  els.flowPanel.hidden = true;
+  els.flowPanel.classList.add("is-completing", "is-dashboard-hidden");
+  document.body.dataset.dashboardHandoff = "welcoming";
+  syncFrameState("onboarding");
   triggerFoodCelebration();
-  els.flowPanel.classList.add("is-completing");
-  showToast("Setup complete. Your first recipe is saved.");
+  hideToast();
   window.clearTimeout(completionTimer);
-  completionTimer = window.setTimeout(() => {
-    completionTimer = null;
-    renderDashboard({ scrollToTop: true });
-  }, 550);
+  completionTimer = null;
+  showDashboardWelcomeScreen(getDashboardRecommendations());
 }
 
 function renderDashboard(options = {}) {
   syncDashboardDefaultsFromOnboarding();
+  if (!options.preserveHandoff) {
+    delete document.body.dataset.dashboardHandoff;
+  }
   els.flowPanel.hidden = true;
   els.flowPanel.classList.add("is-dashboard-hidden", "dashboard-active");
   els.flowPanel.classList.remove("saved-active");
@@ -1706,10 +2187,14 @@ function renderDashboard(options = {}) {
   mobileSaved.hidden = dashboardTab !== "saved";
   mobileSaved.append(createSavedRecipesContent({ title: "Saved recipes", context: "mobile" }));
 
-  content.append(main, mobileSaved, createSavedDock());
+  content.append(main, mobileSaved);
   dashboard.append(content);
   els.onboardingLayout.append(dashboard);
+  document.body.append(createSavedDock());
   syncFrameState("dashboard");
+  if (options.enteringDashboard) {
+    dashboard.classList.add("is-entering-dashboard");
+  }
   refreshIcons();
 
   if (options.scrollToTop) {
@@ -1717,11 +2202,44 @@ function renderDashboard(options = {}) {
   }
 }
 
+function showDashboardWelcomeScreen(recommendations) {
+  document.querySelectorAll(".dashboard-welcome-screen").forEach((screen) => screen.remove());
+
+  const welcomeMessage =
+    state.savedRecipes.length > 0
+      ? `${recommendations.length} recipe matches are ready, with your saved first dinner waiting.`
+      : `${recommendations.length} recipe matches are ready, and you can save a first dinner when one looks right.`;
+  const screen = document.createElement("section");
+  screen.className = "dashboard-welcome-screen";
+  screen.setAttribute("aria-live", "polite");
+  screen.setAttribute("aria-label", "Welcome to your dashboard");
+  screen.innerHTML = `
+    <div class="dashboard-welcome-card">
+      ${iconMarkup("sparkles")}
+      <p class="eyebrow">Setup saved</p>
+      <h2>Welcome to your dashboard.</h2>
+      <p>${welcomeMessage}</p>
+    </div>
+  `;
+
+  els.onboardingLayout.append(screen);
+  refreshIcons();
+  window.setTimeout(() => {
+    renderDashboard({ scrollToTop: true });
+    screen.classList.add("is-fading");
+  }, DASHBOARD_WELCOME_FADE_DELAY);
+  window.setTimeout(() => {
+    screen.remove();
+  }, DASHBOARD_WELCOME_REMOVE_DELAY);
+}
+
 function removeDashboardRoot() {
   const existing = els.onboardingLayout.querySelector(".dashboard-shell");
   if (existing) {
     existing.remove();
   }
+
+  document.querySelectorAll("body > .saved-dock").forEach((dock) => dock.remove());
 }
 
 function createDashboardHero(recommendations) {
@@ -2006,7 +2524,23 @@ function refreshSavedList(wrapper) {
   if (saved.length === 0) {
     const empty = document.createElement("div");
     empty.className = "empty-saved-state";
-    empty.textContent = state.savedRecipes.length === 0 ? "Save a recipe to keep it here." : "No saved recipes match those filters.";
+    const hasActiveFilters = Boolean(state.savedSearch.trim()) || state.savedPresetFilter !== "all";
+    empty.innerHTML =
+      state.savedRecipes.length === 0
+        ? "<p>Save a recipe to keep it here.</p>"
+        : `<p>No saved recipes match those filters.</p>${
+            hasActiveFilters ? '<button type="button" class="text-button clear-saved-filters">Clear filters</button>' : ""
+          }`;
+    empty.querySelector(".clear-saved-filters")?.addEventListener("click", () => {
+      state.savedSearch = "";
+      state.savedPresetFilter = "all";
+      const input = wrapper.querySelector('input[type="search"]');
+      const select = wrapper.querySelector("select");
+      if (input) input.value = "";
+      if (select) select.value = "all";
+      persistState();
+      refreshSavedList(wrapper);
+    });
     list.append(empty);
     return;
   }
@@ -2100,7 +2634,7 @@ function getDashboardMatchReason(recipe) {
   const filters = state.dashboardFilters;
   const preset = simplePresets.find((item) => item.id === state.dashboardPreset);
   if (preset && preset.tags.some((tag) => recipe.tags.includes(tag))) {
-    return `${preset.label}: ${preset.tags.find((tag) => recipe.tags.includes(tag)).replaceAll("-", " ")}.`;
+    return getPresetFitCopy(preset, recipe);
   }
   if (recipe.time <= Number(filters.maxTime)) {
     return `Within ${formatTimeValue(Number(filters.maxTime))}.`;
@@ -2109,6 +2643,39 @@ function getDashboardMatchReason(recipe) {
     return "Short ingredient list.";
   }
   return "Fits your setup.";
+}
+
+function getIngredientPreview(recipe) {
+  const ingredientPreviews = {
+    "hummus-plate": "Hummus, pita, crisp vegetables, olives, and chickpeas.",
+    "chickpea-tacos": "Chickpeas, crunchy slaw, tortillas, salsa, and lime.",
+    "sheet-pan-chicken": "Chicken, potatoes, vegetables, lemon, garlic, and herbs.",
+    "rice-bowl": "Microwave rice, crisp vegetables, canned beans, and sauce.",
+    "tomato-pasta": "Pasta, tomato sauce, cream, pantry seasonings, and vegetables.",
+    "bean-skillet": "Canned beans, sweet potatoes, greens, spices, and skillet staples."
+  };
+
+  return ingredientPreviews[recipe.id] || recipe.summary;
+}
+
+function getPresetFitCopy(preset, recipe) {
+  const matchedTag = preset.tags.find((tag) => recipe.tags.includes(tag));
+  const copy = {
+    "low-commitment": "Quick, low-effort dinner.",
+    quick: "Fast enough for a busy night.",
+    spicy: "Brings the warm, punchy flavor.",
+    "takeout-swap": "Takeout energy, home-cooked.",
+    "gym-meal-plan": "Protein-forward and leftover-friendly.",
+    "high-protein": "Protein-forward for meal planning.",
+    healthy: "Balanced without extra fuss.",
+    "family-friendly": "Familiar flavors, more servings.",
+    comfort: "Comforting and easy to share.",
+    "pantry-rescue": "Built around pantry-friendly staples.",
+    pantry: "Uses ingredients you may already have.",
+    budget: "Keeps the grocery lift low."
+  };
+
+  return copy[matchedTag] || `Fits your ${preset.label.toLowerCase()} mood.`;
 }
 
 function syncDashboardDefaultsFromOnboarding() {
@@ -2129,25 +2696,29 @@ function syncDashboardRestrictionFromOnboarding() {
 }
 
 function triggerFoodCelebration() {
+  document.querySelectorAll(".food-celebration").forEach((existing) => existing.remove());
+
   const layer = document.createElement("div");
   layer.className = "food-celebration";
   layer.setAttribute("aria-hidden", "true");
 
-  const icons = ["salad", "carrot", "leaf", "sparkles", "cooking-pot", "utensils", "wheat", "chef-hat"];
-  for (let index = 0; index < 24; index += 1) {
+  const icons = ["salad", "carrot", "leaf", "cooking-pot", "utensils", "wheat", "chef-hat", "sparkles"];
+  for (let index = 0; index < 18; index += 1) {
     const icon = document.createElement("span");
     icon.className = "food-burst-icon";
     icon.dataset.foodBurstIndex = String(index);
-    icon.style.setProperty("--burst-x", `${Math.round(Math.random() * 100)}vw`);
-    icon.style.setProperty("--burst-delay", `${Math.random().toFixed(2)}s`);
-    icon.style.setProperty("--burst-rotate", `${Math.round(Math.random() * 240) - 120}deg`);
+    icon.style.setProperty("--burst-x", `${18 + Math.round(Math.random() * 64)}vw`);
+    icon.style.setProperty("--burst-y", `${58 + Math.round(Math.random() * 18)}vh`);
+    icon.style.setProperty("--burst-delay", `${(index * 0.035 + Math.random() * 0.08).toFixed(2)}s`);
+    icon.style.setProperty("--burst-drift", `${Math.round(Math.random() * 96) - 48}px`);
+    icon.style.setProperty("--burst-rotate", `${Math.round(Math.random() * 180) - 90}deg`);
     icon.innerHTML = iconMarkup(icons[index % icons.length]);
     layer.append(icon);
   }
 
   document.body.append(layer);
   refreshIcons();
-  window.setTimeout(() => layer.remove(), 1600);
+  window.setTimeout(() => layer.remove(), 1800);
 }
 
 function timeRangeLabel() {
@@ -2358,17 +2929,11 @@ els.nextButton.addEventListener("click", () => {
   }
 
   if (currentStep === steps.length - 1) {
-    if (state.savedRecipes.length === 0) {
-      showToast("Save one recipe to finish setup.");
-      return;
-    }
     completeOnboarding();
     return;
   }
 
-  markStepAnswered(currentStep);
-  currentStep = Math.min(steps.length - 1, currentStep + 1);
-  renderStep({ scrollToPanel: true });
+  advanceToNextStep();
 });
 
 document.addEventListener("keydown", (event) => {

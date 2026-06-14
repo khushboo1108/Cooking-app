@@ -32,6 +32,7 @@
         <nav class="drawer-nav">
           <button class="nav-link active" type="button" data-view="onboarding">Onboarding flow</button>
           <button class="nav-link" type="button" data-view="rationale">UX rationale</button>
+          <button class="nav-link drawer-reset-button" type="button" data-reset-state>Reset setup</button>
         </nav>
         <div class="drawer-note">
           <span>Beta focus</span>
@@ -43,38 +44,11 @@
       <main>
         <section class="page active" id="onboardingPage" aria-labelledby="onboardingTitle">
           <div class="onboarding-layout">
-            <section class="intro-panel" aria-label="HomeStart overview">
-              <div>
-                <p class="eyebrow">Personalized cooking start</p>
-                <h1 id="onboardingTitle">Build a home-cooking habit that fits real weekdays.</h1>
-                <p class="lede">A short setup helps HomeStart recommend recipes, grocery lists, and step-by-step guidance that match your current routine.</p>
-              </div>
-              <img class="hero-image" src="assets/food-prep.png" width="520" height="360" alt="Illustration of simple vegetables and prep tools on a plate">
-              <div class="promise-strip" aria-label="First week target">
-                <span>First week target</span>
-                <strong>Save one recipe. Cook once. Adjust from there.</strong>
-              </div>
-              <dl class="signal-list">
-                <div>
-                  <dt>72%</dt>
-                  <dd>name time as the biggest blocker</dd>
-                </div>
-                <div>
-                  <dt>54%</dt>
-                  <dd>abandon recipes halfway through</dd>
-                </div>
-                <div>
-                  <dt>65%</dt>
-                  <dd>identify as beginner cooks</dd>
-                </div>
-              </dl>
-            </section>
-
             <section class="flow-panel" aria-live="polite">
               <div class="progress-header">
                 <div>
                   <p class="eyebrow" id="stepEyebrow">Step 1 of 4</p>
-                  <h2 id="stepTitle"></h2>
+                  <h1 id="onboardingTitle"></h1>
                 </div>
                 <span class="step-count" id="stepCount"></span>
               </div>
@@ -225,7 +199,7 @@
               </div>
               <div role="row">
                 <span>Personalization could become stale after demos, feedback, or changed needs.</span>
-                <span>A visible Reset setup affordance returns users to onboarding.</span>
+                <span>A visible Reset setup affordance in the left panel returns users to onboarding.</span>
                 <span>Recovery should not require clearing browser storage manually.</span>
                 <span>Users and testers can replay the setup path safely.</span>
               </div>
@@ -386,7 +360,7 @@
               </article>
               <article>
                 <h3>Screen 4: Review recipe</h3>
-                <p>Summary chips, starter recommendation, fit rationale, Save recipe, and Edit preferences are shown together before dashboard handoff.</p>
+                <p>Summary chips, category tabs, a two-card recipe carousel, optional Save recipe, and Edit preferences are shown before dashboard handoff.</p>
               </article>
               <article>
                 <h3>Low commitment</h3>

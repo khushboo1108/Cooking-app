@@ -4,7 +4,7 @@ This document is the source of truth for the prototype decisions. The interface 
 
 ## Product Goal
 
-Design a 4-screen desktop onboarding flow and dashboard handoff that helps a responsive cooking web app understand a user's current cooking habits, preferences, and skill level so it can personalize recipes, instructions, filters, saved recipes, and cooking guidance without overwhelming them.
+Design a compact grouped onboarding flow and dashboard handoff that helps a responsive cooking web app understand a user's current cooking habits, preferences, and skill level so it can personalize recipes, instructions, filters, saved recipes, and cooking guidance without overwhelming them.
 
 This pass is intentionally desktop-only. Mobile and tablet onboarding refinements are deferred unless already documented in a separate pass.
 
@@ -54,16 +54,16 @@ The original rationale still applies: HomeStart should lower intimidation and ge
 | Prior iteration | Updated experience | Why it changed | User impact |
 | --- | --- | --- | --- |
 | Rationale access looked like Settings | The left nav and mobile drawer label the destination as UX rationale, with Home remaining first | Stakeholders need to inspect design reasoning without confusing it with account preferences | Reviewers can find rationale quickly while the cooking flow remains primary |
-| Onboarding could feel like a preference survey | A welcome screen frames setup as a short, low-stakes routine check with a final review screen | Low-confidence cooks need to know the commitment is small before answering questions | Users see 3 grouped screens plus 1 review screen and a fast path to a first recipe |
+| Onboarding could feel like a preference survey | A welcome screen frames setup as a short, low-stakes routine check with 3 grouped setup screens and a final review screen | Low-confidence cooks need to know the commitment is small before answering questions | Users answer related prompts together and still get a fast path to a first recipe |
 | The first headline felt more functional than reassuring | The desktop welcome headline becomes "What does cooking look like for you this week?" | The first line should meet a low-confidence cook with natural weekly language | Users understand setup starts from their real week, not a perfect profile |
 | Progress competed with itself | The desktop flow now shows one compact progress system only: `Step 1 of 4` and a single bar | Category pills, separate counters, and duplicate tracks made state decoding difficult | Users can track progress from one place without visual bookkeeping |
-| Stage labels could sound vague, such as "Pantry Check" | Labels now match task groups: Cooking routine, Recipe support, Food boundaries, Review recipe | Old labels implied actions that did not match the question intent | Users know which decision area they are completing before reading options |
-| Desktop onboarding put too much in one visual stack | Decisions and questions stay on the left; only a compact illustration sits on the right | Large screens can support context, but context should support, not compete with, the decision lane | Users decide faster because grouped questions are co-located and support is glanceable |
+| Stage labels could sound vague, such as "Pantry Check" | Labels now match task groups: Cooking routine, Recipe support, Food boundaries, and Review recipe | Old labels implied actions that did not match the question intent | Users know which decision area they are completing before reading options |
+| Desktop onboarding put too much in one visual stack | The grouped questions stay on the left; only a compact illustration sits on the right | Large screens can support context, but context should support, not compete with, the decision lane | Users decide faster because related questions are co-located and support is glanceable |
 | The setup sidebar exposed full navigation too early | During desktop onboarding, the sidebar is simplified to brand/logo only | Full navigation implies the app is usable before setup is complete and competes with the setup task | Users stay oriented in setup without being pulled into unfinished app areas |
 | Selected states and decoration varied by surface | Selected cards, chips, and actions use one state language within a minimal theme | Decoration should confirm decisions, not add another layer of interpretation | The interface feels calmer, and the decision-first hierarchy is easier to scan |
-| Questions exposed too many options | Each prompt still limits to three primary choices, with grouped questions replacing one-question-per-screen friction | Grouping lowers navigation overhead while keeping each decision legible | Users progress through low-stakes decisions without feeling like a quiz |
-| Single-screen question flow added extra navigation friction | Grouping by decision category removes repeated progress resets between isolated questions | Each grouped screen handles related choices and ends with one clear next step | The user can process low-stakes onboarding content with less churn |
-| Progress read-out was fragmented | The system moved to a 4-step category flow and no longer uses Start/Window/Guidance/Food/Timing/Save pill tabs | Milestone names are now stable and aligned to screen purpose | Users understand which screen they are on from one compact indicator |
+| Questions exposed too many options | Related prompts are grouped into 3 setup screens with compact cards | Grouping lowers wasted space while preserving clear question boundaries | Users progress through low-stakes decisions without the screen feeling sparse |
+| Single-screen question flow added extra navigation friction | The flow now groups related questions by decision category | The issue was screen density, not the underlying answer model | Users see enough context to move quickly while keeping Back and Next for control |
+| Progress read-out was fragmented | The system moved to a 4-step grouped flow and no longer uses Start/Window/Guidance/Food/Timing/Save pill tabs | Milestone names are now stable and aligned to screen purpose | Users understand which screen they are on from one compact indicator |
 | Gradient progress implied mixed status | Progress should use a solid grey-to-orange intensity shift with one one-time ping per milestone | Solid progress is easier to read, and a ping acknowledges completion without continuous motion | Users get feedback without distraction |
 | Generic confetti felt detached from cooking | Saved-recipe celebration should use local food icons and cooking illustration language | Delight should reinforce the product milestone, not feel like unrelated party decoration | The milestone feels specific to HomeStart |
 | "Right now" language overfit immediate cooking | Copy shifts to "this cooking window," "next dinner," and "planned meal" | Users may be planning groceries, lunch, or a future weekday meal | Recommendations work for immediate and future planning |
@@ -94,9 +94,9 @@ Desktop setup uses a two-column pattern to keep focus and context separate:
 - The left column owns the decision surface: headline, helper copy, grouped question cards, and sticky bottom actions (Back + Continue/Save).
 - The right column remains compact: a small cooking illustration only. The live `Setup so far` card was removed because it repeated answers before they were useful and competed with the question lane.
 - Progress is one system only: `Step 1 of 4`, supported by a compact progress bar with no extra category pills.
-- Task labels reflect grouped screen purpose: Cooking routine, Recipe support, Food boundaries, Review recipe.
+- Task labels reflect grouped screen purpose: Cooking routine, Recipe support, Food boundaries, and Review recipe.
 
-Grouping the screens by decision category reduces progress noise and one-question-per-screen friction. Low-stakes onboarding prompts like cooking frequency, skill fit, and serving size are collected with related context instead of forcing a long queue of isolated micro-questions.
+Grouping the screens by decision category reduces wasted space and progress noise. Low-stakes onboarding prompts like cooking frequency, skill fit, and serving size are collected with related context instead of forcing a long queue of sparse micro-screens.
 
 The setup sidebar follows the same rule. During desktop onboarding it should show only the HomeStart brand/logo. Full nav returns after setup or on rationale/dashboard screens. Full navigation during setup can imply the app is fully usable too early and can split attention from the focused decision flow.
 
@@ -115,8 +115,8 @@ The setup sidebar follows the same rule. During desktop onboarding it should sho
 - If onboarding begins with the user's current routine instead of an aspirational cooking goal, users will feel less judged and be more likely to complete the flow.
 - If the app asks for total dinner time including cleanup, recommendations will feel more realistic and reduce first-week recipe abandonment.
 - If the app captures why recipes usually fail, the step-by-step experience can address the user's actual source of anxiety.
-- If each grouped screen presents 2-3 related onboarding questions, users will be more likely to continue than if they answer one decision per page.
-- If screens are grouped by routine category, users will build a complete mental model before moving to the next stage.
+- If each grouped screen presents related onboarding questions, users will be more likely to continue than if they answer one decision per sparse page.
+- If screens stay grouped by routine, recipe support, and food boundaries, users will build a complete mental model before the review step.
 - If progress is shown as a single `Step 1 of 4` bar, users will know where they are without reconciling pills, counts, and extra steps.
 - If progress uses a solid grey-to-orange intensity shift plus a one-time ping, feedback will feel responsive without implying mixed states or constant motion.
 - If saved-recipe celebration uses food icons instead of generic confetti, the milestone will feel connected to cooking.
@@ -135,10 +135,10 @@ The setup sidebar follows the same rule. During desktop onboarding it should sho
 - Cap each onboarding question at three primary choices so the user compares a small set of meaningful paths.
 - Keep two-column desktop structure: active decision on the left, compact support context on the right, with sticky actions at the bottom.
 - Show one progress pattern only: `Step X of 4` plus a compact bar. No Start/Window/Guidance/Food/Timing/Save pill tabs.
-- Group low-stakes onboarding questions by decision category to reduce one-question-per-screen friction.
+- Group low-stakes onboarding questions by decision category to reduce wasted space and context switching.
 - Keep one selected-state pattern across cards, chips, and inputs so state is readable at a glance.
 - Use task labels that describe the decision being made; avoid decorative labels that imply work the user is not doing.
-- Use four milestones and one compact progression model instead of raw numeric step noise.
+- Use one compact progression model instead of competing milestone systems.
 - Use solid progress intensity from grey to orange. Avoid gradients that imply multiple statuses.
 - Use one-time milestone pings that grow slightly by stage, then stop.
 - Keep the setup sidebar brand-only on desktop until onboarding is complete.
@@ -201,7 +201,7 @@ The useful journey is not just onboarding. The business metric requires a saved 
 | Prepare | User generates a grocery list, checks pantry items, and shops or orders missing ingredients | "What do I need before I can cook?" | Remove the logistical barrier between intent and action | User uses grocery list |
 | Cook | User returns, opens the saved recipe, follows steps, cleans up, and confirms completion | "Can I finish without getting lost halfway?" | Guide clearly through execution and reinforce the first win | User cooks once within 7 days |
 
-The 4-screen onboarding set sits in Calibrate and flows into Recommend, but it must intentionally support Commit, Prepare, and Cook.
+The focused onboarding set sits in Calibrate and flows into Recommend, but it must intentionally support Commit, Prepare, and Cook.
 
 ## Behavioral Model
 
@@ -311,13 +311,13 @@ Why reduced motion matters:
 
 ## Proposed Flow
 
-### Welcome + 4-screen desktop flow
+### Welcome + 4-screen grouped flow
 
-Progress is always `Step X of 4` with a compact bar. This is desktop-only by design.
+Progress is always `Step X of 4` with a compact bar.
 
-- Group related onboarding questions to reduce one-question-per-screen friction and reduce context switching.
-- Keep each screen in one decision category; this avoids long serial micro-questions and keeps momentum high.
-- Use `Back` plus one forward action in the sticky action row.
+- Group related onboarding questions to reduce wasted space and context switching.
+- Keep each setup screen in one decision category.
+- Preserve `Back` plus one forward action in the sticky action row.
 
 Screen structure is fixed:
 
@@ -329,7 +329,7 @@ Screen structure is fixed:
 
 Rationale:
 
-This screen establishes baseline behavior first. Frequency is captured as a habit signal, while cooking mode captures effort style so the app can distinguish "when" from "how." Dinner window captures immediate context so recommendations stay realistic.
+This screen establishes baseline behavior first. Frequency is captured as a habit signal, while cooking mode captures effort style so the app can distinguish "when" from "how." Dinner window captures usual timing so recommendations stay realistic.
 
 ### Screen 2: Recipe support
 
@@ -353,14 +353,16 @@ Hard constraints and practical filters stay together as one decision family. Thi
 ### Screen 4: Review recipe
 
 - Summary chips showing captured constraints and preferences.
-- Starter recommendation preview.
+- Preference-based recipe category tabs.
+- Two-card starter recipe carousel.
 - Why this meal fits this setup.
 - `Save recipe` primary action.
 - `Edit preferences` secondary action returning users to the relevant category.
+- `Open dashboard` remains available even if the user skips saving.
 
 Rationale:
 
-The review screen closes the loop on onboarding without introducing a fifth setup screen. The user sees what was captured, evaluates one recommendation, and acts immediately while still retaining explicit edit controls.
+The review screen closes the loop on onboarding. The user sees what was captured, compares a small set of recommendations, can save one recipe if it feels right, and still retains explicit edit controls.
 
 The review screen connects directly into dashboard context:
 
@@ -401,31 +403,33 @@ The review screen connects directly into dashboard context:
 - One-question-per-screen flow fatigue was reduced by grouping related choices.
 - Decorative numeric progress that does not explain what the app is learning.
 - Generic confetti and motion that can feel detached from cooking or uncomfortable for motion-sensitive users.
+- Stale transition frames where review, welcome, and old dashboard layouts appear in sequence instead of one smooth handoff.
 - Vague health goals that do not translate into recipe decisions.
 - Trust loss from ignoring dietary restrictions.
 - Recipe abandonment caused by unclear timing, prep order, or doneness cues.
 
 ## Key Design Decisions
 
-- Short task-based setup sections, each with a distinct job. This keeps cognitive load low while still capturing enough personalization signal.
+- Short grouped setup screens, each with a distinct job. This keeps cognitive load low while still capturing enough personalization signal.
 - Desktop onboarding uses a single progress system: `Step 1 of 4`, compact bar, no additional pill tabs.
 - The first headline is warm and weekly-context-led: "What does cooking look like for you this week?"
-- Task labels name the decision being made, such as Cooking routine, Recipe support, Food boundaries, and Review recipe.
+- Task labels name the decision group, such as Cooking routine, Recipe support, Food boundaries, and Review recipe.
 - Desktop onboarding uses a two-column pattern: decisions and questions on the left, compact illustration on the right.
 - During desktop setup, the sidebar is brand/logo only so navigation does not imply the app is usable before setup is complete.
 - Familiar segmented cards and chips, capped at three primary choices per question. These are faster than open-ended questions and work well on mobile.
-- Grouping by decision category keeps friction low while keeping decisions actionable within each screen.
-- Progress is category-based with four milestones, not a raw numeric screen count.
+- Grouping by decision category keeps friction low while making better use of desktop space.
+- Progress is category-based with four milestones, not competing category pills.
 - Progress uses a solid grey-to-orange intensity shift plus one milestone ping, with reduced-motion fallbacks.
 - Time is captured at two levels: onboarding captures the usual range, and recommendations ask for the selected cooking window.
 - "Not sure" options where users may lack confidence. This preserves completion rather than forcing false precision.
-- Final recommendations are limited to one primary recipe or a small explainable set. The goal is a first decision, not exhaustive discovery.
+- Final recommendations are limited to a small explainable carousel. The goal is a first decision, not exhaustive discovery.
 - Food-icon celebration replaces generic confetti for the saved-recipe milestone.
+- The review-to-dashboard handoff is owned by the welcome overlay. The review panel is hidden immediately, and the dashboard is rendered only after temporary handoff state is cleared so final dashboard breakpoint rules apply from the first visible frame.
 - Selected states use one visual language across choice cards, chips, inputs, and save actions.
 - The UI theme is intentionally more minimal: lower decoration, less visual noise, and a decision-first hierarchy.
 - Dashboard presets provide a simple entry point into filtering; advanced filters are available when users need more control.
 - Dashboard copy is intentionally reduced after onboarding. Recipe photos, match reasons, save actions, and filters should carry the evidence.
-- Reset setup is visible because users need to return to onboarding for feedback/testing and recover from stale personalization.
+- Reset setup is visible in the left panel because users need to return to onboarding for feedback/testing and recover from stale personalization, while the card footer stays focused on Back and handoff.
 - Visual assets use stock/free photography for recipe evidence and Lucide for consistent UI icon weight.
 - Compact-density components should reveal more rows per viewport while preserving tap targets.
 - The first-week goal is intentionally small. For this audience, "cook once" is more motivating and credible than an ambitious weekly plan.
@@ -463,14 +467,14 @@ Presets should be implemented as temporary filter bundles. They should not overw
 | "Meal prep has a second-cycle dread problem." | Batch cooking was treated only as a benefit. | Added restart-friction capture and batch-aware recommendation logic. |
 | "What does this fallback question capture?" | Hard-night fallback was not visibly affecting outcomes. | Reframed it as "what does cooking need to replace?" and tied it to recommendation ranking, summary chips, and match reasons. |
 | "Time and low energy cover the other blockers." | Root constraints were mixed with downstream breakdown points. | Removed generic time/energy blocker chips and asked where dinner breaks down after those limits: deciding, ingredients, prep, cooking flow, cleanup. |
-| "Do not lock me into 30 or 45 minute recipes." | A fixed onboarding time choice overfit recommendations to one context. | Replaced fixed choices with a usual time range picker and added a selected-cooking-window picker on recommendations. |
+| "Do not lock me into 30 or 45 minute recipes." | A fixed onboarding time choice overfit recommendations to one context. | Kept onboarding time as a usual-window choice and added a selected-cooking-window picker on recommendations. |
 | "I cannot find the rationale." | The rationale destination existed but was labeled as Settings in the nav. | Renamed the nav item UX rationale and placed it directly after Home. |
 | "Do not make me manage every filter." | Advanced filtering can recreate information overload. | Added simple presets that map to advanced filters and personas, with advanced controls available on demand. |
 | "Do not make saved recipes disappear." | A saved count does not support grocery planning or return use. | Added a saved dock/tab rationale so the first commitment remains visible across device sizes. |
 | "Celebrate progress, but keep it practical." | Gamification can feel patronizing if it appears before meaningful action. | Reserved delight, toast, and food-icon celebration for the save milestone rather than every onboarding interaction. |
 | "There are too many choices." | Several onboarding prompts risked becoming option grids. | Capped each question at three primary choices and kept uncertainty options only where useful. |
-| "Why did onboarding feel fragmented?" | One-question-per-screen interaction felt repetitive. | Grouped screens by decision category and used one forward action per screen with Back for correction. |
-| "The stepper looks decorative." | Raw numbered steps did not explain question purpose. | Changed the progress model to `Step 1 of 4` plus a compact bar matching the four-screen structure. |
+| "Why did onboarding still feel slow?" | Select-then-Next made each answer feel like two actions. | Regrouped related questions into 3 setup screens with Back and Next for correction and pacing. |
+| "The stepper looks decorative." | Raw numbered steps did not explain question purpose. | Changed the progress model to `Step 1 of 4` plus a compact bar matching the grouped four-screen structure. |
 | "The progress gradient reads as decoration." | Gradient progress can imply mixed states and excess motion. | Changed the direction to solid grey-to-orange progress with one growing ping per milestone. |
 | "There are too many progress cues." | Pills, count, and bar made progress feel like three systems. | Desktop onboarding now documents one clear progress pattern at a time. |
 | "The first line should feel more encouraging." | Setup language led with the product task before the user's real weekly context. | Changed the welcome rationale to lead with "What does cooking look like for you this week?" |
@@ -481,6 +485,7 @@ Presets should be implemented as temporary filter bundles. They should not overw
 | "Confetti feels generic." | Celebration was not tied to cooking or saving. | Added local SVG food-icon celebration and cooking-stage illustration recommendations. |
 | "`Right now` is too narrow." | Immediate-only copy ignores future meal planning and grocery prep. | Replaced active copy with "selected cooking window," "next dinner," and "planned meal" language. |
 | "Motion needs accessibility guardrails." | Pings and bursts can be uncomfortable or distracting. | Documented reduced-motion fallbacks and vanilla CSS/WAAPI-style implementation guidance. |
+| "The handoff shows several stale screens." | The review panel remained visible during a delay, and the dashboard briefly rendered in temporary handoff state before final desktop overrides applied. | Removed the visible delay, made welcome the only handoff surface, and clear handoff state before rendering dashboard so old two-column layout rules cannot flash. |
 | "The dashboard is explaining too much." | Onboarding-level copy was competing with recipe evidence and actions. | Reduced dashboard copy direction so photos, match reasons, saves, and filters do the work. |
 | "The visuals still feel inconsistent." | Mixed symbol weights and placeholder-style illustrations made the UI feel crude. | Shifted the asset system toward stock/free food photography and one Lucide icon library. |
 | "I need to replay setup." | Stale personalization and demos were hard to recover from. | Added a visible Reset setup affordance for feedback/testing and state recovery. |

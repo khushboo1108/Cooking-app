@@ -9,6 +9,46 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 - The dashboard converts onboarding answers into simple presets first, then exposes advanced filters when the user wants more control.
 - Saved recipes are always recoverable through the sidebar/dock/tab pattern, depending on breakpoint.
 
+## Future Agent Quickstart
+
+### Source Of Truth
+
+- Work from the local project at `/Users/khushboo/Desktop/development projects/cooking-app`.
+- The active branch is `main`, tracking `khushboo/main`.
+- Primary GitHub remote for Khushboo’s hosted project: `https://github.com/khushboo1108/Cooking-app.git`.
+- Secondary/original remote: `https://github.com/Vaibhav7887-code/Cooking-app.git`. Do not push here unless the user explicitly asks.
+- Latest pushed baseline before this documentation update: `c4fc82c` (`Refine responsive cooking app prototype`).
+
+### Local Prototype
+
+- This is a static frontend prototype. There is no build step required for the current app.
+- Run locally with `python3 -m http.server 8022`.
+- Open `http://127.0.0.1:8022/` for the same local target used during recent visual checks.
+- Query parameters are not app routes; the app is rendered from `index.html` and uses client-side state from `localStorage`.
+- To replay onboarding, use the in-app `Reset setup` / `Reset user flow` controls rather than manually clearing storage unless debugging persistence.
+
+### Current Product Contract
+
+- Onboarding is low commitment and grouped into 3 setup screens plus 1 review screen after the welcome screen.
+- Desktop onboarding should feel like a web app, not a stretched mobile flow: persistent simplified brand rail, two-column card, questions on the left, compact visual support on the right.
+- Tablet keeps navigation compact by default and should not inherit awkward desktop spacing.
+- Mobile uses a hamburger menu during onboarding, then dashboard/saved tabs after onboarding is complete.
+- Dashboard helper copy should stay light; explanation belongs mostly in onboarding and the UX rationale page.
+- Saved recipes must remain reachable on every breakpoint: right dock on desktop/tablet, tab on mobile.
+- The onboarding-to-dashboard handoff must be single-surface: the review panel hides immediately, the welcome overlay owns the transition, and the dashboard only renders after the body has left temporary handoff state so final dashboard breakpoint rules apply from the first visible frame.
+
+### Recent Interaction Decisions
+
+- Dinner-window input uses compact preset cards inside the cooking routine screen.
+- The right-side `Setup so far` summary was intentionally removed from onboarding to reduce clutter.
+- `Reset setup` lives in the left drawer/sidebar so the onboarding card footer can focus on Back and dashboard handoff.
+- Setup screens auto-progress once every question in the current group is answered; the setup footer only shows Back.
+- Default servings uses eight radio-style option cards instead of a dropdown so it participates in auto-progress.
+- The review recipe area uses preference-based category tabs and a two-card carousel instead of a single forced starter.
+- Saving the starter recipe reveals a small cook-day nudge with `Tonight`, `Tomorrow`, `This weekend`, and `Next week`; `Tomorrow` is the default.
+- Opening the dashboard from review does not require saving a recipe. The welcome screen appears immediately and fades into the final dashboard; no review screen, intro panel, completion toast, or old two-column dashboard layout should flash during the handoff.
+- Selected states should remain consistent across onboarding cards and inputs: one green border, one soft green tint, one check/radio marker.
+
 ## Breakpoints And Layout Intent
 
 ### Desktop
@@ -50,43 +90,37 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 ### Screen 1: Cooking Routine
 
 - Title: `How does home cooking fit your week right now?`
-- Questions:
-  - `How often do you cook dinner at home?`
-  - `How would you prefer cooking to work for you?`
-  - `What dinner window actually works?` uses a double-thumb range slider with a default `20-40 min` window.
-- Design rationale: these all describe capacity, routine, and time availability, so grouping them avoids one-question-per-screen friction.
+- Questions: cooking frequency, preferred cooking style, and dinner window.
+- Design rationale: these all describe cooking capacity, routine, and available time.
 
 ### Screen 2: Recipe Support
 
 - Title: `How much support should your recipes give you?`
-- Questions:
-  - `Which skill level feels closest?`
-  - `What instruction style would feel best at first?`
-- Design rationale: both answers affect instruction density, confidence support, and recipe checkpoint detail.
+- Questions: skill level and instruction style.
+- Design rationale: these control recipe guidance, instruction density, and confidence support.
 
 ### Screen 3: Food Boundaries
 
 - Title: `What should recommendations respect first?`
-- Questions:
-  - `Any hard dietary restrictions?`
-  - `How many ingredients feels manageable?`
-  - `Default servings`
-- Restriction logic:
-  - Multi-select is allowed for restrictions.
-  - Selecting `None` clears all other restrictions.
-  - Selecting any restriction clears `None`.
+- Questions: dietary restrictions, ingredient limit, and default servings.
+- Restriction logic: multi-select is allowed; `None` clears other restrictions, and selecting any restriction clears `None`.
+- Default servings: eight radio-style buttons for 1–8 servings.
+- Design rationale: these affect recipe filtering and recommendation constraints.
 
 ### Screen 4: Review Recipe
 
 - Title: `Review your first recipe`
 - Shows:
   - Summary chips from prior answers.
-  - Recommended starter recipe.
-  - Explanation chip for why it fits.
+  - Preference-based recipe category tabs.
+  - A two-card carousel of starter recipes.
+  - Explanation chips for why recipes fit.
   - Primary CTA: `Save recipe`.
   - Secondary CTA: `Edit preferences`.
+- Carousel behavior: tabs are interactive, follow scroll position, auto-rotate without arrows, and pause for 6 seconds after user interaction.
 - After saving, a small cook-day nudge appears with `Tonight`, `Tomorrow`, `This weekend`, and `Next week`; `Tomorrow` is the default.
-- The footer handoff button reads `Open dashboard` and remains disabled until a recipe is saved.
+- The footer handoff button reads `Open dashboard`; saving a recipe is encouraged but optional.
+- Handoff behavior: once `Open dashboard` is clicked, the flow panel is hidden, `data-dashboard-handoff="welcoming"` is set only while the welcome overlay is active, and `renderDashboard()` clears handoff before syncing the dashboard. This prevents stale review content and old dashboard grid rules from painting for a frame.
 
 ## Dashboard Components
 
@@ -117,7 +151,7 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 ### Reset Experience
 
 - Reset is available from the drawer/sidebar.
-- Onboarding screens also include a visually secondary `Reset setup` action at the bottom-left of the onboarding card.
+- Onboarding screens keep reset out of the footer so Back can sit at the bottom-left of the card.
 - It clears local app state and returns the user to onboarding.
 - This is intentionally visible so designers and testers can replay onboarding without clearing browser storage manually.
 
@@ -148,13 +182,17 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 ## Recent Fixes From Exhaustive Audit
 
 - Fixed tablet reset control showing as a blank button by overriding hidden text from compact rail rules.
-- Fixed desktop onboarding screen one where grouped cards were clipped under the footer.
+- Fixed desktop onboarding screens where grouped cards were previously clipped under the footer.
 - Fixed desktop onboarding grid rows stretching and creating poster-like vertical gaps.
 - Fixed desktop review screen where `Save recipe` and `Edit preferences` were below the fold.
 - Fixed mobile onboarding transitions that scrolled the topbar/hamburger out of view.
 - Fixed mobile topbar copy during onboarding to show setup progress instead of `0 saved`.
 - Removed duplicate blank decorative icons from onboarding option cards.
-- Replaced dinner-window option cards with a compact range slider so time feels adjustable instead of categorical.
+- Restored grouped onboarding screens and uses compact dinner-window preset cards inside the routine screen.
+- Added grouped-screen auto-progress once all answers on a screen are selected.
+- Replaced the servings dropdown with eight radio-style option cards.
+- Made saving a review recipe optional before opening the dashboard.
+- Added a tabbed two-card review recipe carousel with a 6-second user-interaction pause.
 - Confirmed restriction multi-select behavior and `None` clearing behavior.
 
 ## Code Architecture Notes
@@ -192,20 +230,22 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 - Tablet: `1024x768`
 - Mobile: `390x844`
 
-### Final Audit Result
+### Current QA Baseline
 
 - Harness: no Playwright; local Node static server plus headless Chrome/CDP.
-- Report path: `/tmp/homestart-e2e-audit/audit-report.json`
-- Screenshot folder: `/tmp/homestart-e2e-audit`
-- Final result: `0` failures, `49` screenshots.
+- Historical report path: `/tmp/homestart-e2e-audit/audit-report.json`
+- Historical screenshot folder: `/tmp/homestart-e2e-audit`
+- The historical automated audit reached `0` failures and `49` screenshots, but future agents should treat it as a baseline artifact, not a fresh pass for newly changed UI.
+- After the most recent grouped onboarding change, lightweight validation passed with `node --check app.js`.
+- Historical manual in-app browser checks confirmed the removed `Setup so far` card, onboarding reset, and post-save cook-day nudge at `http://127.0.0.1:8013/?qa=reset-final`.
 
 ### Covered Flow
 
 - Welcome state.
-- Onboarding screens 1–3.
+- Onboarding setup screens 1–8 and review screen 9.
 - Option selection visual states.
 - Restriction multi-select and `None` clearing behavior.
-- Servings dropdown.
+- Servings option cards.
 - Review before save.
 - Save recipe.
 - Review after save.
@@ -219,12 +259,19 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 - Reset back to onboarding.
 - Horizontal overflow checks for all captured states.
 
+### QA Warning For Future Agents
+
+- Do not reuse stale assertions that expect one-question auto-advance screens or a dinner-window range slider; the current setup uses grouped question screens.
+- Do not count the removed `Setup so far` card as missing UI; its removal is intentional.
+- If changing responsive layout, inspect screenshots for all three breakpoints before claiming success.
+- If changing onboarding flow, verify reset, back, setup auto-progress, optional save recipe, edit preferences, carousel tabs, and dashboard handoff.
+
 ### Manual Screenshot Checks
 
-- Desktop onboarding screen 1: grouped cards fit without footer overlap.
-- Desktop onboarding screen 2: grouped questions stack tightly without grid stretching.
-- Desktop food boundaries: multi-select and servings are visible.
-- Desktop review: `Save recipe` and `Edit preferences` are visible before the long recipe card.
+- Desktop onboarding screens: grouped questions fit without footer overlap.
+- Desktop option screens: selected-state feedback remains readable before auto-progress.
+- Desktop food boundaries: restriction choices, ingredient choices, and eight serving cards are visible together.
+- Desktop review: category tabs, two recipe cards, `Save recipe`, and `Edit preferences` are visible before dashboard handoff.
 - Tablet dashboard: reset button label is readable.
 - Mobile onboarding: hamburger/topbar remains visible.
 - Mobile dashboard: dashboard/saved tabs and simple presets are visible.
@@ -233,9 +280,11 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 
 - Start by reading this file, `STEERING.md`, and `docs/onboarding-rationale.md`.
 - Before changing UI, identify which breakpoint owns the issue.
+- Before staging, run `git status --short --branch` and verify changes are limited to the requested scope.
 - After changing UI, run:
   - `node --check app.js`
   - `git diff --check`
   - no-Playwright visual E2E or internal browser screenshots across desktop/tablet/mobile.
 - Visually inspect at least one onboarding screen, one review screen, one dashboard screen, and one saved-recipes state per affected breakpoint.
+- If pushing, push to the `khushboo` remote unless the user explicitly requests the original Vaibhav remote.
 - Update this file when a system-level behavior, breakpoint rule, or component contract changes.
