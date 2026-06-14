@@ -1577,6 +1577,7 @@ function renderTimeWindowQuestion(container) {
   container.append(
     renderQuestionSection({
       heading: "What dinner window actually works?",
+      intro: "Including prep and cleanup time.",
       content: renderOptionChoiceGroup({
         key: "timeWindow",
         options: timeWindowChoices,
@@ -1681,6 +1682,7 @@ function renderCookingRoutine(container) {
     }),
     renderQuestionSection({
       heading: "What dinner window actually works?",
+      intro: "Including prep and cleanup time.",
       content: renderOptionChoiceGroup({
         key: "timeWindow",
         options: timeWindowChoices,
@@ -2032,6 +2034,11 @@ function renderRecipeCard(recipe, options = {}) {
   card.dataset.recipeTime = String(recipe.time);
   card.dataset.recipeEffort = recipe.effort;
   const saved = state.savedRecipes.includes(recipe.id);
+  const saveButtonLabel = saved
+    ? isOnboardingCard
+      ? "Added to your grocery list"
+      : "Saved"
+    : "Save recipe";
   const summaryMarkup = context === "dashboard" || isOnboardingCard
     ? `<p class="ingredient-preview">${getIngredientPreview(recipe)}</p>`
     : `<p>${recipe.summary}</p>`;
@@ -2053,7 +2060,7 @@ function renderRecipeCard(recipe, options = {}) {
       showSaveAction
         ? `<button class="save-button ${saved ? "saved" : ""}" type="button" aria-pressed="${saved ? "true" : "false"}">${iconMarkup(
             saved ? "check" : "bookmark"
-          )}<span>${saved ? "Saved" : "Save recipe"}</span></button>`
+          )}<span>${saveButtonLabel}</span></button>`
         : ""
     }
   `;

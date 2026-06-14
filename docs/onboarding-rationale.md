@@ -424,8 +424,10 @@ The review screen connects directly into dashboard context:
 - Progress is category-based with four milestones, not competing category pills.
 - Progress uses a solid grey-to-orange intensity shift plus one milestone ping, with reduced-motion fallbacks.
 - Time is captured at two levels: onboarding captures the usual range, and recommendations ask for the selected cooking window.
+- The dinner-window question explicitly includes prep and cleanup time so users do not answer with stove time only.
 - "Not sure" options where users may lack confidence. This preserves completion rather than forcing false precision.
 - Final recommendations are limited to a small explainable carousel. The goal is a first decision, not exhaustive discovery.
+- Saving a review recipe changes the card state to `Added to your grocery list` with a check marker. The copy should confirm a practical next step, not merely mark an abstract saved state.
 - Food-icon celebration replaces generic confetti for the saved-recipe milestone.
 - The review-to-dashboard handoff is owned by the welcome overlay. The review panel is hidden immediately, and the dashboard is rendered only after temporary handoff state is cleared so final dashboard breakpoint rules apply from the first visible frame.
 - The welcome screen primary CTA is centered as part of the hero composition; it should not inherit the right-aligned setup action-row behavior used by later Back/Next controls.
@@ -472,6 +474,7 @@ Presets should be implemented as temporary filter bundles. They should not overw
 | "What does this fallback question capture?" | Hard-night fallback was not visibly affecting outcomes. | Reframed it as "what does cooking need to replace?" and tied it to recommendation ranking, summary chips, and match reasons. |
 | "Time and low energy cover the other blockers." | Root constraints were mixed with downstream breakdown points. | Removed generic time/energy blocker chips and asked where dinner breaks down after those limits: deciding, ingredients, prep, cooking flow, cleanup. |
 | "Do not lock me into 30 or 45 minute recipes." | A fixed onboarding time choice overfit recommendations to one context. | Kept onboarding time as a usual-window choice and added a selected-cooking-window picker on recommendations. |
+| "Does this timing include prep and cleanup?" | Users may interpret dinner-window cards as cooking-only time. | Added helper text under the dinner-window question: `Including prep and cleanup time.` |
 | "I cannot find the rationale." | The rationale destination existed but was labeled as Settings in the nav. | Renamed the nav item UX rationale and placed it directly after Home. |
 | "Do not make me manage every filter." | Advanced filtering can recreate information overload. | Added simple presets that map to advanced filters and personas, with advanced controls available on demand. |
 | "Do not make saved recipes disappear." | A saved count does not support grocery planning or return use. | Added a saved dock/tab rationale so the first commitment remains visible across device sizes. |
@@ -493,6 +496,7 @@ Presets should be implemented as temporary filter bundles. They should not overw
 | "The welcome CTA is drifting right." | The first-screen CTA inherited the shared action group alignment intended for Back/Next controls. | Added a welcome-only centered action row so `Get started` stays centered under the hero copy. |
 | "Mobile onboarding cards are too tall." | Full-width mobile cards made grouped option sets feel like a long vertical form. | Added mobile-only responsive card grids: one column below 360px, two columns from 360px to 767px. |
 | "Mobile review still makes me scroll past visuals before recipes." | The review support column moved ahead of the recipes on mobile and kept a decorative animation in the first viewport. | Scoped mobile review ordering so recipes come first, the dinner-plan summary follows the carousel, and the cooking animation is hidden only on mobile. |
+| "The save state should feel useful." | `Saved` confirms storage but not the next cooking task. | Review recipe cards now change to `Added to your grocery list` with the saved check state after save. |
 | "The dashboard is explaining too much." | Onboarding-level copy was competing with recipe evidence and actions. | Reduced dashboard copy direction so photos, match reasons, saves, and filters do the work. |
 | "The visuals still feel inconsistent." | Mixed symbol weights and placeholder-style illustrations made the UI feel crude. | Shifted the asset system toward stock/free food photography and one Lucide icon library. |
 | "I need to replay setup." | Stale personalization and demos were hard to recover from. | Added a visible Reset setup affordance for feedback/testing and state recovery. |

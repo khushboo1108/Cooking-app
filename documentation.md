@@ -17,7 +17,7 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 - The active branch is `main`, tracking `khushboo/main`.
 - Primary GitHub remote for Khushboo’s hosted project: `https://github.com/khushboo1108/Cooking-app.git`.
 - Secondary/original remote: `https://github.com/Vaibhav7887-code/Cooking-app.git`. Do not push here unless the user explicitly asks.
-- Latest pushed baseline before this documentation update: `1255257` (`Refine mobile onboarding cards`).
+- Latest pushed baseline before this documentation update: `d2743b5` (`Refine mobile review layout`).
 
 ### Local Prototype
 
@@ -42,11 +42,13 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 ### Recent Interaction Decisions
 
 - Dinner-window input uses compact preset cards inside the cooking routine screen.
+- Dinner-window helper text reads `Including prep and cleanup time.` and appears as a muted line under the question.
 - The right-side `Setup so far` summary was intentionally removed from onboarding to reduce clutter.
 - `Reset setup` lives in the left drawer/sidebar so the onboarding card footer can focus on Back and dashboard handoff.
 - Setup screens auto-progress once every question in the current group is answered; the setup footer only shows Back.
 - Default servings uses eight radio-style option cards instead of a dropdown so it participates in auto-progress.
 - The review recipe area uses preference-based category tabs and a two-card carousel instead of a single forced starter.
+- Review recipe cards change saved-state copy from `Save recipe` to `Added to your grocery list` after the user saves, while keeping the check icon and pressed state.
 - Saving the starter recipe reveals a small cook-day nudge with `Tonight`, `Tomorrow`, `This weekend`, and `Next week`; `Tomorrow` is the default.
 - Opening the dashboard from review does not require saving a recipe. The welcome screen appears immediately and fades into the final dashboard; no review screen, intro panel, completion toast, or old two-column dashboard layout should flash during the handoff.
 - The welcome screen CTA is centered under the hero copy, not pushed into the shared right-aligned action group.
@@ -98,6 +100,7 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 
 - Title: `How does home cooking fit your week right now?`
 - Questions: cooking frequency, preferred cooking style, and dinner window.
+- Dinner-window helper: `Including prep and cleanup time.`
 - Design rationale: these all describe cooking capacity, routine, and available time.
 
 ### Screen 2: Recipe Support
@@ -125,6 +128,7 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
   - Primary CTA: `Save recipe`.
   - Secondary CTA: `Edit preferences`.
 - Carousel behavior: tabs are interactive, follow scroll position, auto-rotate without arrows, and pause for 6 seconds after user interaction.
+- Saved-card behavior: a saved review recipe shows a check icon and `Added to your grocery list`, reinforcing the grocery-list payoff instead of only saying `Saved`.
 - After saving, a small cook-day nudge appears with `Tonight`, `Tomorrow`, `This weekend`, and `Next week`; `Tomorrow` is the default.
 - The footer handoff button reads `Open dashboard`; saving a recipe is encouraged but optional.
 - Mobile review layout prioritizes the recipes above the plan summary and removes the decorative cooking animation. This is scoped under the mobile breakpoint so desktop remains a two-column review layout.
@@ -186,6 +190,7 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 - Desktop keeps a compact right-column cooking illustration.
 - Mobile/tablet can show the cooking illustration as a scannable visual break before questions.
 - Food celebration assets exist in `assets/food-icons-celebration.svg` and `assets/onboarding-cooking-stage.svg`.
+- Static CSS/JS references in `index.html` use a version query during prototype iteration so local browsers do not keep stale assets after quick UI changes.
 
 ## Recent Fixes From Exhaustive Audit
 
@@ -201,6 +206,9 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 - Replaced the servings dropdown with eight radio-style option cards.
 - Made saving a review recipe optional before opening the dashboard.
 - Added a tabbed two-card review recipe carousel with a 6-second user-interaction pause.
+- Added explicit dinner-window helper text under the question.
+- Changed review recipe saved-state copy to `Added to your grocery list` with the saved check marker.
+- Added static asset versioning to avoid stale local CSS/JS during prototype refreshes.
 - Confirmed restriction multi-select behavior and `None` clearing behavior.
 
 ## Code Architecture Notes
