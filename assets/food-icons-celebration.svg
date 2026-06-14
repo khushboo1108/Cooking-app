@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="220" viewBox="0 0 720 220" role="img" aria-labelledby="title desc">
+  <title id="title">Food icon celebration strip</title>
+  <desc id="desc">A strip of simple food icons and sparkles for a saved-recipe celebration.</desc>
+  <rect width="720" height="220" rx="28" fill="#fff7ed"/>
+  <path d="M54 152c74-68 156-81 248-38 94 44 178 34 252-29 40-34 78-45 112-30" fill="none" stroke="#fed7aa" stroke-width="12" stroke-linecap="round"/>
+  <g transform="translate(92 108)">
+    <circle cx="0" cy="0" r="34" fill="#ef4444"/>
+    <circle cx="-12" cy="-7" r="5" fill="#fca5a5"/>
+    <path d="M-4-31c13-24 32-23 49-10-6 22-24 30-49 10z" fill="#16a34a"/>
+    <path d="M0-27c9 4 18 3 28-3" fill="none" stroke="#15803d" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(204 116) rotate(-18)">
+    <path d="M0-48c26 9 42 28 48 58C22 20 3 9-10-24z" fill="#fb923c"/>
+    <path d="M-2-49c-10-20 3-34 22-29 1 18-6 27-22 29z" fill="#22c55e"/>
+    <path d="M17-17c11 6 19 13 25 24" fill="none" stroke="#fed7aa" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(316 108)">
+    <circle cx="0" cy="0" r="38" fill="#facc15"/>
+    <path d="M-26-8c18 7 35 7 52 0M-26 12c18-7 35-7 52 0" fill="none" stroke="#fef3c7" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="11" cy="-18" r="4" fill="#fef3c7"/>
+  </g>
+  <g transform="translate(432 110)">
+    <path d="M-44 8c31-44 63-44 96 0-30 22-64 22-96 0z" fill="#22c55e"/>
+    <path d="M-18-2c15 12 31 12 48 0" fill="none" stroke="#15803d" stroke-width="6" stroke-linecap="round"/>
+    <path d="M-4-29c11 7 16 17 13 31" fill="none" stroke="#15803d" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(558 118)">
+    <ellipse cx="0" cy="22" rx="52" ry="13" fill="#92400e" opacity=".12"/>
+    <path d="M-54-2h108c-4 34-25 56-54 56S-50 32-54-2z" fill="#fb923c"/>
+    <path d="M-42-1c8 16 23 25 42 25s34-9 42-25" fill="none" stroke="#ffedd5" stroke-width="6" stroke-linecap="round"/>
+    <rect x="-36" y="-40" width="72" height="32" rx="16" fill="#fed7aa"/>
+    <circle cx="-16" cy="-23" r="5" fill="#f97316"/>
+    <circle cx="8" cy="-24" r="5" fill="#16a34a"/>
+  </g>
+  <g fill="#fb923c">
+    <path d="M84 46l6 16 16 6-16 6-6 16-6-16-16-6 16-6z"/>
+    <path d="M644 80l7 18 18 7-18 7-7 18-7-18-18-7 18-7z"/>
+    <path d="M260 44l4 11 11 4-11 4-4 11-4-11-11-4 11-4z"/>
+  </g>
+  <g fill="#fed7aa">
+    <circle cx="154" cy="48" r="8"/>
+    <circle cx="508" cy="52" r="7"/>
+    <circle cx="640" cy="158" r="9"/>
+    <circle cx="250" cy="166" r="6"/>
+  </g>
+</svg>
