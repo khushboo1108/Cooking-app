@@ -419,6 +419,7 @@ The review screen connects directly into dashboard context:
 - During desktop setup, the sidebar is brand/logo only so navigation does not imply the app is usable before setup is complete.
 - Familiar segmented cards and chips, capped at three primary choices per question. These are faster than open-ended questions and work well on mobile.
 - Mobile onboarding option groups use a compact breakpoint rule: one card per row below 360px, and two columns from 360px through the mobile breakpoint. Desktop and tablet card layouts should not be affected by this rule.
+- Mobile review prioritizes decision content over decorative support: recipes appear before the `Your first dinner plan` summary, and the animated cooking illustration is hidden at the mobile breakpoint. Desktop and tablet keep the two-column review composition.
 - Grouping by decision category keeps friction low while making better use of desktop space.
 - Progress is category-based with four milestones, not competing category pills.
 - Progress uses a solid grey-to-orange intensity shift plus one milestone ping, with reduced-motion fallbacks.
@@ -491,6 +492,7 @@ Presets should be implemented as temporary filter bundles. They should not overw
 | "The handoff shows several stale screens." | The review panel remained visible during a delay, and the dashboard briefly rendered in temporary handoff state before final desktop overrides applied. | Removed the visible delay, made welcome the only handoff surface, and clear handoff state before rendering dashboard so old two-column layout rules cannot flash. |
 | "The welcome CTA is drifting right." | The first-screen CTA inherited the shared action group alignment intended for Back/Next controls. | Added a welcome-only centered action row so `Get started` stays centered under the hero copy. |
 | "Mobile onboarding cards are too tall." | Full-width mobile cards made grouped option sets feel like a long vertical form. | Added mobile-only responsive card grids: one column below 360px, two columns from 360px to 767px. |
+| "Mobile review still makes me scroll past visuals before recipes." | The review support column moved ahead of the recipes on mobile and kept a decorative animation in the first viewport. | Scoped mobile review ordering so recipes come first, the dinner-plan summary follows the carousel, and the cooking animation is hidden only on mobile. |
 | "The dashboard is explaining too much." | Onboarding-level copy was competing with recipe evidence and actions. | Reduced dashboard copy direction so photos, match reasons, saves, and filters do the work. |
 | "The visuals still feel inconsistent." | Mixed symbol weights and placeholder-style illustrations made the UI feel crude. | Shifted the asset system toward stock/free food photography and one Lucide icon library. |
 | "I need to replay setup." | Stale personalization and demos were hard to recover from. | Added a visible Reset setup affordance for feedback/testing and state recovery. |

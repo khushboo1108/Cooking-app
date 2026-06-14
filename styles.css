@@ -8348,7 +8348,32 @@ body[data-app-view="onboarding"][data-onboarding-status="started"] .review-actio
   }
 
   .review-side-column {
-    order: -1;
+    order: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  body[data-app-view="onboarding"][data-onboarding-status="started"][data-onboarding-step="4"] .review-two-column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  body[data-app-view="onboarding"][data-onboarding-status="started"][data-onboarding-step="4"] .review-main-column {
+    order: 1;
+  }
+
+  body[data-app-view="onboarding"][data-onboarding-status="started"][data-onboarding-step="4"] .review-side-column {
+    order: 2;
+  }
+
+  body[data-app-view="onboarding"][data-onboarding-status="started"][data-onboarding-step="4"] .review-side-column > .cooking-illustration {
+    display: none;
+  }
+
+  body[data-app-view="onboarding"][data-onboarding-status="started"][data-onboarding-step="4"] .review-side-column > .review-plan-summary {
+    justify-self: stretch;
+    max-width: none;
+    margin: 0;
   }
 }
 

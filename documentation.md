@@ -17,7 +17,7 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 - The active branch is `main`, tracking `khushboo/main`.
 - Primary GitHub remote for Khushboo’s hosted project: `https://github.com/khushboo1108/Cooking-app.git`.
 - Secondary/original remote: `https://github.com/Vaibhav7887-code/Cooking-app.git`. Do not push here unless the user explicitly asks.
-- Latest pushed baseline before this documentation update: `cca237e` (`Smooth onboarding dashboard handoff`).
+- Latest pushed baseline before this documentation update: `1255257` (`Refine mobile onboarding cards`).
 
 ### Local Prototype
 
@@ -34,6 +34,7 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 - Tablet keeps navigation compact by default and should not inherit awkward desktop spacing.
 - Mobile uses a hamburger menu during onboarding, then dashboard/saved tabs after onboarding is complete.
 - Mobile onboarding option groups use compact cards: one card per row below `360px`, and a 2-column grid from `360px` through the mobile breakpoint.
+- On the mobile review screen, recipe recommendations stay above `Your first dinner plan`; the cooking illustration is hidden at this breakpoint so the review does not spend the first viewport on animation.
 - Dashboard helper copy should stay light; explanation belongs mostly in onboarding and the UX rationale page.
 - Saved recipes must remain reachable on every breakpoint: right dock on desktop/tablet, tab on mobile.
 - The onboarding-to-dashboard handoff must be single-surface: the review panel hides immediately, the welcome overlay owns the transition, and the dashboard only renders after the body has left temporary handoff state so final dashboard breakpoint rules apply from the first visible frame.
@@ -50,6 +51,7 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 - Opening the dashboard from review does not require saving a recipe. The welcome screen appears immediately and fades into the final dashboard; no review screen, intro panel, completion toast, or old two-column dashboard layout should flash during the handoff.
 - The welcome screen CTA is centered under the hero copy, not pushed into the shared right-aligned action group.
 - Mobile onboarding option cards stay compact: under `360px` they remain single-column for readability; `360px` and wider mobile screens use two columns for common four-option questions.
+- Mobile review order is recipes first, dinner-plan summary second. Desktop/tablet keep their existing two-column review composition.
 - Selected states should remain consistent across onboarding cards and inputs: one green border, one soft green tint, one check/radio marker.
 
 ## Breakpoints And Layout Intent
@@ -80,6 +82,7 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 - Layout: sticky topbar with hamburger menu, HomeStart brand, and setup/saved status.
 - Onboarding keeps the hamburger menu available and does not show dashboard tabs before profiling is complete.
 - Onboarding option groups are responsive: `<360px` keeps one card per row; `360px–767px` uses two columns so four-option prompts become a 2x2 grid.
+- Review step order is intentionally mobile-specific: intro copy, recipe carousel, then `Your first dinner plan`. The animated cooking illustration is hidden on mobile review to reduce vertical churn and avoid a decorative frame before recipes.
 - Dashboard uses two tabs: `Dashboard` and `Saved recipes`.
 - Saved recipes are shown as a mobile tab instead of a right-side dock.
 
@@ -124,6 +127,7 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 - Carousel behavior: tabs are interactive, follow scroll position, auto-rotate without arrows, and pause for 6 seconds after user interaction.
 - After saving, a small cook-day nudge appears with `Tonight`, `Tomorrow`, `This weekend`, and `Next week`; `Tomorrow` is the default.
 - The footer handoff button reads `Open dashboard`; saving a recipe is encouraged but optional.
+- Mobile review layout prioritizes the recipes above the plan summary and removes the decorative cooking animation. This is scoped under the mobile breakpoint so desktop remains a two-column review layout.
 - Handoff behavior: once `Open dashboard` is clicked, the flow panel is hidden, `data-dashboard-handoff="welcoming"` is set only while the welcome overlay is active, and `renderDashboard()` clears handoff before syncing the dashboard. This prevents stale review content and old dashboard grid rules from painting for a frame.
 
 ## Dashboard Components
