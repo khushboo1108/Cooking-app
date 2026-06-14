@@ -17,13 +17,13 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 - The active branch is `main`, tracking `khushboo/main`.
 - Primary GitHub remote for Khushboo’s hosted project: `https://github.com/khushboo1108/Cooking-app.git`.
 - Secondary/original remote: `https://github.com/Vaibhav7887-code/Cooking-app.git`. Do not push here unless the user explicitly asks.
-- Latest pushed baseline before this documentation update: `c4fc82c` (`Refine responsive cooking app prototype`).
+- Latest pushed baseline before this documentation update: `cca237e` (`Smooth onboarding dashboard handoff`).
 
 ### Local Prototype
 
 - This is a static frontend prototype. There is no build step required for the current app.
-- Run locally with `python3 -m http.server 8022`.
-- Open `http://127.0.0.1:8022/` for the same local target used during recent visual checks.
+- Run locally with `python3 -m http.server 8024`.
+- Open `http://127.0.0.1:8024/` for the same local target used during recent visual checks.
 - Query parameters are not app routes; the app is rendered from `index.html` and uses client-side state from `localStorage`.
 - To replay onboarding, use the in-app `Reset setup` / `Reset user flow` controls rather than manually clearing storage unless debugging persistence.
 
@@ -33,6 +33,7 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 - Desktop onboarding should feel like a web app, not a stretched mobile flow: persistent simplified brand rail, two-column card, questions on the left, compact visual support on the right.
 - Tablet keeps navigation compact by default and should not inherit awkward desktop spacing.
 - Mobile uses a hamburger menu during onboarding, then dashboard/saved tabs after onboarding is complete.
+- Mobile onboarding option groups use compact cards: one card per row below `360px`, and a 2-column grid from `360px` through the mobile breakpoint.
 - Dashboard helper copy should stay light; explanation belongs mostly in onboarding and the UX rationale page.
 - Saved recipes must remain reachable on every breakpoint: right dock on desktop/tablet, tab on mobile.
 - The onboarding-to-dashboard handoff must be single-surface: the review panel hides immediately, the welcome overlay owns the transition, and the dashboard only renders after the body has left temporary handoff state so final dashboard breakpoint rules apply from the first visible frame.
@@ -47,6 +48,8 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 - The review recipe area uses preference-based category tabs and a two-card carousel instead of a single forced starter.
 - Saving the starter recipe reveals a small cook-day nudge with `Tonight`, `Tomorrow`, `This weekend`, and `Next week`; `Tomorrow` is the default.
 - Opening the dashboard from review does not require saving a recipe. The welcome screen appears immediately and fades into the final dashboard; no review screen, intro panel, completion toast, or old two-column dashboard layout should flash during the handoff.
+- The welcome screen CTA is centered under the hero copy, not pushed into the shared right-aligned action group.
+- Mobile onboarding option cards stay compact: under `360px` they remain single-column for readability; `360px` and wider mobile screens use two columns for common four-option questions.
 - Selected states should remain consistent across onboarding cards and inputs: one green border, one soft green tint, one check/radio marker.
 
 ## Breakpoints And Layout Intent
@@ -76,6 +79,7 @@ HomeStart is a responsive cooking-onboarding and recipe dashboard prototype. The
 - Width target: `<768px`; validated at `390x844`.
 - Layout: sticky topbar with hamburger menu, HomeStart brand, and setup/saved status.
 - Onboarding keeps the hamburger menu available and does not show dashboard tabs before profiling is complete.
+- Onboarding option groups are responsive: `<360px` keeps one card per row; `360px–767px` uses two columns so four-option prompts become a 2x2 grid.
 - Dashboard uses two tabs: `Dashboard` and `Saved recipes`.
 - Saved recipes are shown as a mobile tab instead of a right-side dock.
 

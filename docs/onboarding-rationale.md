@@ -400,6 +400,7 @@ The review screen connects directly into dashboard context:
 - Unrealistic recipe timing that ignores cleanup and energy level.
 - Overloaded onboarding surveys that ask for too many tastes before proving value.
 - Option grids that force users to compare more than three choices per question.
+- Mobile option cards that stack every answer full-width and make grouped onboarding feel longer than it is.
 - One-question-per-screen flow fatigue was reduced by grouping related choices.
 - Decorative numeric progress that does not explain what the app is learning.
 - Generic confetti and motion that can feel detached from cooking or uncomfortable for motion-sensitive users.
@@ -417,6 +418,7 @@ The review screen connects directly into dashboard context:
 - Desktop onboarding uses a two-column pattern: decisions and questions on the left, compact illustration on the right.
 - During desktop setup, the sidebar is brand/logo only so navigation does not imply the app is usable before setup is complete.
 - Familiar segmented cards and chips, capped at three primary choices per question. These are faster than open-ended questions and work well on mobile.
+- Mobile onboarding option groups use a compact breakpoint rule: one card per row below 360px, and two columns from 360px through the mobile breakpoint. Desktop and tablet card layouts should not be affected by this rule.
 - Grouping by decision category keeps friction low while making better use of desktop space.
 - Progress is category-based with four milestones, not competing category pills.
 - Progress uses a solid grey-to-orange intensity shift plus one milestone ping, with reduced-motion fallbacks.
@@ -425,6 +427,7 @@ The review screen connects directly into dashboard context:
 - Final recommendations are limited to a small explainable carousel. The goal is a first decision, not exhaustive discovery.
 - Food-icon celebration replaces generic confetti for the saved-recipe milestone.
 - The review-to-dashboard handoff is owned by the welcome overlay. The review panel is hidden immediately, and the dashboard is rendered only after temporary handoff state is cleared so final dashboard breakpoint rules apply from the first visible frame.
+- The welcome screen primary CTA is centered as part of the hero composition; it should not inherit the right-aligned setup action-row behavior used by later Back/Next controls.
 - Selected states use one visual language across choice cards, chips, inputs, and save actions.
 - The UI theme is intentionally more minimal: lower decoration, less visual noise, and a decision-first hierarchy.
 - Dashboard presets provide a simple entry point into filtering; advanced filters are available when users need more control.
@@ -486,6 +489,8 @@ Presets should be implemented as temporary filter bundles. They should not overw
 | "`Right now` is too narrow." | Immediate-only copy ignores future meal planning and grocery prep. | Replaced active copy with "selected cooking window," "next dinner," and "planned meal" language. |
 | "Motion needs accessibility guardrails." | Pings and bursts can be uncomfortable or distracting. | Documented reduced-motion fallbacks and vanilla CSS/WAAPI-style implementation guidance. |
 | "The handoff shows several stale screens." | The review panel remained visible during a delay, and the dashboard briefly rendered in temporary handoff state before final desktop overrides applied. | Removed the visible delay, made welcome the only handoff surface, and clear handoff state before rendering dashboard so old two-column layout rules cannot flash. |
+| "The welcome CTA is drifting right." | The first-screen CTA inherited the shared action group alignment intended for Back/Next controls. | Added a welcome-only centered action row so `Get started` stays centered under the hero copy. |
+| "Mobile onboarding cards are too tall." | Full-width mobile cards made grouped option sets feel like a long vertical form. | Added mobile-only responsive card grids: one column below 360px, two columns from 360px to 767px. |
 | "The dashboard is explaining too much." | Onboarding-level copy was competing with recipe evidence and actions. | Reduced dashboard copy direction so photos, match reasons, saves, and filters do the work. |
 | "The visuals still feel inconsistent." | Mixed symbol weights and placeholder-style illustrations made the UI feel crude. | Shifted the asset system toward stock/free food photography and one Lucide icon library. |
 | "I need to replay setup." | Stale personalization and demos were hard to recover from. | Added a visible Reset setup affordance for feedback/testing and state recovery. |

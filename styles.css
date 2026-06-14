@@ -7520,6 +7520,8 @@ body[data-app-view="onboarding"][data-onboarding-status="welcome"] .simple-welco
 }
 
 body[data-app-view="onboarding"][data-onboarding-status="welcome"] .flow-panel.is-welcome > .flow-actions {
+  display: flex;
+  justify-content: center;
   justify-self: center;
   width: min(100%, 620px);
   margin-top: 0;
@@ -7527,10 +7529,18 @@ body[data-app-view="onboarding"][data-onboarding-status="welcome"] .flow-panel.i
 }
 
 body[data-app-view="onboarding"][data-onboarding-status="welcome"] .flow-panel.is-welcome .flow-action-group {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  width: 100%;
+  margin-left: 0;
   justify-content: center;
 }
 
 body[data-app-view="onboarding"][data-onboarding-status="welcome"] .flow-panel.is-welcome .primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-width: min(100%, 220px);
 }
 
@@ -8339,6 +8349,36 @@ body[data-app-view="onboarding"][data-onboarding-status="started"] .review-actio
 
   .review-side-column {
     order: -1;
+  }
+}
+
+@media (min-width: 360px) and (max-width: 767px) {
+  body[data-app-view="onboarding"][data-onboarding-status="started"] .flow-panel.is-onboarding-question .choice-grid,
+  body[data-app-view="onboarding"][data-onboarding-status="started"] .flow-panel.is-onboarding-question .choice-grid.compact,
+  body[data-app-view="onboarding"][data-onboarding-status="started"] .flow-panel.is-onboarding-question .quick-choice-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px;
+  }
+
+  body[data-app-view="onboarding"][data-onboarding-status="started"] .flow-panel.is-onboarding-question .choice-card,
+  body[data-app-view="onboarding"][data-onboarding-status="started"] .flow-panel.is-onboarding-question .quick-choice-card {
+    min-height: 72px;
+    padding: 10px 32px 10px 10px;
+  }
+
+  body[data-app-view="onboarding"][data-onboarding-status="started"] .flow-panel.is-onboarding-question .choice-card strong,
+  body[data-app-view="onboarding"][data-onboarding-status="started"] .flow-panel.is-onboarding-question .quick-choice-card strong,
+  body[data-app-view="onboarding"][data-onboarding-status="started"] .flow-panel.is-onboarding-question .choice-card span,
+  body[data-app-view="onboarding"][data-onboarding-status="started"] .flow-panel.is-onboarding-question .quick-choice-card span {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 359px) {
+  body[data-app-view="onboarding"][data-onboarding-status="started"] .flow-panel.is-onboarding-question .choice-grid,
+  body[data-app-view="onboarding"][data-onboarding-status="started"] .flow-panel.is-onboarding-question .choice-grid.compact,
+  body[data-app-view="onboarding"][data-onboarding-status="started"] .flow-panel.is-onboarding-question .quick-choice-grid {
+    grid-template-columns: 1fr !important;
   }
 }
 
