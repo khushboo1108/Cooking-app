@@ -2,6 +2,10 @@
 
 This document is the source of truth for the prototype decisions. The interface should be judged against this thinking, not the other way around.
 
+The in-app UX rationale page now adapts `Rational.pdf` into responsive web content. It should remain real HTML text, collapsible sections, real comparison tables, and focused screenshot/sketch assets under `assets/rationale/`; do not replace it with a flat rendered PDF image or embedded PDF.
+
+The rationale cover follows the PDF hierarchy while staying web-native: `Design Rational` is centered, `Service fusion design challenge` sits directly below it, and `Time taken: 4hrs` stays anchored at the bottom-right.
+
 ## Product Goal
 
 Design a compact grouped onboarding flow and dashboard handoff that helps a responsive cooking web app understand a user's current cooking habits, preferences, and skill level so it can personalize recipes, instructions, filters, saved recipes, and cooking guidance without overwhelming them.

@@ -2245,11 +2245,255 @@ main {
 
 .rationale-page {
   width: 100%;
-  max-width: var(--content-max);
+  max-width: min(1180px, calc(100vw - 48px));
 }
 
-.rationale-hero {
-  border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+.rationale-document {
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--line) 86%, #c96f37);
+  border-radius: var(--radius-lg);
+  background: #f4f6f9;
+  box-shadow: 0 20px 70px rgba(38, 48, 46, 0.08);
+}
+
+.rationale-cover {
+  position: relative;
+  display: grid;
+  align-content: center;
+  gap: 14px;
+  min-height: 184px;
+  padding: clamp(32px, 5vw, 52px) clamp(24px, 5vw, 60px) 42px;
+  background:
+    radial-gradient(circle at 16% 22%, rgba(255, 255, 255, 0.82), transparent 24%),
+    radial-gradient(circle at 86% 34%, rgba(255, 95, 18, 0.36), transparent 30%),
+    linear-gradient(125deg, #fff3d5 0%, #ffb236 45%, #f57424 100%);
+  color: #28312f;
+  text-align: center;
+}
+
+.rationale-cover .eyebrow {
+  justify-self: center;
+  margin: 0;
+  color: #28312f;
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+.rationale-cover h1 {
+  justify-self: center;
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.1rem, 4.2vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 0.92;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.rationale-time {
+  position: absolute;
+  right: clamp(24px, 5vw, 60px);
+  bottom: 22px;
+  justify-self: end;
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.rationale-block {
+  padding: clamp(22px, 3.4vw, 36px) clamp(22px, 4.4vw, 48px);
+  border-top: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
+}
+
+.rationale-block.is-collapsed {
+  padding-block: 24px;
+}
+
+.rationale-block-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.rationale-block-heading h2 {
+  margin: 0;
+  color: #101716;
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  line-height: 1.18;
+}
+
+.rationale-toggle {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.rationale-toggle:hover {
+  background: color-mix(in srgb, #ffffff 72%, var(--sage));
+}
+
+.rationale-toggle:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--focus) 70%, white);
+  outline-offset: 2px;
+}
+
+.rationale-toggle span[aria-hidden="true"] {
+  color: #101716;
+  font-size: 1.28rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.rationale-block p {
+  max-width: 62rem;
+  margin: 0 0 0.66rem;
+  color: #172320;
+  font-size: clamp(1rem, 1.05vw, 1.08rem);
+  line-height: 1.5;
+}
+
+.rationale-lead {
+  color: #003ebf !important;
+  font-weight: 750;
+}
+
+.rationale-copy-stack {
+  display: grid;
+  gap: 8px;
+  margin: 34px 0;
+}
+
+.rationale-media-row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(280px, 0.85fr);
+  gap: clamp(22px, 4vw, 54px);
+  align-items: center;
+  margin: 16px 0 38px;
+}
+
+.rationale-media-row-flipped {
+  grid-template-columns: minmax(280px, 0.95fr) minmax(0, 0.85fr);
+}
+
+.rationale-media-row-flipped > div {
+  order: 1;
+}
+
+.rationale-figure {
+  margin: 0;
+}
+
+.rationale-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.rationale-figure-small {
+  max-width: 360px;
+  justify-self: center;
+}
+
+.rationale-figure-wide {
+  max-width: 700px;
+}
+
+.rationale-phone-shot {
+  max-width: 210px;
+  justify-self: center;
+}
+
+.rationale-table-wrap {
+  overflow-x: auto;
+  margin-top: 16px;
+  border: 1px solid color-mix(in srgb, var(--line) 76%, transparent);
+  background: #fffefa;
+}
+
+.rationale-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  color: #121817;
+}
+
+.rationale-table th,
+.rationale-table td {
+  padding: 16px 18px;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
+  text-align: left;
+  vertical-align: top;
+  font-size: clamp(0.96rem, 1vw, 1.05rem);
+  line-height: 1.45;
+}
+
+.rationale-table th {
+  background: #ebe8e0;
+  color: #171d1b;
+  font-size: clamp(1rem, 1.18vw, 1.12rem);
+  font-weight: 900;
+}
+
+.rationale-table td:first-child {
+  font-weight: 850;
+}
+
+.rationale-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.rationale-table-two-col {
+  min-width: 680px;
+}
+
+.rationale-next-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.rationale-next-grid article {
+  padding: 16px;
+  border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.rationale-next-grid h3 {
+  margin: 0 0 8px;
+  color: #172320;
+  font-size: 1rem;
+  line-height: 1.22;
+}
+
+.rationale-next-grid p {
+  margin-bottom: 0;
+}
+
+.rationale-closing {
+  margin-top: 24px !important;
+  font-weight: 750;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
 }
 
 .rationale-page code {
@@ -8503,4 +8747,66 @@ body[data-app-view="onboarding"][data-onboarding-status="started"][data-onboardi
   min-height: 34px;
   margin: 0 12px 12px !important;
   font-size: 0.82rem;
+}
+
+@media (max-width: 760px) {
+  .rationale-page {
+    max-width: none;
+  }
+
+  .rationale-document {
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0;
+  }
+
+  .rationale-cover {
+    min-height: 190px;
+    padding: 34px 20px 32px;
+    text-align: center;
+  }
+
+  .rationale-cover .eyebrow {
+    justify-self: center;
+  }
+
+  .rationale-time {
+    right: 20px;
+    bottom: 18px;
+  }
+
+  .rationale-block {
+    padding: 24px 18px;
+  }
+
+  .rationale-block-heading {
+    margin-bottom: 16px;
+  }
+
+  .rationale-media-row,
+  .rationale-media-row-flipped {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-bottom: 34px;
+  }
+
+  .rationale-media-row-flipped > div {
+    order: 0;
+  }
+
+  .rationale-figure-small,
+  .rationale-figure-wide,
+  .rationale-phone-shot {
+    max-width: 100%;
+    justify-self: stretch;
+  }
+
+  .rationale-phone-shot img {
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  .rationale-table {
+    min-width: 640px;
+  }
 }

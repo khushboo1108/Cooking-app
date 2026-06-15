@@ -2898,6 +2898,25 @@ els.navLinks.forEach((link) => {
 
 document.addEventListener("click", (event) => {
   const target = event.target instanceof Element ? event.target : null;
+  const rationaleToggle = target?.closest(".rationale-toggle");
+  if (rationaleToggle) {
+    const contentId = rationaleToggle.getAttribute("aria-controls");
+    const content = contentId ? document.getElementById(contentId) : null;
+    const section = rationaleToggle.closest(".rationale-block");
+    const icon = rationaleToggle.querySelector("[aria-hidden='true']");
+    const label = rationaleToggle.querySelector(".sr-only");
+    const heading = section?.querySelector("h2")?.textContent?.trim() || "section";
+    const isExpanded = rationaleToggle.getAttribute("aria-expanded") === "true";
+
+    rationaleToggle.setAttribute("aria-expanded", String(!isExpanded));
+    if (content) content.hidden = isExpanded;
+    section?.classList.toggle("is-open", !isExpanded);
+    section?.classList.toggle("is-collapsed", isExpanded);
+    if (icon) icon.textContent = isExpanded ? "+" : "-";
+    if (label) label.textContent = `${isExpanded ? "Expand" : "Collapse"} ${heading}`;
+    return;
+  }
+
   const resetButton = target?.closest("[data-reset-state]");
   if (!resetButton) return;
   resetExperience();

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>HomeCook Onboarding</title>
-    <link rel="stylesheet" href="styles.css?v=20260615-reset-panel">
+    <link rel="stylesheet" href="styles.css?v=20260615-rationale-full">
   </head>
   <body>
     <div class="app-shell">
@@ -68,550 +68,392 @@
         </section>
 
         <section class="page rationale-page" id="rationalePage" aria-labelledby="rationaleTitle">
-          <div class="rationale-hero">
-            <p class="eyebrow">Design rationale</p>
-            <h1 id="rationaleTitle">Why HomeCook starts small, then opens up.</h1>
-            <p class="lede">This view mirrors the presentation notes in <code>docs/onboarding-rationale.md</code> and documents the latest desktop-only onboarding pass: 3 grouped screens + 1 review screen, one progress system (`Step 1 of 4`), two-column decision/design pattern, brand-only setup sidebar, and consistent selected-state treatment across cards, chips, and inputs.</p>
-          </div>
+          <article class="rationale-document" aria-label="HomeCook design rationale">
+            <header class="rationale-cover">
+              <h1 id="rationaleTitle">Design Rational</h1>
+              <p class="eyebrow">Service fusion design challenge</p>
+              <p class="rationale-time">Time taken: 4hrs</p>
+            </header>
 
-          <section class="rationale-section">
-            <h2>What Changed And Why</h2>
-            <div class="journey-table" role="table" aria-label="Experience changes">
-              <div role="row">
-                <strong role="columnheader">Prior iteration</strong>
-                <strong role="columnheader">Updated experience</strong>
-                <strong role="columnheader">Why it changed</strong>
-                <strong role="columnheader">User impact</strong>
+            <section class="rationale-block is-open" aria-labelledby="coreBetTitle">
+              <div class="rationale-block-heading">
+                <h2 id="coreBetTitle">The Core Bet</h2>
+                <button class="rationale-toggle" type="button" aria-expanded="true" aria-controls="coreBetContent"><span aria-hidden="true">-</span><span class="sr-only">Collapse The Core Bet</span></button>
               </div>
-              <div role="row">
-                <span>Rationale lived behind a mislabeled Settings item.</span>
-                <span>The drawer now names the destination UX rationale, directly below Home.</span>
-                <span>Stakeholders should not hunt for design reasoning or mistake it for account settings.</span>
-                <span>The prototype is easier to review without interrupting the primary Home flow.</span>
+              <div class="rationale-block-content" id="coreBetContent">
+                <p class="rationale-lead">Christina doesn't need more recipes. She needs one doable first win.</p>
+                <p>She already has options. What she lacks is confidence that cooking will feel possible when she's tired and takeout is easier.</p>
+                <p>So onboarding answers one question: "Can I do this, this week?"</p>
+                <p>The flow starts the behaviour chain: complete onboarding, save a recipe, cook once in 7 days.</p>
               </div>
-              <div role="row">
-                <span>Onboarding felt like a survey before value appeared.</span>
-                <span>A warmer welcome frames setup around one doable dinner.</span>
-                <span>Low-confidence cooks need proof that the app is practical before they share preferences.</span>
-                <span>Users understand the commitment: answer a few concrete prompts, save one recipe, adjust later.</span>
-              </div>
-              <div role="row">
-                <span>The first headline sounded like setup work.</span>
-                <span>The desktop welcome leads with "What does cooking look like for you this week?"</span>
-                <span>The first line should sound natural and start from the user's real weekly context.</span>
-                <span>The flow feels warmer and less like profile administration.</span>
-              </div>
-              <div role="row">
-                <span>Progress appeared as pills, count, and bar at once.</span>
-                <span>Desktop onboarding now uses one compact system: <code>Step 1 of 4</code> plus a single progress bar.</span>
-                <span>Duplicate progress representations and old Start/Window/Guidance/Food/Timing/Save pills were removed.</span>
-                <span>Users track progress from one location with less visual overhead.</span>
-              </div>
-              <div role="row">
-                <span>Some stage labels sounded vague, like Pantry Check.</span>
-                <span>Labels now map to decision groups: cooking routine, recipe support, food boundaries, review recipe.</span>
-                <span>A pantry metaphor implies inventory work when the screen may be asking about habits or planning.</span>
-                <span>Users know what decision they are making before reading every option.</span>
-              </div>
-              <div role="row">
-                <span>Desktop setup stacked questions, visuals, and summary in one lane.</span>
-                <span>Questions and decisions stay left; compact illustration or live summary sits right.</span>
-                <span>The answer set should remain dominant while context stays glanceable.</span>
-                <span>Users decide faster because supporting information does not compete with cards.</span>
-              </div>
-              <div role="row">
-                <span>Full navigation appeared during setup.</span>
-                <span>The desktop setup sidebar should show only brand/logo until onboarding is complete.</span>
-                <span>Navigation implies the app is usable before setup has enough signal.</span>
-                <span>Users stay focused on finishing setup instead of exploring incomplete areas.</span>
-              </div>
-              <div role="row">
-                <span>Selected states and decoration varied across controls.</span>
-                <span>Selected cards, chips, and actions use one state language within a more minimal theme.</span>
-                <span>Decoration should support decisions, not become another layer to parse.</span>
-                <span>The UI feels calmer and reduces information overload.</span>
-              </div>
-              <div role="row">
-                <span>Questions could ask too many things at once.</span>
-                <span>Each screen now groups low-stakes decisions and limits each prompt to three primary choices.</span>
-                <span>Grouping by category reduces one-question-per-screen friction and keeps the user in one context.</span>
-                <span>Users can complete more progress with fewer navigation interruptions.</span>
-              </div>
-              <div role="row">
-                <span>Single questions forced repeated small navigation clicks.</span>
-                <span>Related prompts are grouped by decision category with one forward action per screen.</span>
-                <span>Back remains visible to correct the current screen, but the flow stays focused on grouped decisions.</span>
-                <span>Users complete onboarding with less repeated click overhead.</span>
-              </div>
-              <div role="row">
-                <span>The numeric stepper was mostly decorative.</span>
-                <span>Progress is now a single four-step system labeled as `Step 1 of 4`.</span>
-                <span>A compact progress bar plus explicit step count explains completion without competing controls.</span>
-                <span>Users understand purpose and position without counting screens.</span>
-              </div>
-              <div role="row">
-                <span>The progress gradient implied mixed states and constant motion.</span>
-                <span>Progress should use a solid grey-to-orange intensity shift plus a one-time ping that grows slightly by milestone.</span>
-                <span>Solid progress is easier to read; the ping acknowledges completion without becoming a spinner or distraction.</span>
-                <span>The system feels responsive, but not busy, and can be reduced for motion-sensitive users.</span>
-              </div>
-              <div role="row">
-                <span>Confetti was generic and appeared detached from cooking.</span>
-                <span>Celebration should use local food icons and a warm cooking illustration.</span>
-                <span>Delight should reinforce the user's saved recipe milestone, not feel like unrelated party decoration.</span>
-                <span>The first commitment feels specific to HomeCook and safe to ship offline.</span>
-              </div>
-              <div role="row">
-                <span>"Right now" copy made future planning feel out of scope.</span>
-                <span>Language shifts to "this cooking window," "next dinner," and "planned meal."</span>
-                <span>Users may be planning lunch, groceries, or a future weekday rather than standing in the kitchen.</span>
-                <span>Recommendations stay useful for immediate cooking and later planning.</span>
-              </div>
-              <div role="row">
-                <span>Recommendations could look locked to onboarding answers.</span>
-                <span>The dashboard uses simple presets first, with advanced filters available on demand.</span>
-                <span>Time, energy, and household needs change daily; personalization must stay reversible.</span>
-                <span>Users can try a 10-minute rescue meal for one cooking window without erasing a broader meal-prep preference.</span>
-              </div>
-              <div role="row">
-                <span>Saved recipes were treated as a count, not a workspace.</span>
-                <span>Desktop and tablet get a saved dock; mobile gets a saved tab pattern.</span>
-                <span>The saved recipe is the bridge between discovery, groceries, and the first cook.</span>
-                <span>The first commitment remains visible while users compare filters or return later.</span>
-              </div>
-              <div role="row">
-                <span>Dashboard copy carried onboarding-level explanation.</span>
-                <span>The dashboard should lead with actions, recipe photos, saved state, and match evidence.</span>
-                <span>Onboarding can explain the setup; the dashboard should prove value visually.</span>
-                <span>Users scan more options without losing the reason each recipe fits.</span>
-              </div>
-              <div role="row">
-                <span>Visuals mixed emoji, uneven icons, and placeholder-style illustrations.</span>
-                <span>Recipe visuals should use stock/free food photography while UI glyphs use one Lucide icon set.</span>
-                <span>Photos make meals feel real, and consistent icon weight keeps actions legible.</span>
-                <span>The product feels more polished and less like a crude prototype.</span>
-              </div>
-              <div role="row">
-                <span>Generous spacing limited visible recommendations.</span>
-                <span>The compact-density pass should reveal more rows per viewport while preserving tap targets.</span>
-                <span>Cooking decisions need comparison, but hands still need forgiving controls.</span>
-                <span>Users can compare more recipes without tiny hit areas.</span>
-              </div>
-              <div role="row">
-                <span>Personalization could become stale after demos, feedback, or changed needs.</span>
-                <span>A visible Reset setup affordance in the left panel returns users to onboarding.</span>
-                <span>Recovery should not require clearing browser storage manually.</span>
-                <span>Users and testers can replay the setup path safely.</span>
-              </div>
-            </div>
-          </section>
+            </section>
 
-          <section class="rationale-section">
-            <h2>Problem Framing</h2>
-            <div class="rationale-grid">
-              <article>
-                <h3>Recipes are not the shortage.</h3>
-                <p>The real shortage is confidence that a recipe fits tonight's time, skill, cleanup tolerance, and household constraints.</p>
-              </article>
-              <article>
-                <h3>The first win is intentionally small.</h3>
-                <p>The product optimizes for one saved recipe and one cook attempt in seven days, not a full identity shift into "home cook."</p>
-              </article>
-              <article>
-                <h3>Personalization must stay editable.</h3>
-                <p>Onboarding answers seed recommendations, but dashboard filters let users change context without retaking setup.</p>
-              </article>
-            </div>
-          </section>
+            <section class="rationale-block is-open" aria-labelledby="journeyInsightTitle">
+              <div class="rationale-block-heading">
+                <h2 id="journeyInsightTitle">Journey Map Insight</h2>
+                <button class="rationale-toggle" type="button" aria-expanded="true" aria-controls="journeyInsightContent"><span aria-hidden="true">-</span><span class="sr-only">Collapse Journey Map Insight</span></button>
+              </div>
+              <div class="rationale-block-content" id="journeyInsightContent">
+                <p class="rationale-lead">The key moment is getting Christina to try once.</p>
+                <p>She isn't trying to become a great cook. She's trying to stop relying on takeout when she's tired and stuck.</p>
+                <p>So onboarding meets her where she is. It avoids judgement, gives her one realistic recipe, helps with groceries, and nudges her toward one night to cook.</p>
+                <p>She leaves with a plan she can actually follow.</p>
+              </div>
+            </section>
 
-          <section class="rationale-section">
-            <h2>Design Principles</h2>
-            <div class="decision-list">
-              <article>
-                <span>Home first</span>
-                <p>Home remains the primary nav item because the app's job is to move the user from setup to a usable cooking plan.</p>
-              </article>
-              <article>
-                <span>Setup brand only</span>
-                <p>During desktop onboarding, the sidebar should show brand/logo only because full navigation suggests the app is usable before setup is complete.</p>
-              </article>
-              <article>
-                <span>Ask only usable data</span>
-                <p>Every onboarding prompt maps to recipe ranking, instruction detail, grocery scope, serving quantity, or saved-plan language.</p>
-              </article>
-              <article>
-                <span>Decision left, context right</span>
-                <p>Desktop onboarding keeps choices in the left column and reserves the right column for compact illustration or live summary.</p>
-              </article>
-              <article>
-                <span>Clear task labels</span>
-                <p>Labels should name the actual task group, such as cooking routine, recipe support, food boundaries, or review recipe.</p>
-              </article>
-              <article>
-                <span>Cap choices at three</span>
-                <p>Each question should present a maximum of three primary choices so users can decide quickly without feeling over-profiled.</p>
-              </article>
-              <article>
-                <span>Grouped screens</span>
-                <p>Each grouped screen now has one forward action and one Back action so users can correct choices without extra tap choreography.</p>
-              </article>
-              <article>
-                <span>Milestones over numbers</span>
-                <p>Desktop progress is a single system: `Step 1 of 4` and a compact progress bar.</p>
-              </article>
-              <article>
-                <span>Consistent selection</span>
-                <p>Cards, chips, inputs, and actions should share one selected-state language so users can scan decisions without relearning the UI.</p>
-              </article>
-              <article>
-                <span>Plan beyond the moment</span>
-                <p>Copy uses planning-friendly phrases like "this cooking window" so the app supports future meals, grocery prep, and immediate dinner.</p>
-              </article>
-              <article>
-                <span>Reward commitment</span>
-                <p>Saving a recipe should trigger food-icon celebration and a visible milestone without making cooking feel mandatory.</p>
-              </article>
-              <article>
-                <span>Make reset available</span>
-                <p>A visible reset path lets users replay onboarding for feedback, testing, or stale personalization recovery.</p>
-              </article>
-              <article>
-                <span>Respect reduced motion</span>
-                <p>Progress pings, keyframes, and celebratory icons should pause or simplify when the user prefers reduced motion.</p>
-              </article>
-            </div>
-          </section>
+            <section class="rationale-block is-collapsed" aria-labelledby="constraintsTitle">
+              <div class="rationale-block-heading">
+                <h2 id="constraintsTitle">Why I Started With Constraints, Not Goals</h2>
+                <button class="rationale-toggle" type="button" aria-expanded="false" aria-controls="constraintsContent"><span aria-hidden="true">+</span><span class="sr-only">Expand Why I Started With Constraints, Not Goals</span></button>
+              </div>
+              <div class="rationale-block-content" id="constraintsContent" hidden>
+                <p>Most onboarding flows start with goals. I started with Christina's actual week.</p>
+                <p>"Eat healthier" sounds useful, but for 41% of her cohort, it's too vague to act on. Asking her to define it upfront adds pressure, not clarity.</p>
+                <p>So the flow asks concrete questions: how often she cooks, how she wants cooking to fit in, and how much time she has on a weeknight, including cleanup.</p>
+                <p>That last detail matters. "30-minute recipes" often ignore the mess. Christina knows that gap. Asking for the full window shows the product understands her real life.</p>
+              </div>
+            </section>
 
-          <section class="rationale-section">
-            <h2>Responsive Strategy</h2>
-            <div class="journey-table" role="table" aria-label="Responsive strategy">
-              <div role="row">
-                <strong role="columnheader">Breakpoint</strong>
-                <strong role="columnheader">Navigation</strong>
-                <strong role="columnheader">Dashboard layout</strong>
-                <strong role="columnheader">Reason</strong>
+            <section class="rationale-block is-open" aria-labelledby="onboardingDecisionTitle">
+              <div class="rationale-block-heading">
+                <h2 id="onboardingDecisionTitle">Onboarding Decisions</h2>
+                <button class="rationale-toggle" type="button" aria-expanded="true" aria-controls="onboardingDecisionContent"><span aria-hidden="true">-</span><span class="sr-only">Collapse Onboarding Decisions</span></button>
               </div>
-              <div role="row">
-                <span>Desktop</span>
-                <span>Brand/logo-only sidebar during setup; persistent nav can return after setup or on rationale pages.</span>
-                <span>Main recipe area, advanced filters in a readable panel, saved recipes docked to the side.</span>
-                <span>Large screens can show context, but setup should keep navigation and decoration from competing with the active decision.</span>
-              </div>
-              <div role="row">
-                <span>Tablet</span>
-                <span>Left nav remains available with compact spacing and preserved tap targets.</span>
-                <span>Simple filters stay prominent; tighter rows keep more recipes visible before panels stack.</span>
-                <span>Tablet use often happens while planning or shopping, so scanning and touch accuracy need to coexist.</span>
-              </div>
-              <div role="row">
-                <span>Mobile</span>
-                <span>Top menu opens the same drawer destinations, including UX rationale.</span>
-                <span>One-column flow with sticky actions, compact result rows, simple presets first, and a mobile saved tab.</span>
-                <span>Small screens should not show every control at once, but they should reveal enough rows to compare.</span>
-              </div>
-            </div>
-            <p>The current refinement is desktop-only. It does not claim new mobile onboarding behavior; mobile layout decisions should be handled in a later pass.</p>
-          </section>
+              <div class="rationale-block-content" id="onboardingDecisionContent">
+                <div class="rationale-media-row">
+                  <div>
+                    <p class="rationale-lead">Every question has to improve Christina's first recipe.</p>
+                    <p>If it doesn't help match something she can actually cook this week, it doesn't belong in onboarding. It can wait for settings or come up later.</p>
+                    <p>Cuisine preference sounds useful, but it's secondary. Before she builds confidence, time and skill matter more than whether the recipe is Italian or Thai.</p>
+                    <p>The same logic cut questions about hard nights, restarting, and past recipe failures. They ask her to predict, reflect, or relive frustration too early.</p>
+                    <p>Onboarding should reduce pressure, not add it.</p>
+                  </div>
+                  <figure class="rationale-figure rationale-figure-small">
+                    <img src="assets/rationale/rationale-question-notes.png" width="664" height="456" alt="Handwritten notes sorting potential onboarding questions into useful and less useful signals" loading="lazy">
+                  </figure>
+                </div>
 
-          <section class="rationale-section">
-            <h2>Desktop Setup Pattern</h2>
-            <div class="rationale-grid">
-              <article>
-                <h3>Decision column</h3>
-                <p>The left column owns the headline, helper copy, grouped question cards, and sticky bottom actions so the user's next decision stays in one lane.</p>
-              </article>
-              <article>
-                <h3>Support column</h3>
-                <p>The right column stays compact with a cooking illustration or live summary, helping context stay present without becoming another control surface.</p>
-              </article>
-              <article>
-                <h3>Single progress pattern</h3>
-                <p>Progress is `Step 1 of 4` with one compact bar, with no category pills, count chips, or extra tabbed milestones.</p>
-              </article>
-              <article>
-                <h3>Brand-only sidebar</h3>
-                <p>During setup, desktop shows the HomeCook brand/logo only because navigation implies the app is usable before setup is finished.</p>
-              </article>
-            </div>
-          </section>
+                <div class="rationale-media-row rationale-media-row-flipped">
+                  <div>
+                    <p class="rationale-lead">I kept the groups tight.</p>
+                    <p>Constraints sit together, support preferences sit together, and food boundaries sit together. Each screen still feels like it's asking one thing, even when it covers a few angles.</p>
+                    <p>In production, I'd test both versions. My hypothesis: grouped questions complete faster, while one-question screens produce more confident answers.</p>
+                  </div>
+                  <figure class="rationale-figure">
+                    <img src="assets/rationale/rationale-grouping-sketch.png" width="1278" height="648" alt="Handwritten grouping sketch with constraints, support, and boundaries columns" loading="lazy">
+                  </figure>
+                </div>
 
-          <section class="rationale-section">
-            <h2>Onboarding Experience</h2>
-            <div class="rationale-grid">
-              <article>
-                <h3>Welcome screen</h3>
-                <p>The welcome screen is desktop-only and uses one compact sequence: 3 grouped screens plus a review screen.</p>
-              </article>
-              <article>
-                <h3>Three choices</h3>
-                <p>Progressive groups keep each screen to meaningful related prompts: routine, support, and food boundaries.</p>
-              </article>
-              <article>
-                <h3>Screen 1: Cooking routine</h3>
-                <p>Frequency, preferred cooking mode, and dinner window are grouped to reduce friction and clarify effort model.</p>
-              </article>
-              <article>
-                <h3>Screen 2: Recipe support</h3>
-                <p>Skill level and instruction style are captured together so initial recipe matches stay realistic.</p>
-              </article>
-              <article>
-                <h3>Screen 3: Food boundaries</h3>
-                <p>Restrictions (multi-select), ingredient tolerance, and servings are collected in one decision area.</p>
-              </article>
-              <article>
-                <h3>Screen 4: Review recipe</h3>
-                <p>Summary chips, category tabs, a two-card recipe carousel, optional Save recipe, and Edit preferences are shown before dashboard handoff.</p>
-              </article>
-              <article>
-                <h3>Low commitment</h3>
-                <p>Copy avoids "build your perfect profile" language. The promise is "start with one doable meal," which is easier to accept.</p>
-              </article>
-              <article>
-                <h3>Minimal selected states</h3>
-                <p>Selected cards, chips, inputs, and actions should use the same border, fill, and emphasis logic so the UI confirms decisions without extra decoration.</p>
-              </article>
-            </div>
-          </section>
+                <div class="rationale-copy-stack">
+                  <p class="rationale-lead">I cut gamification.</p>
+                  <p>Streaks, badges, and points came up early, but they solve the wrong problem here. Gamification reinforces a behaviour that already exists. Christina hasn't cooked once yet.</p>
+                  <p>Adding a streak before her first win gives her another way to fail, especially when 54% of this user base abandons recipes halfway through.</p>
+                  <p>So I used a lighter commitment: a day-picker on the recipe review screen. No badge, no streak, no failure state. Just one small next step.</p>
+                  <p>Gamification can come later, once she has something worth reinforcing.</p>
 
-          <section class="rationale-section">
-            <h2>Progress, Motion, And Asset System</h2>
-            <div class="rationale-grid">
-              <article>
-                <h3>Solid progress intensity</h3>
-                <p>The progress bar should move from quiet grey toward orange as confidence builds. A single solid color is clearer than a gradient that can imply multiple statuses.</p>
-              </article>
-              <article>
-                <h3>One-time ping</h3>
-                <p>Each milestone can emit one small ping that grows slightly by stage. It acknowledges progress without creating continuous motion.</p>
-              </article>
-              <article>
-                <h3>Food-themed celebration</h3>
-                <p>Celebration should use food icons and cooking cues so the saved-recipe moment feels connected to the product, not like generic confetti.</p>
-              </article>
-              <article>
-                <h3>Photo and icon consistency</h3>
-                <p>Recipe cards should rely on stock/free food photography for visual evidence, while UI actions use one Lucide icon family instead of mixed-weight symbols.</p>
-              </article>
-              <article>
-                <h3>Reduced motion</h3>
-                <p>State-driven CSS or WAAPI-style animations should have a reduced-motion path: no ping scale, no icon burst travel, and instant progress state changes.</p>
-              </article>
-            </div>
-            <figure>
-              <img src="assets/onboarding-cooking-stage.svg" width="720" height="360" alt="Illustration of a calm cooking setup with a recipe card, pot, spoon, and vegetables" loading="lazy" style="max-width: 100%; height: auto;">
-              <figcaption>Illustration remains useful for onboarding tone; recipe surfaces should move toward real food-photo evidence.</figcaption>
-            </figure>
-            <figure>
-              <img src="assets/food-icons-celebration.svg" width="720" height="220" alt="Food icon celebration strip with tomato, carrot, lemon, herb, bowl, and sparkle shapes" loading="lazy" style="max-width: 100%; height: auto;">
-              <figcaption>Food icons stay reserved for celebration, while navigation and action icons should come from one consistent Lucide set.</figcaption>
-            </figure>
-          </section>
+                  <p class="rationale-lead">I kept skill level because it gives a useful first signal.</p>
+                  <p>It's imperfect. Some users underrate themselves, others overrate. So the answer seeds the first recommendation, but doesn't become a fixed label.</p>
+                  <p>The copy lowers pressure: "Which skill level feels closest?" instead of "What's your cooking ability?"</p>
+                  <p>I kept instruction style separate because skill and guidance needs are different.</p>
+                  <p>After onboarding, the app should trust behaviour more than self-reporting: saves, completions, and mood filters.</p>
 
-          <section class="rationale-section">
-            <h2>Dashboard Filters</h2>
-            <div class="rationale-grid">
-              <article>
-                <h3>Simple presets first</h3>
-                <p>Presets such as quick rescue, prep once, confidence builder, and pantry fallback translate common cooking moods into one tap.</p>
-              </article>
-              <article>
-                <h3>Advanced filters second</h3>
-                <p>Advanced controls expose time, skill, ingredients, dietary rules, servings, cleanup, and guidance style only when users need precision.</p>
-              </article>
-              <article>
-                <h3>Explainable matches</h3>
-                <p>Recipe cards should state why they appear: "fits 20 minutes," "batch-friendly," "short ingredient list," or "step-by-step beginner guidance."</p>
-              </article>
-              <article>
-                <h3>Action-first copy</h3>
-                <p>Dashboard text should shrink after onboarding; recipe photos, match reasons, save actions, and filters carry the proof.</p>
-              </article>
-            </div>
-            <div class="journey-table" role="table" aria-label="Preset to advanced filter mapping">
-              <div role="row">
-                <strong role="columnheader">Preset</strong>
-                <strong role="columnheader">Advanced filters it sets</strong>
-                <strong role="columnheader">Persona / moment</strong>
-                <strong role="columnheader">Why it helps</strong>
-              </div>
-              <div role="row">
-                <span>Quick rescue</span>
-                <span>Time 10-20 minutes, beginner-safe, short ingredient list, low cleanup.</span>
-                <span>Rushed professional who would otherwise order takeout.</span>
-                <span>Turns urgency into a narrow, realistic set instead of an empty "healthy dinner" search.</span>
-              </div>
-              <div role="row">
-                <span>Prep once</span>
-                <span>Batchable recipes, 3-4 servings, reheats well, grocery list consolidation.</span>
-                <span>User who wants one effortful session to protect several weeknights.</span>
-                <span>Acknowledges meal prep benefits while still watching for restart dread next cycle.</span>
-              </div>
-              <div role="row">
-                <span>Confidence builder</span>
-                <span>Beginner skill, guided steps, doneness cues, forgiving timing, familiar techniques.</span>
-                <span>User who abandoned recipes because instructions moved too fast.</span>
-                <span>Ranks recipes by execution clarity, not just taste or popularity.</span>
-              </div>
-              <div role="row">
-                <span>Pantry fallback</span>
-                <span>Flexible ingredients, shelf-stable staples, substitutions, few fresh items.</span>
-                <span>User delaying dinner because shopping feels like the blocker.</span>
-                <span>Offers a path when the fridge is imperfect instead of forcing a full grocery reset.</span>
-              </div>
-            </div>
-          </section>
+                  <p class="rationale-lead">Serving size</p>
+                  <p>I kept serving size in the flow because beginners shouldn't have to scale recipes themselves.</p>
+                  <p>28% of beta users cook for more than one person at least half the time. If a recipe serves 4 and Christina needs 2, she may not feel confident adjusting it.</p>
+                  <p>So the app handles serving size upfront with a 1-8 selector, defaulting to 2.</p>
+                  <p>The default gives her a sensible starting point and removes one more decision mid-recipe.</p>
+                </div>
 
-          <section class="rationale-section">
-            <h2>Progressive Disclosure And Lock-In</h2>
-            <div class="decision-list">
-              <article>
-                <span>Start broad</span>
-                <p>Show a small, curated result set before asking the user to tune every dimension.</p>
-              </article>
-              <article>
-                <span>Reveal controls</span>
-                <p>Advanced filters sit behind clear affordances so they help power users without overwhelming beginners.</p>
-              </article>
-              <article>
-                <span>Presets are temporary</span>
-                <p>A preset is a current cooking mode, not a permanent profile label.</p>
-              </article>
-              <article>
-                <span>Reset is visible</span>
-                <p>Users need an obvious way to replay onboarding during feedback/testing or recover from stale personalization.</p>
-              </article>
-              <article>
-                <span>Saves teach taste</span>
-                <p>The app should learn from saved recipes over time instead of asking a long cuisine quiz up front.</p>
-              </article>
-            </div>
-          </section>
+                <div class="rationale-media-row">
+                  <div>
+                    <p class="rationale-lead">I kept meal prep because time has more than one solution.</p>
+                    <p>For 72% of users, time is the blocker. Quick dinners solve that night. Meal prep solves the week.</p>
+                    <p>This matters for users who aren't intimidated by cooking, but don't have weeknight energy. Forcing them into quick dinners would miss how they want to use the product.</p>
+                    <p>Meal prep also makes grocery lists more valuable. Cooking once for multiple meals gives that feature a clearer purpose.</p>
+                  </div>
+                  <figure class="rationale-figure">
+                    <img src="assets/rationale/rationale-routine-screen.png" width="960" height="706" alt="Cooking routine onboarding screen with grouped frequency, cooking style, and dinner window questions" loading="lazy">
+                  </figure>
+                </div>
 
-          <section class="rationale-section">
-            <h2>Saved Recipes Access</h2>
-            <div class="rationale-grid">
-              <article>
-                <h3>Desktop dock</h3>
-                <p>A side dock keeps saved recipes visible next to filters and recommendations, reinforcing the first commitment while users compare options.</p>
-              </article>
-              <article>
-                <h3>Tablet dock</h3>
-                <p>The dock can collapse or stack under results so planning remains readable during couch, kitchen, or grocery-list use.</p>
-              </article>
-              <article>
-                <h3>Mobile saved tab</h3>
-                <p>Saved recipes become a dedicated mobile tab because a persistent side dock would crowd the one-column recommendation flow.</p>
-              </article>
-            </div>
-          </section>
+                <div class="rationale-media-row rationale-media-row-flipped">
+                  <div>
+                    <p class="rationale-lead">The flow ends with a recipe because "You're all set" doesn't move Christina forward.</p>
+                    <p>She just shared her time, skill level, food needs, and serving size. The product should use that immediately.</p>
+                    <p>The recipe screen shows what fits, why it fits, and how to start. Tags like time, ingredients, skill match, and servings make the recommendation feel earned, not random.</p>
+                    <p>She ends onboarding with proof, not a confirmation screen.</p>
+                  </div>
+                  <figure class="rationale-figure">
+                    <img src="assets/rationale/rationale-review-screen.png" width="964" height="702" alt="Review recipe screen showing starter recipes, fit tags, a dinner plan, and open dashboard action" loading="lazy">
+                  </figure>
+                </div>
 
-          <section class="rationale-section">
-            <h2>Journey Map</h2>
-            <div class="journey-table" role="table" aria-label="Updated user journey">
-              <div role="row">
-                <strong role="columnheader">Moment</strong>
-                <strong role="columnheader">User question</strong>
-                <strong role="columnheader">Product job</strong>
-                <strong role="columnheader">Success signal</strong>
+                <div class="rationale-media-row">
+                  <div>
+                    <p class="rationale-lead">The day picker turns a saved recipe into a plan.</p>
+                    <p>After Christina saves a recipe, she picks a loose target: tonight, tomorrow, this weekend, or next week.</p>
+                    <p>The copy keeps it low-pressure: "Pick a tiny commitment." It doesn't ask her to promise. It just helps her choose a moment.</p>
+                    <p>That matters because "cook once in 7 days" needs a place in her actual week.</p>
+                    <p>She can still change her mind, but she leaves with a plan instead of a saved recipe she may forget.</p>
+                  </div>
+                  <figure class="rationale-figure rationale-figure-wide">
+                    <img src="assets/rationale/rationale-save-planner.png" width="1492" height="1299" alt="Saved recipe state with added grocery list copy and a day picker commitment" loading="lazy">
+                  </figure>
+                </div>
               </div>
-              <div role="row">
-                <span>Welcome</span>
-                <span>"Is this actually for someone like me?"</span>
-                <span>Make the app feel practical and low-pressure before the first question.</span>
-                <span>User starts onboarding from Home.</span>
-              </div>
-              <div role="row">
-                <span>Calibrate</span>
-                <span>"What can I realistically handle?"</span>
-                <span>Capture frequency, preferred effort pattern, time range, skill, restrictions, servings, and guidance needs.</span>
-                <span>User completes the short milestone setup.</span>
-              </div>
-              <div role="row">
-                <span>Recommend</span>
-                <span>"Which option fits the next cooking window?"</span>
-                <span>Show explainable recipe matches and let simple presets adjust the result set.</span>
-                <span>User compares a few recipes without opening a broad catalog.</span>
-              </div>
-              <div role="row">
-                <span>Commit</span>
-                <span>"Will I come back to this?"</span>
-                <span>Make saving prominent and celebrate it lightly with a status toast or food-icon moment.</span>
-                <span>User saves at least one recipe.</span>
-              </div>
-              <div role="row">
-                <span>Prepare</span>
-                <span>"What do I need before cooking?"</span>
-                <span>Use the saved recipe as the source for grocery planning and serving quantities.</span>
-                <span>User opens the saved dock or mobile saved tab.</span>
-              </div>
-              <div role="row">
-                <span>Cook</span>
-                <span>"Can I finish without getting lost?"</span>
-                <span>Carry skill and guidance preferences into step-by-step cooking support.</span>
-                <span>User cooks once within seven days.</span>
-              </div>
-            </div>
-          </section>
+            </section>
 
-          <section class="rationale-section">
-            <h2>Research Signals To Product Decisions</h2>
-            <div class="decision-list">
-              <article>
-                <span>65% beginners</span>
-                <p>Use plain-language skill choices, beginner-safe defaults, and confidence-builder filters.</p>
-              </article>
-              <article>
-                <span>72% time blocker</span>
-                <p>Capture usual time in onboarding, then let the dashboard adapt to the selected cooking window.</p>
-              </article>
-              <article>
-                <span>54% abandon recipes</span>
-                <p>Personalize instruction density and surface recipes with clearer timing and doneness cues.</p>
-              </article>
-              <article>
-                <span>41% want healthier</span>
-                <p>Translate healthy into concrete levers such as vegetables, protein, lighter takeout swaps, and ingredient count.</p>
-              </article>
-              <article>
-                <span>22% restrictions</span>
-                <p>Apply hard dietary rules before softer preference ranking to protect trust.</p>
-              </article>
-            </div>
-          </section>
+            <section class="rationale-block is-open" aria-labelledby="interactionDecisionTitle">
+              <div class="rationale-block-heading">
+                <h2 id="interactionDecisionTitle">Interaction Decisions</h2>
+                <button class="rationale-toggle" type="button" aria-expanded="true" aria-controls="interactionDecisionContent"><span aria-hidden="true">-</span><span class="sr-only">Collapse Interaction Decisions</span></button>
+              </div>
+              <div class="rationale-block-content" id="interactionDecisionContent">
+                <div class="rationale-media-row">
+                  <div>
+                    <p class="rationale-lead">I originally preferred one question per screen, but the brief pushed toward grouped screens.</p>
+                    <p>One-question screens feel more like a conversation than a form. They lower cognitive load, make backtracking cleaner, and allow small trust-building moments like "Got it, we'll keep recipes under 30 minutes."</p>
+                    <p>In testing, I'd compare grouped screens against one-question screens with auto-progression.</p>
+                    <p>My hypothesis: grouped screens finish faster, but one-question screens create more confident answers and less drop-off. The key metric isn't just completion. It's how often users go back and change an answer.</p>
+                  </div>
+                  <figure class="rationale-figure">
+                    <img src="assets/rationale/rationale-one-question-screen.png" width="1268" height="766" alt="Early one-question onboarding screen concept for cooking routine" loading="lazy">
+                  </figure>
+                </div>
 
-          <section class="rationale-section two-column">
-            <div>
-              <h2>Intended Outcomes</h2>
-              <ul>
-                <li>Users understand that setup is short, reversible, and aimed at one first dinner.</li>
-                <li>Desktop onboarding uses a warmer first headline and concrete task labels.</li>
-                <li>Desktop setup keeps decisions on the left and compact illustration or live summary on the right.</li>
-                <li>The setup sidebar stays brand/logo only until onboarding is complete.</li>
-                <li>Onboarding reduces one-question-per-screen friction by grouping around 3+1 screens.</li>
-                <li>Progress uses one clear pattern instead of competing pills, count, and bar.</li>
-                <li>Dashboard presets and lean copy reduce overload while actions and visuals carry the evidence.</li>
-                <li>Consistent selected states and a minimal theme reduce information overload.</li>
-              </ul>
-            </div>
-            <div>
-              <h2>What Worked Or Changed</h2>
-              <ul>
-                <li>Changed competing progress cues into one desktop progress pattern.</li>
-                <li>Changed vague stage language into concrete task labels tied to each decision.</li>
-                <li>Changed desktop setup into a two-column decision-and-context pattern.</li>
-                <li>Changed setup navigation into a brand-only sidebar during onboarding.</li>
-                <li>Changed inconsistent selected treatments into one calmer state language.</li>
-                <li>Changed generic confetti into food-icon celebration tied to saving a recipe.</li>
-                <li>Changed fixed recommendation thinking into editable dashboard context to avoid preference lock-in.</li>
-              </ul>
-            </div>
-          </section>
+                <div class="rationale-media-row rationale-media-row-flipped">
+                  <div>
+                    <p class="rationale-lead">The range bar for time was dropped. Here's why.</p>
+                    <p>The first version used a slider so users could choose any time between 10 and 60 minutes. It looked flexible, but it added friction.</p>
+                    <p>A slider does not work well with auto-progression because there is no clear moment when the user is "done." It can also feel fiddly on mobile, where dragging a small handle takes more effort than tapping a clear option.</p>
+                    <p>I replaced it with simple time pills because they are faster, easier to change, and closer to how people think after work: "I have 15 minutes," "I can do 30," or "I have more time tonight."</p>
+                  </div>
+                  <figure class="rationale-figure">
+                    <img src="assets/rationale/rationale-time-slider-screen.png" width="1341" height="823" alt="Earlier onboarding screen with a time range slider that was later dropped" loading="lazy">
+                  </figure>
+                </div>
+
+                <div class="rationale-media-row">
+                  <div>
+                    <p class="rationale-lead">Why I did not open with the full recipe catalog</p>
+                    <p>I did not start with the full recipe catalog because more choice would not help Christina make dinner. It would recreate the same problem she already has: too many options, not enough confidence, and no clear next step.</p>
+                    <p>The app needs a little signal before it can be useful. Once it understands her time, comfort level, and preferences, it can show fewer recipes that actually fit.</p>
+                    <p>That is why the catalog appears after onboarding, not before. The first recipe set is filtered, explained, and intentionally small. The goal is not to show everything. The goal is to make the first choice easy enough to act on.</p>
+                  </div>
+                  <figure class="rationale-figure">
+                    <img src="assets/rationale/rationale-catalog-sketch.png" width="1180" height="702" alt="Hand sketch of a filtered recipe catalog with recipe cards and save action" loading="lazy">
+                  </figure>
+                </div>
+
+                <div class="rationale-media-row rationale-media-row-flipped">
+                  <div>
+                    <p class="rationale-lead">Why I designed a mobile state</p>
+                    <p>The brief asked for a web app, but a web app still needs to work wherever the user opens it.</p>
+                    <p>Christina may plan meals on a laptop during the weekend, but the actual cooking moment is more likely to happen on her phone at the kitchen counter. Those are different contexts: planning needs space to compare and browse; cooking needs clear steps, large tap targets, and less distraction.</p>
+                    <p>Designing the mobile state made sure the experience works at the moment that matters most when she is actually trying to cook. Mobile constraints also forced cleaner decisions. If the layout, cards, and inputs work on a small screen, they can scale up. The reverse is not always true.</p>
+                  </div>
+                  <figure class="rationale-figure rationale-phone-shot">
+                    <img src="assets/rationale/rationale-mobile-welcome.png" width="324" height="702" alt="Mobile welcome screen with warm-up-the-kitchen visual and get started action" loading="lazy">
+                  </figure>
+                </div>
+
+                <div class="rationale-media-row">
+                  <div>
+                    <p class="rationale-lead">Grocery list: one action, not two</p>
+                    <p>When a user saves a recipe, the button changes to "Added to your grocery list." This gives immediate feedback that two things happened: the recipe was saved, and the ingredients are ready for shopping.</p>
+                    <p>I made this a single action because saving a recipe usually means the user is considering cooking it. Asking her to make a second decision would add friction at the exact moment the product should make things feel easier.</p>
+                    <p>She can always remove items from the grocery list later, but the default should support the most useful next step.</p>
+                  </div>
+                  <figure class="rationale-figure">
+                    <img src="assets/rationale/rationale-grocery-action.png" width="1278" height="846" alt="Recipe card showing saved state copy changed to Added to your grocery list" loading="lazy">
+                  </figure>
+                </div>
+              </div>
+            </section>
+
+            <section class="rationale-block is-open" aria-labelledby="dashboardDecisionTitle">
+              <div class="rationale-block-heading">
+                <h2 id="dashboardDecisionTitle">Dashboard Decisions</h2>
+                <button class="rationale-toggle" type="button" aria-expanded="true" aria-controls="dashboardDecisionContent"><span aria-hidden="true">-</span><span class="sr-only">Collapse Dashboard Decisions</span></button>
+              </div>
+              <div class="rationale-block-content" id="dashboardDecisionContent">
+                <div class="rationale-media-row">
+                  <div>
+                    <p class="rationale-lead">Time is not fixed. It is contextual.</p>
+                    <p>The time a user sets during onboarding is only a starting point. Christina may choose "30 minutes" honestly, but real evenings change. Some nights she only has 15 minutes before delivery feels easier. Other nights she has low energy but can assemble something quickly and let it cook while she unwinds.</p>
+                    <p>That is why time should be adjustable when she opens the app, not hidden in settings.</p>
+                    <p>The mood filter supports this moment. Presets like "low commitment," "pantry rescue," and "family-friendly" turn time, effort, and ingredient complexity into one simple choice. Christina picks how tonight feels, and the app does the filtering.</p>
+                    <p>Over time, the app can learn from those choices. If she often chooses "low commitment," that should become her default recommendation pattern, with room to explore when she has more energy.</p>
+                  </div>
+                  <figure class="rationale-figure rationale-phone-shot">
+                    <img src="assets/rationale/rationale-mobile-dashboard.png" width="366" height="760" alt="Mobile dashboard with mood presets and recommended recipes" loading="lazy">
+                  </figure>
+                </div>
+              </div>
+            </section>
+
+            <section class="rationale-block is-open" aria-labelledby="uiDecisionTitle">
+              <div class="rationale-block-heading">
+                <h2 id="uiDecisionTitle">UI Decisions</h2>
+                <button class="rationale-toggle" type="button" aria-expanded="true" aria-controls="uiDecisionContent"><span aria-hidden="true">-</span><span class="sr-only">Collapse UI Decisions</span></button>
+              </div>
+              <div class="rationale-block-content" id="uiDecisionContent">
+                <p class="rationale-lead">Visual language: making the experience feel manageable</p>
+                <p>The visual language has one job: make the product feel approachable before the user reads a word.</p>
+                <p>This was a time-boxed exercise, so I made a deliberate trade-off. I prioritized the logic, structure, and interaction model over pixel-perfect visual polish. The screens communicate hierarchy, states, and flow clearly enough to present and test, but they are not ready for engineering handoff.</p>
+                <p>The next step would be a proper visual design pass: tighter spacing, a refined type scale, stronger responsive behavior, complete component states, edge cases, and a deeper UX audit.</p>
+                <p>One known issue is the desktop layout. The experience works better on mobile and mid-size screens, but on wider desktop viewports the content becomes too centered and the whitespace starts to feel empty rather than calm. A stronger solution would be a constrained content width around 720-800px, or a two-column layout where the main task stays on the left and contextual support, progress, or previews sit on the right.</p>
+                <p>I also used cards and pills instead of dropdowns, sliders, or free-text inputs. Cards keep the choices visible, low-pressure, and easy to change. Dropdowns hide options, sliders require precision, and free text can make users feel like there is a "correct" answer. The goal here is different: let Christina choose what feels right, then let the system do the work.</p>
+              </div>
+            </section>
+
+            <section class="rationale-block is-open" aria-labelledby="researchTitle">
+              <div class="rationale-block-heading">
+                <h2 id="researchTitle">Research to Decisions</h2>
+                <button class="rationale-toggle" type="button" aria-expanded="true" aria-controls="researchContent"><span aria-hidden="true">-</span><span class="sr-only">Collapse Research to Decisions</span></button>
+              </div>
+              <div class="rationale-block-content" id="researchContent">
+                <p>Every question maps to a signal. If it doesn't, it's not in the flow.</p>
+                <div class="rationale-table-wrap">
+                  <table class="rationale-table">
+                    <thead>
+                      <tr>
+                        <th>Research signal</th>
+                        <th>What I designed</th>
+                        <th>Why</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>65% identify as beginners</td>
+                        <td>Skill level question with soft language + separate instruction style question</td>
+                        <td>Skill and guidance preference are different signals. One beginner wants hand-holding; another wants just the steps.</td>
+                      </tr>
+                      <tr>
+                        <td>72% say time is biggest blocker</td>
+                        <td>Time window question - pill options, not a slider</td>
+                        <td>Pills work on mobile and enable auto-progression. Slider breaks both.</td>
+                      </tr>
+                      <tr>
+                        <td>54% abandon mid-recipe</td>
+                        <td>Instruction style screen + recipe evidence tags on review screen</td>
+                        <td>Reduce mid-recipe uncertainty before the first attempt, not after.</td>
+                      </tr>
+                      <tr>
+                        <td>41% want "healthier" but can't define it</td>
+                        <td>Concrete levers: time, ingredient count, mood presets</td>
+                        <td>Forced definition produces unreliable answers. Behaviour over time is a better signal.</td>
+                      </tr>
+                      <tr>
+                        <td>33% want under 5 ingredients</td>
+                        <td>Ingredient tolerance question on food boundaries screen</td>
+                        <td>Better early signal than cuisine preference for a beginner.</td>
+                      </tr>
+                      <tr>
+                        <td>28% cook for 2+ people</td>
+                        <td>Default servings input, contextualised by recipe complexity</td>
+                        <td>Scaling is hard for beginners. Obvious for experienced cooks on simple meals.</td>
+                      </tr>
+                      <tr>
+                        <td>22% have hard dietary restrictions</td>
+                        <td>Dietary restrictions before soft preferences</td>
+                        <td>Hard constraints must filter before preference-based ranking. Getting this wrong destroys trust immediately.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+
+            <section class="rationale-block is-open" aria-labelledby="testingTitle">
+              <div class="rationale-block-heading">
+                <h2 id="testingTitle">What Testing Surfaced</h2>
+                <button class="rationale-toggle" type="button" aria-expanded="true" aria-controls="testingContent"><span aria-hidden="true">-</span><span class="sr-only">Collapse What Testing Surfaced</span></button>
+              </div>
+              <div class="rationale-block-content" id="testingContent">
+                <p class="rationale-lead">One walkthrough, two useful signals</p>
+                <p>Because this was a time-boxed exercise, I did one informal walkthrough with someone close to the target profile: a busy professional who does not feel fully confident cooking on weeknights. This was not formal research, but it gave me a useful reality check on the prototype.</p>
+                <p><strong>Skill level is not reliable at onboarding:</strong> He rated himself as above average, which felt optimistic for the type of user this product is designed around. That reinforced an important assumption: self-reported skill should not be treated as truth.</p>
+                <p>The onboarding answer should only seed the recommendation system. Over time, the app should adjust based on what the user saves, cooks, completes, and rates.</p>
+                <p><strong>Serving size is useful only when it matters:</strong> For a simple hummus and pita plate, "serves 2" felt unnecessary. The user already understood how much to prepare. This is only informal testing, so a decision cannot be made based on that alone.</p>
+                <p>That does not mean serving size should be removed. It means it should be contextual. It should be more visible on recipes where scaling is harder, and quieter or absent on simple assembly meals where the answer is obvious.</p>
+              </div>
+            </section>
+
+            <section class="rationale-block is-open" aria-labelledby="tradeoffsTitle">
+              <div class="rationale-block-heading">
+                <h2 id="tradeoffsTitle">Trade-offs</h2>
+                <button class="rationale-toggle" type="button" aria-expanded="true" aria-controls="tradeoffsContent"><span aria-hidden="true">-</span><span class="sr-only">Collapse Trade-offs</span></button>
+              </div>
+              <div class="rationale-block-content" id="tradeoffsContent">
+                <p>The decisions I'd revisit with more time.</p>
+                <div class="rationale-table-wrap">
+                  <table class="rationale-table rationale-table-two-col">
+                    <thead>
+                      <tr>
+                        <th>Trade-off made</th>
+                        <th>What I'd validate</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Grouped questions per screen (brief constraint)</td>
+                        <td>One-question-per-screen with auto-progression test completion rate and answer confidence</td>
+                      </tr>
+                      <tr>
+                        <td>Auto-progression vs. explicit Continue</td>
+                        <td>Some users may feel they lost control. Test both; watch for backtracking rate.</td>
+                      </tr>
+                      <tr>
+                        <td>Single dietary restriction for MVP</td>
+                        <td>Multi-select in production. Overlapping restrictions are common and getting this wrong damages trust.</td>
+                      </tr>
+                      <tr>
+                        <td>Recipe review before full dashboard</td>
+                        <td>Test whether a small curated set reduces hesitation vs. whether users want to browse first.</td>
+                      </tr>
+                      <tr>
+                        <td>Serving size always visible, not contextual</td>
+                        <td>Future version: quieter on simple assembly meals, prominent on complex recipes requiring scaling.</td>
+                      </tr>
+                      <tr>
+                        <td>No gamification at launch</td>
+                        <td>Introduce lightweight positive reinforcement after first cook, not before. Streaks before a first win create failure states.</td>
+                      </tr>
+                      <tr>
+                        <td>Dashboard not fully UI-finished</td>
+                        <td>Visual design pass needed. Spacing system, component states, desktop two-column layout.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+
+            <section class="rationale-block is-open" aria-labelledby="nextTitle">
+              <div class="rationale-block-heading">
+                <h2 id="nextTitle">What's Next</h2>
+                <button class="rationale-toggle" type="button" aria-expanded="true" aria-controls="nextContent"><span aria-hidden="true">-</span><span class="sr-only">Collapse What's Next</span></button>
+              </div>
+              <div class="rationale-block-content" id="nextContent">
+                <div class="rationale-next-grid">
+                  <article><h3>Post-cook check-in</h3><p>Add a simple "How did it go?" prompt after cooking: "nailed it," "okay," or "struggled." This would help adjust future recipe difficulty and create the feedback loop the current design is missing.</p></article>
+                  <article><h3>Progressive skill ladder</h3><p>Treat onboarding skill level as a starting point, not a final profile. The app should surface slightly harder recipes over time based on actual cooking behaviour.</p></article>
+                  <article><h3>Recommendation relevance test</h3><p>I would test whether the final recipe recommendations actually feel relevant based on the answers users gave during onboarding.</p></article>
+                  <article><h3>Desktop layout pass</h3><p>The desktop experience needs a more deliberate structure: constrained content width, stronger use of columns, and less reliance on empty space.</p></article>
+                  <article><h3>Question quality validation</h3><p>I would validate whether each onboarding question feels easy to answer, relevant, and useful from the user's perspective.</p></article>
+                  <article><h3>Advanced settings IA pass</h3><p>The dashboard includes an advanced tab, but it needs clearer information architecture so detailed controls are accessible without overwhelming casual users.</p></article>
+                </div>
+                <p class="rationale-closing">In short: Help users start small enough to succeed. One doable dinner is more valuable than a perfect profile.</p>
+              </div>
+            </section>
+          </article>
         </section>
       </main>
 
       <div class="toast" id="toast" role="status" aria-live="polite"></div>
     </div>
 
-    <script src="app.js?v=20260615-reset-panel"></script>
+    <script src="app.js?v=20260615-rationale-full"></script>
   </body>
 </html>

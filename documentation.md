@@ -36,6 +36,8 @@ HomeCook is a responsive cooking-onboarding and recipe dashboard prototype. The 
 - Mobile onboarding option groups use compact cards: one card per row below `360px`, and a 2-column grid from `360px` through the mobile breakpoint.
 - On the mobile review screen, recipe recommendations stay above `Your first dinner plan`; the cooking illustration is hidden at this breakpoint so the review does not spend the first viewport on animation.
 - Dashboard helper copy should stay light; explanation belongs mostly in onboarding and the UX rationale page.
+- The UX rationale page is a polished, responsive web adaptation of `Rational.pdf`: real HTML text, collapsible sections, tables, section hierarchy, and cropped screenshot/sketch assets from `assets/rationale/`, not a flat PDF image or embed.
+- The rationale cover keeps `Design Rational` centered, places `Service fusion design challenge` directly underneath, and pins `Time taken: 4hrs` to the bottom-right of the cover.
 - Saved recipes must remain reachable on every breakpoint: right dock on desktop/tablet, tab on mobile.
 - The onboarding-to-dashboard handoff must be single-surface: the review panel hides immediately, the welcome overlay owns the transition, and the dashboard only renders after the body has left temporary handoff state so final dashboard breakpoint rules apply from the first visible frame.
 
