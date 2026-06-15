@@ -1,4 +1,4 @@
-# HomeStart Agent Steering
+# HomeCook Agent Steering
 
 ## Operating Rule
 
@@ -48,7 +48,7 @@ Use subagents for non-trivial product/UI work. The main agent owns orchestration
 Use prompts like this:
 
 ```text
-You are the [role] for the HomeStart cooking app. Scope: [specific files/screens/breakpoints]. Do not edit outside [scope] unless required. Report findings with exact component names, user-story impact, and suggested fix priority. If editing, keep changes minimal and explain every changed file.
+You are the [role] for the HomeCook cooking app. Scope: [specific files/screens/breakpoints]. Do not edit outside [scope] unless required. Report findings with exact component names, user-story impact, and suggested fix priority. If editing, keep changes minimal and explain every changed file.
 ```
 
 ## Coordination Rules

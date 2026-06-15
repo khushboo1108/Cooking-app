@@ -1793,6 +1793,13 @@ function renderReviewRecipe(container) {
   const sideColumn = document.createElement("div");
   sideColumn.className = "review-side-column";
 
+  let savedBanner = null;
+  if (state.savedRecipes.length > 0) {
+    savedBanner = document.createElement("div");
+    savedBanner.className = "completion-banner";
+    savedBanner.innerHTML = `<strong>Recipe saved.</strong><span>You can open the dashboard now or save another idea.</span>`;
+  }
+
   if (reviewCopy) mainColumn.append(reviewCopy);
   mainColumn.append(renderRecipeCarousel(reviewRecipes));
   if (reviewIllustration) sideColumn.append(reviewIllustration);
@@ -1802,15 +1809,15 @@ function renderReviewRecipe(container) {
     mainColumn.append(renderCookNudge());
   }
 
-  if (state.savedRecipes.length > 0) {
-    const banner = document.createElement("div");
-    banner.className = "completion-banner";
-    banner.innerHTML = `<strong>Recipe saved.</strong><span>You can open the dashboard now or save another idea.</span>`;
-    mainColumn.append(banner);
-  }
-
+  if (savedBanner) layout.append(savedBanner);
   layout.append(mainColumn, sideColumn);
   container.append(layout);
+
+  if (savedBanner) {
+    window.requestAnimationFrame(() => {
+      container.scrollTo({ top: 0, behavior: "auto" });
+    });
+  }
 }
 
 function renderRecipeCarousel(baseRecipes = getRecommendedRecipes(8)) {
@@ -2175,7 +2182,7 @@ function renderDashboard(options = {}) {
   dashboard.dataset.dashboardPreset = state.dashboardPreset;
   dashboard.dataset.dashboardTab = dashboardTab;
   dashboard.dataset.activeTab = dashboardTab;
-  dashboard.setAttribute("aria-label", "HomeStart dashboard");
+  dashboard.setAttribute("aria-label", "HomeCook dashboard");
 
   const recommendations = getDashboardRecommendations();
   dashboard.append(createDashboardHero(recommendations));

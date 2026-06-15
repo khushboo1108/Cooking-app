@@ -1,4 +1,4 @@
-# HomeStart Onboarding Rationale
+# HomeCook Onboarding Rationale
 
 This document is the source of truth for the prototype decisions. The interface should be judged against this thinking, not the other way around.
 
@@ -49,7 +49,7 @@ The onboarding problem is therefore:
 
 ## Current UX Direction
 
-The original rationale still applies: HomeStart should lower intimidation and get the user to one realistic first recipe. The redesigned experience expands the handoff after onboarding so users do not feel locked into a single profile or abandoned in a generic catalog.
+The original rationale still applies: HomeCook should lower intimidation and get the user to one realistic first recipe. The redesigned experience expands the handoff after onboarding so users do not feel locked into a single profile or abandoned in a generic catalog.
 
 | Prior iteration | Updated experience | Why it changed | User impact |
 | --- | --- | --- | --- |
@@ -65,7 +65,7 @@ The original rationale still applies: HomeStart should lower intimidation and ge
 | Single-screen question flow added extra navigation friction | The flow now groups related questions by decision category | The issue was screen density, not the underlying answer model | Users see enough context to move quickly while keeping Back and Next for control |
 | Progress read-out was fragmented | The system moved to a 4-step grouped flow and no longer uses Start/Window/Guidance/Food/Timing/Save pill tabs | Milestone names are now stable and aligned to screen purpose | Users understand which screen they are on from one compact indicator |
 | Gradient progress implied mixed status | Progress should use a solid grey-to-orange intensity shift with one one-time ping per milestone | Solid progress is easier to read, and a ping acknowledges completion without continuous motion | Users get feedback without distraction |
-| Generic confetti felt detached from cooking | Saved-recipe celebration should use local food icons and cooking illustration language | Delight should reinforce the product milestone, not feel like unrelated party decoration | The milestone feels specific to HomeStart |
+| Generic confetti felt detached from cooking | Saved-recipe celebration should use local food icons and cooking illustration language | Delight should reinforce the product milestone, not feel like unrelated party decoration | The milestone feels specific to HomeCook |
 | "Right now" language overfit immediate cooking | Copy shifts to "this cooking window," "next dinner," and "planned meal" | Users may be planning groceries, lunch, or a future weekday meal | Recommendations work for immediate and future planning |
 | Motion could become inaccessible | Animations use state-driven CSS/WAAPI-style patterns with reduced-motion fallbacks | The app is vanilla, and motion should respect user preference settings | Motion-sensitive users are not forced through pings or icon bursts |
 | Recommendations could appear fixed by setup answers | The dashboard starts with simple presets and reveals advanced filters on demand | Time, energy, and cooking goals change by session | Users can choose a 10-minute rescue meal for one cooking window without erasing a meal-prep preference |
@@ -98,7 +98,7 @@ Desktop setup uses a two-column pattern to keep focus and context separate:
 
 Grouping the screens by decision category reduces wasted space and progress noise. Low-stakes onboarding prompts like cooking frequency, skill fit, and serving size are collected with related context instead of forcing a long queue of sparse micro-screens.
 
-The setup sidebar follows the same rule. During desktop onboarding it should show only the HomeStart brand/logo. Full nav returns after setup or on rationale/dashboard screens. Full navigation during setup can imply the app is fully usable too early and can split attention from the focused decision flow.
+The setup sidebar follows the same rule. During desktop onboarding it should show only the HomeCook brand/logo. Full nav returns after setup or on rationale/dashboard screens. Full navigation during setup can imply the app is fully usable too early and can split attention from the focused decision flow.
 
 ## Primary User Assumptions
 
@@ -428,6 +428,7 @@ The review screen connects directly into dashboard context:
 - "Not sure" options where users may lack confidence. This preserves completion rather than forcing false precision.
 - Final recommendations are limited to a small explainable carousel. The goal is a first decision, not exhaustive discovery.
 - Saving a review recipe changes the card state to `Added to your grocery list` with a check marker. The copy should confirm a practical next step, not merely mark an abstract saved state.
+- The saved confirmation should be a slim top banner, not a large decorative card. It confirms progress without stealing attention from recipe comparison.
 - Food-icon celebration replaces generic confetti for the saved-recipe milestone.
 - The review-to-dashboard handoff is owned by the welcome overlay. The review panel is hidden immediately, and the dashboard is rendered only after temporary handoff state is cleared so final dashboard breakpoint rules apply from the first visible frame.
 - The welcome screen primary CTA is centered as part of the hero composition; it should not inherit the right-aligned setup action-row behavior used by later Back/Next controls.
@@ -497,6 +498,7 @@ Presets should be implemented as temporary filter bundles. They should not overw
 | "Mobile onboarding cards are too tall." | Full-width mobile cards made grouped option sets feel like a long vertical form. | Added mobile-only responsive card grids: one column below 360px, two columns from 360px to 767px. |
 | "Mobile review still makes me scroll past visuals before recipes." | The review support column moved ahead of the recipes on mobile and kept a decorative animation in the first viewport. | Scoped mobile review ordering so recipes come first, the dinner-plan summary follows the carousel, and the cooking animation is hidden only on mobile. |
 | "The save state should feel useful." | `Saved` confirms storage but not the next cooking task. | Review recipe cards now change to `Added to your grocery list` with the saved check state after save. |
+| "The saved notice takes too much space." | The confirmation banner looked like a decorative card and pulled attention away from recipes. | Changed it into a thin top banner inside the review screen and reset review scroll so it is visible immediately after save. |
 | "The dashboard is explaining too much." | Onboarding-level copy was competing with recipe evidence and actions. | Reduced dashboard copy direction so photos, match reasons, saves, and filters do the work. |
 | "The visuals still feel inconsistent." | Mixed symbol weights and placeholder-style illustrations made the UI feel crude. | Shifted the asset system toward stock/free food photography and one Lucide icon library. |
 | "I need to replay setup." | Stale personalization and demos were hard to recover from. | Added a visible Reset setup affordance for feedback/testing and state recovery. |
