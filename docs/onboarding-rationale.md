@@ -53,7 +53,7 @@ The original rationale still applies: HomeCook should lower intimidation and get
 
 | Prior iteration | Updated experience | Why it changed | User impact |
 | --- | --- | --- | --- |
-| Rationale access looked like Settings | The left nav and mobile drawer label the destination as UX rationale, with Home remaining first | Stakeholders need to inspect design reasoning without confusing it with account preferences | Reviewers can find rationale quickly while the cooking flow remains primary |
+| Rationale access looked like Settings | The left nav and mobile drawer label the destination as UX rationale, anchored at the bottom-left of the panel | Stakeholders need to inspect design reasoning without confusing it with account preferences or primary setup actions | Reviewers can find rationale without it competing with onboarding and reset controls |
 | Onboarding could feel like a preference survey | A welcome screen frames setup as a short, low-stakes routine check with 3 grouped setup screens and a final review screen | Low-confidence cooks need to know the commitment is small before answering questions | Users answer related prompts together and still get a fast path to a first recipe |
 | The first headline felt more functional than reassuring | The desktop welcome headline becomes "What does cooking look like for you this week?" | The first line should meet a low-confidence cook with natural weekly language | Users understand setup starts from their real week, not a perfect profile |
 | Progress competed with itself | The desktop flow now shows one compact progress system only: `Step 1 of 4` and a single bar | Category pills, separate counters, and duplicate tracks made state decoding difficult | Users can track progress from one place without visual bookkeeping |
@@ -79,7 +79,7 @@ The original rationale still applies: HomeCook should lower intimidation and get
 
 | Breakpoint | Navigation | Dashboard layout | Saved recipe access |
 | --- | --- | --- | --- |
-| Desktop | During setup, brand/logo-only sidebar; after setup or on rationale pages, persistent nav can expose Home and UX rationale | Main recipe area, readable advanced filter panel, and space for explanations | Docked saved recipes panel beside recommendations |
+| Desktop | Left panel keeps HomeCook branding and primary setup controls near the top, with UX rationale anchored bottom-left | Main recipe area, readable advanced filter panel, and space for explanations | Docked saved recipes panel beside recommendations |
 | Tablet | Left nav remains available with compact spacing and preserved tap targets | Simple filters stay prominent; tighter rows keep more recipes visible before panels stack | Collapsible dock or stacked saved section |
 | Mobile | Top menu opens the same drawer destinations, including UX rationale | One-column flow, sticky actions, compact result rows, simple presets first, advanced filters behind disclosure | Dedicated saved tab pattern instead of a side dock |
 
@@ -436,7 +436,7 @@ The review screen connects directly into dashboard context:
 - The UI theme is intentionally more minimal: lower decoration, less visual noise, and a decision-first hierarchy.
 - Dashboard presets provide a simple entry point into filtering; advanced filters are available when users need more control.
 - Dashboard copy is intentionally reduced after onboarding. Recipe photos, match reasons, save actions, and filters should carry the evidence.
-- Reset setup is visible in the left panel because users need to return to onboarding for feedback/testing and recover from stale personalization, while the card footer stays focused on Back and handoff.
+- Reset setup remains available throughout the flow in the left panel because users need to recover from stale personalization before they reach the dashboard. During setup, it should stay out of the card footer so Back and handoff actions remain primary.
 - Visual assets use stock/free photography for recipe evidence and Lucide for consistent UI icon weight.
 - Compact-density components should reveal more rows per viewport while preserving tap targets.
 - The first-week goal is intentionally small. For this audience, "cook once" is more motivating and credible than an ambitious weekly plan.

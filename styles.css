@@ -170,8 +170,19 @@ input:focus-visible {
 }
 
 .drawer-nav {
-  display: grid;
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
   gap: 8px;
+}
+
+.drawer-nav .drawer-reset-button {
+  order: 2;
+}
+
+.drawer-nav .nav-link[data-view="rationale"] {
+  order: 3;
+  margin-top: auto;
 }
 
 .nav-link {
@@ -6901,9 +6912,7 @@ main img[src*="food-icons-celebration"] {
     margin: 0;
   }
 
-  :where(body[data-app-view="onboarding"][data-onboarding-status="welcome"], body[data-app-view="onboarding"][data-onboarding-status="started"]) .drawer-nav,
-  :where(body[data-app-view="onboarding"][data-onboarding-status="welcome"], body[data-app-view="onboarding"][data-onboarding-status="started"]) .drawer-note,
-  :where(body[data-app-view="onboarding"][data-onboarding-status="welcome"], body[data-app-view="onboarding"][data-onboarding-status="started"]) .drawer :where(.nav-link, .reset-state-button, [data-reset-state], [class*="reset-state"]) {
+  :where(body[data-app-view="onboarding"][data-onboarding-status="welcome"], body[data-app-view="onboarding"][data-onboarding-status="started"]) .drawer-note {
     display: none !important;
   }
 
@@ -8100,13 +8109,14 @@ body[data-app-view="onboarding"][data-onboarding-status="started"] .flow-actions
 }
 
 body[data-app-view="onboarding"][data-onboarding-status="started"] .flow-action-group {
-  width: 100%;
+  flex: 1;
+  width: auto;
   margin-left: 0;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 body[data-app-view="onboarding"][data-onboarding-status="started"] .flow-action-group:has(#nextButton[hidden]) {
-  justify-content: flex-start;
+  justify-content: flex-end;
 }
 
 body[data-app-view="onboarding"][data-onboarding-status="started"] #backButton {

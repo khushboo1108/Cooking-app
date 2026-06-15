@@ -1085,13 +1085,12 @@ function renderStep(options = {}) {
   els.screenBody.append(copy);
   step.render(els.screenBody);
 
-  els.resetFlowButton.hidden = false;
+  els.resetFlowButton.hidden = true;
   els.backButton.hidden = false;
   els.backButton.disabled = currentStep === 0;
   els.nextButton.textContent = currentStep === steps.length - 1 ? completionButtonText() : "Next";
   els.nextButton.disabled = !step.isValid();
   els.nextButton.hidden = currentStep !== ONBOARDING_REVIEW_STEP_INDEX;
-  els.resetFlowButton.hidden = true;
   updateSavedCount();
   refreshIcons();
 

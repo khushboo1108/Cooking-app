@@ -44,8 +44,9 @@ HomeCook is a responsive cooking-onboarding and recipe dashboard prototype. The 
 - Dinner-window input uses compact preset cards inside the cooking routine screen.
 - Dinner-window helper text reads `Including prep and cleanup time.` and appears as a muted line under the question.
 - The right-side `Setup so far` summary was intentionally removed from onboarding to reduce clutter.
-- `Reset setup` lives in the left drawer/sidebar so the onboarding card footer can focus on Back and dashboard handoff.
-- Setup screens auto-progress once every question in the current group is answered; the setup footer only shows Back.
+- `Reset setup` stays available throughout the user flow from the left drawer/sidebar only.
+- `UX rationale` is anchored at the bottom-left of the drawer/sidebar so reviewer access does not compete with setup and reset controls.
+- Setup screens auto-progress once every question in the current group is answered; the setup footer stays focused on Back and dashboard handoff.
 - Default servings uses eight radio-style option cards instead of a dropdown so it participates in auto-progress.
 - The review recipe area uses preference-based category tabs and a two-card carousel instead of a single forced starter.
 - Review recipe cards change saved-state copy from `Save recipe` to `Added to your grocery list` after the user saves, while keeping the check icon and pressed state.
@@ -165,7 +166,7 @@ HomeCook is a responsive cooking-onboarding and recipe dashboard prototype. The 
 ### Reset Experience
 
 - Reset is available from the drawer/sidebar.
-- Onboarding screens keep reset out of the footer so Back can sit at the bottom-left of the card.
+- Started onboarding screens keep reset in the left panel so users can restart without waiting for the dashboard, while the card footer stays focused on Back and dashboard handoff.
 - It clears local app state and returns the user to onboarding.
 - This is intentionally visible so designers and testers can replay onboarding without clearing browser storage manually.
 
