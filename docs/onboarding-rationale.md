@@ -48,7 +48,7 @@ The onboarding problem is therefore:
 - Set up the first 7-day cook attempt through a small, credible commitment.
 - Avoid asking for data the current product cannot use.
 - Keep personalization editable after onboarding through simple presets and advanced filters.
-- Keep saved recipes visible enough to bridge discovery, grocery planning, and the first cook.
+- Keep saved recipes and their grocery items visible enough to bridge discovery, shopping, and the first cook.
 - Keep setup recoverable so users and testers can replay onboarding or clear stale personalization.
 
 ## Current UX Direction
@@ -73,7 +73,7 @@ The original rationale still applies: HomeCook should lower intimidation and get
 | "Right now" language overfit immediate cooking | Copy shifts to "this cooking window," "next dinner," and "planned meal" | Users may be planning groceries, lunch, or a future weekday meal | Recommendations work for immediate and future planning |
 | Motion could become inaccessible | Animations use state-driven CSS/WAAPI-style patterns with reduced-motion fallbacks | The app is vanilla, and motion should respect user preference settings | Motion-sensitive users are not forced through pings or icon bursts |
 | Recommendations could appear fixed by setup answers | The dashboard starts with simple presets and reveals advanced filters on demand | Time, energy, and cooking goals change by session | Users can choose a 10-minute rescue meal for one cooking window without erasing a meal-prep preference |
-| Saved recipes were mostly represented as a count | Desktop/tablet use a saved recipes dock; mobile uses a saved tab pattern | The saved recipe is the bridge between discovery, groceries, and cooking | The first commitment remains visible across planning contexts |
+| Saved recipes were mostly represented as a count | Desktop/tablet use a saved recipes and grocery-list dock; mobile uses saved and grocery tabs | The saved recipe is the bridge between discovery, groceries, and cooking | The first commitment and its shopping lift remain visible across planning contexts |
 | Dashboard copy did too much explaining | The dashboard should reduce text and lead with actions, recipe photos, saved state, and match reasons | Onboarding can explain the model; the dashboard should prove value visually | Users can scan more options without losing why each recipe fits |
 | Visual assets felt inconsistent | Recipe visuals shift toward stock/free photography, and UI glyphs use one Lucide icon set | Photos make meals feel real, while consistent icon weight fixes mixed symbols | The product feels more polished and less placeholder-like |
 | Rows and cards were too spacious | The compact-density pass reveals more rows per viewport while preserving tap targets | Cooking decisions benefit from comparison, but controls still need to be forgiving | Users see more usable recommendations without cramped interactions |
@@ -81,11 +81,11 @@ The original rationale still applies: HomeCook should lower intimidation and get
 
 ## Responsive Strategy
 
-| Breakpoint | Navigation | Dashboard layout | Saved recipe access |
+| Breakpoint | Navigation | Dashboard layout | Saved and grocery access |
 | --- | --- | --- | --- |
-| Desktop | Left panel keeps HomeCook branding and primary setup controls near the top, with UX rationale anchored bottom-left | Main recipe area, readable advanced filter panel, and space for explanations | Docked saved recipes panel beside recommendations |
-| Tablet | Left nav remains available with compact spacing and preserved tap targets | Simple filters stay prominent; tighter rows keep more recipes visible before panels stack | Collapsible dock or stacked saved section |
-| Mobile | Top menu opens the same drawer destinations, including UX rationale | One-column flow, sticky actions, compact result rows, simple presets first, advanced filters behind disclosure | Dedicated saved tab pattern instead of a side dock |
+| Desktop | Left panel keeps HomeCook branding and primary setup controls near the top, with UX rationale anchored bottom-left | Main recipe area, readable advanced filter panel, and space for explanations | Bottom-right dock with `Saved recipes` and `Grocery list` options |
+| Tablet | Left nav remains available with compact spacing and preserved tap targets | Simple filters stay prominent; tighter rows keep more recipes visible before panels stack | Collapsible saved/grocery dock or stacked saved section |
+| Mobile | Top menu opens the same drawer destinations, including UX rationale | One-column flow, sticky actions, compact result rows, simple presets first, advanced filters behind disclosure | Dedicated `Saved recipes` and `Grocery list` tabs instead of a side dock |
 
 This strategy keeps the same information architecture across device sizes while changing density. Desktop can show context side by side. Tablet and mobile should tighten vertical spacing enough to reveal more rows per viewport while preserving comfortable tap targets and saved-recipe access.
 

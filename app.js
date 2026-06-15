@@ -61,7 +61,8 @@ const recipes = [
     image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80",
     tags: ["vegetarian", "dairy-free", "quick", "pantry", "snack-upgrade", "flexible", "low-commitment"],
     dietary: ["vegetarian", "dairy-free"],
-    summary: "Hummus, pita, crisp vegetables, olives, and canned chickpeas become a real dinner with almost no cooking."
+    summary: "Hummus, pita, crisp vegetables, olives, and canned chickpeas become a real dinner with almost no cooking.",
+    groceryItems: ["Hummus", "Pita", "Crisp vegetables", "Olives", "Canned chickpeas"]
   },
   {
     id: "chickpea-tacos",
@@ -75,7 +76,8 @@ const recipes = [
     image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=900&q=80",
     tags: ["vegetarian", "dairy-free", "quick", "healthy", "flexible", "takeout-swap", "spicy", "low-commitment"],
     dietary: ["vegetarian", "dairy-free"],
-    summary: "Warm chickpeas, crunchy slaw, tortillas, salsa, and lime. Low prep, easy to repeat, and flexible for leftovers."
+    summary: "Warm chickpeas, crunchy slaw, tortillas, salsa, and lime. Low prep, easy to repeat, and flexible for leftovers.",
+    groceryItems: ["Chickpeas", "Crunchy slaw", "Tortillas", "Salsa", "Lime"]
   },
   {
     id: "sheet-pan-chicken",
@@ -89,7 +91,8 @@ const recipes = [
     image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=900&q=80",
     tags: ["high-protein", "one-pan", "gluten-free", "dairy-free", "batchable", "leftovers", "sit-down", "family-friendly", "gym-meal-plan"],
     dietary: ["gluten-free", "dairy-free"],
-    summary: "Chicken, potatoes, and vegetables roast together with one cleanup point, clear doneness checks, and leftovers."
+    summary: "Chicken, potatoes, and vegetables roast together with one cleanup point, clear doneness checks, and leftovers.",
+    groceryItems: ["Chicken", "Potatoes", "Vegetables", "Lemon", "Garlic", "Olive oil", "Herbs"]
   },
   {
     id: "rice-bowl",
@@ -103,7 +106,8 @@ const recipes = [
     image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=900&q=80",
     tags: ["vegetarian", "gluten-free", "dairy-free", "healthy", "prep-shortcut", "flexible", "takeout-swap", "snack-upgrade", "gym-meal-plan"],
     dietary: ["vegetarian", "gluten-free", "dairy-free"],
-    summary: "Microwave rice, crisp vegetables, canned beans, and a simple sauce with flexible portions and shortcut prep."
+    summary: "Microwave rice, crisp vegetables, canned beans, and a simple sauce with flexible portions and shortcut prep.",
+    groceryItems: ["Microwave rice", "Crisp vegetables", "Canned beans", "Simple sauce", "Sesame seeds", "Greens"]
   },
   {
     id: "tomato-pasta",
@@ -117,7 +121,8 @@ const recipes = [
     image: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=80",
     tags: ["vegetarian", "comfort", "budget", "quick", "pantry", "snack-upgrade", "family-friendly", "pantry-rescue"],
     dietary: ["vegetarian"],
-    summary: "A forgiving pasta dinner with pantry staples and optional vegetables stirred in at the end."
+    summary: "A forgiving pasta dinner with pantry staples and optional vegetables stirred in at the end.",
+    groceryItems: ["Pasta", "Tomato sauce", "Cream", "Pantry seasoning", "Optional vegetables", "Parmesan", "Garlic"]
   },
   {
     id: "bean-skillet",
@@ -131,7 +136,8 @@ const recipes = [
     image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80",
     tags: ["vegetarian", "gluten-free", "dairy-free", "one-pan", "batchable", "leftovers", "pantry", "gym-meal-plan", "pantry-rescue"],
     dietary: ["vegetarian", "gluten-free", "dairy-free"],
-    summary: "A sturdy one-pan meal with canned beans, pre-cut sweet potatoes, greens, and portions that hold up well."
+    summary: "A sturdy one-pan meal with canned beans, pre-cut sweet potatoes, greens, and portions that hold up well.",
+    groceryItems: ["Canned beans", "Sweet potatoes", "Greens", "Onion", "Spices", "Lime"]
   }
 ];
 
@@ -455,6 +461,7 @@ let currentStep = state.completed ? 0 : state.started ? getFirstIncompleteStep()
 let activeView = "onboarding";
 let dashboardTab = "dashboard";
 let savedDockOpen = false;
+let savedDockTab = "saved";
 let toastTimer;
 let progressTimer;
 let completionTimer;
@@ -883,6 +890,7 @@ function resetExperience() {
   activeView = "onboarding";
   dashboardTab = "dashboard";
   savedDockOpen = false;
+  savedDockTab = "saved";
 
   els.onboardingPage.classList.add("active");
   els.rationalePage.classList.remove("active");
@@ -2176,7 +2184,9 @@ function renderDashboard(options = {}) {
   removeDashboardRoot();
 
   const dashboard = document.createElement("section");
-  dashboard.className = `dashboard-shell ${dashboardTab === "saved" ? "saved-active" : "dashboard-active"}`;
+  const activeDashboardClass =
+    dashboardTab === "saved" ? "saved-active" : dashboardTab === "grocery" ? "grocery-active" : "dashboard-active";
+  dashboard.className = `dashboard-shell ${activeDashboardClass}`;
   dashboard.dataset.dashboardMode = state.dashboardMode;
   dashboard.dataset.dashboardPreset = state.dashboardPreset;
   dashboard.dataset.dashboardTab = dashboardTab;
@@ -2200,7 +2210,12 @@ function renderDashboard(options = {}) {
   mobileSaved.hidden = dashboardTab !== "saved";
   mobileSaved.append(createSavedRecipesContent({ title: "Saved recipes", context: "mobile" }));
 
-  content.append(main, mobileSaved);
+  const mobileGrocery = document.createElement("section");
+  mobileGrocery.className = "mobile-grocery-panel";
+  mobileGrocery.hidden = dashboardTab !== "grocery";
+  mobileGrocery.append(createGroceryListContent());
+
+  content.append(main, mobileSaved, mobileGrocery);
   dashboard.append(content);
   els.onboardingLayout.append(dashboard);
   document.body.append(createSavedDock());
@@ -2282,7 +2297,8 @@ function createMobileTabs() {
 
   [
     { id: "dashboard", label: "Dashboard" },
-    { id: "saved", label: `Saved recipes (${state.savedRecipes.length})` }
+    { id: "saved", label: `Saved recipes (${state.savedRecipes.length})` },
+    { id: "grocery", label: "Grocery list" }
   ].forEach((tab) => {
     const button = document.createElement("button");
     button.type = "button";
@@ -2462,21 +2478,46 @@ function createSavedDock() {
   const dock = document.createElement("aside");
   dock.className = `saved-dock ${savedDockOpen ? "is-open" : "is-collapsed"}`;
   dock.dataset.savedDockState = savedDockOpen ? "open" : "collapsed";
-  dock.setAttribute("aria-label", "Saved recipes dock");
+  dock.dataset.savedDockTab = savedDockTab;
+  dock.setAttribute("aria-label", "Saved recipes and grocery list dock");
 
-  const toggle = document.createElement("button");
-  toggle.type = "button";
-  toggle.className = "saved-dock-toggle";
-  toggle.setAttribute("aria-expanded", savedDockOpen ? "true" : "false");
-  toggle.innerHTML = `<strong>Saved recipes</strong><span>${state.savedRecipes.length} saved</span>`;
-  toggle.addEventListener("click", () => {
-    savedDockOpen = !savedDockOpen;
-    renderDashboard();
+  const actions = document.createElement("div");
+  actions.className = "saved-dock-actions";
+  [
+    {
+      id: "saved",
+      title: "Saved recipes",
+      count: `${state.savedRecipes.length} saved`
+    },
+    {
+      id: "grocery",
+      title: "Grocery list",
+      count: `${getSavedGroceryItems().length} items`
+    }
+  ].forEach((item) => {
+    const button = document.createElement("button");
+    const isActive = savedDockOpen && savedDockTab === item.id;
+    button.type = "button";
+    button.className = `saved-dock-toggle ${isActive ? "active" : ""}`;
+    button.dataset.savedDockPanel = item.id;
+    button.setAttribute("aria-expanded", isActive ? "true" : "false");
+    button.innerHTML = `<strong>${item.title}</strong><span>${item.count}</span>`;
+    button.addEventListener("click", () => {
+      const closingCurrentPanel = savedDockOpen && savedDockTab === item.id;
+      savedDockTab = item.id;
+      savedDockOpen = !closingCurrentPanel;
+      renderDashboard();
+    });
+    actions.append(button);
   });
-  dock.append(toggle);
+  dock.append(actions);
 
   if (savedDockOpen) {
-    dock.append(createSavedRecipesContent({ title: "Saved recipes", context: "dock" }));
+    dock.append(
+      savedDockTab === "grocery"
+        ? createGroceryListContent()
+        : createSavedRecipesContent({ title: "Saved recipes", context: "dock" })
+    );
   }
 
   return dock;
@@ -2526,6 +2567,50 @@ function createSavedRecipesContent({ title, context }) {
   });
 
   refreshSavedList(wrapper);
+  return wrapper;
+}
+
+function createGroceryListContent() {
+  const wrapper = document.createElement("div");
+  wrapper.className = "saved-panel grocery-panel";
+  const groceryItems = getSavedGroceryItems();
+  const savedCount = state.savedRecipes.length;
+
+  wrapper.innerHTML = `
+    <div class="saved-panel-header grocery-panel-header">
+      <div>
+        <h2>Grocery list</h2>
+        <p>Groceries saved from recipes.</p>
+      </div>
+      <span>${groceryItems.length} item${groceryItems.length === 1 ? "" : "s"}</span>
+    </div>
+    <div class="grocery-list" aria-live="polite"></div>
+  `;
+
+  const list = wrapper.querySelector(".grocery-list");
+  if (savedCount === 0) {
+    list.innerHTML = '<div class="empty-saved-state"><p>Save a recipe to start your grocery list.</p></div>';
+    return wrapper;
+  }
+
+  if (groceryItems.length === 0) {
+    list.innerHTML = '<div class="empty-saved-state"><p>No grocery items found for your saved recipes yet.</p></div>';
+    return wrapper;
+  }
+
+  groceryItems.forEach((item) => {
+    const row = document.createElement("article");
+    row.className = "grocery-item";
+    row.innerHTML = `
+      <span class="grocery-check" aria-hidden="true">${iconMarkup("check")}</span>
+      <div>
+        <strong>${item.name}</strong>
+        <span>${item.sources.join(", ")}</span>
+      </div>
+    `;
+    list.append(row);
+  });
+
   return wrapper;
 }
 
@@ -2588,6 +2673,27 @@ function getSavedRecipesForPanel() {
     const matchesPreset = !preset || preset.tags.some((tag) => recipe.tags.includes(tag));
     return matchesQuery && matchesPreset;
   });
+}
+
+function getSavedRecipeRecords() {
+  const savedIds = new Set(state.savedRecipes);
+  return recipes.filter((recipe) => savedIds.has(recipe.id));
+}
+
+function getSavedGroceryItems() {
+  const groceryMap = new Map();
+  getSavedRecipeRecords().forEach((recipe) => {
+    (recipe.groceryItems || []).forEach((item) => {
+      const key = item.toLowerCase();
+      const existing = groceryMap.get(key) || { name: item, sources: [] };
+      if (!existing.sources.includes(recipe.title)) {
+        existing.sources.push(recipe.title);
+      }
+      groceryMap.set(key, existing);
+    });
+  });
+
+  return Array.from(groceryMap.values()).sort((a, b) => a.name.localeCompare(b.name));
 }
 
 function applyPreset(presetId) {
@@ -2931,6 +3037,7 @@ els.navButtons.forEach((link) => {
         dashboardTab = "saved";
       } else {
         dashboardTab = "dashboard";
+        savedDockTab = "saved";
         savedDockOpen = true;
       }
       setView("onboarding");

@@ -17,7 +17,7 @@ HomeCook is a responsive cooking-onboarding and recipe dashboard prototype. The 
 - The active branch is `main`, tracking `khushboo/main`.
 - Primary GitHub remote for Khushboo’s hosted project: `https://github.com/khushboo1108/Cooking-app.git`.
 - Secondary/original remote: `https://github.com/Vaibhav7887-code/Cooking-app.git`. Do not push here unless the user explicitly asks.
-- Latest pushed baseline before this documentation update: `f49f360` (`Clarify review save feedback`).
+- Latest pushed baseline before the grocery-list dashboard update: `c5c5b27` (`Polish rationale page`).
 
 ### Local Prototype
 
@@ -38,7 +38,7 @@ HomeCook is a responsive cooking-onboarding and recipe dashboard prototype. The 
 - Dashboard helper copy should stay light; explanation belongs mostly in onboarding and the UX rationale page.
 - The UX rationale page is a polished, responsive web adaptation of `Rational.pdf`: real HTML text, collapsible sections, tables, section hierarchy, and cropped screenshot/sketch assets from `assets/rationale/`, not a flat PDF image or embed.
 - The rationale cover keeps `Design Rational` centered, places `Service fusion design challenge` directly underneath, and pins `Time taken: 4hrs` to the bottom-right of the cover.
-- Saved recipes must remain reachable on every breakpoint: right dock on desktop/tablet, tab on mobile.
+- Saved recipes and grocery items must remain reachable on every breakpoint: a two-option saved/grocery dock on desktop/tablet and dashboard tabs on mobile.
 - The onboarding-to-dashboard handoff must be single-surface: the review panel hides immediately, the welcome overlay owns the transition, and the dashboard only renders after the body has left temporary handoff state so final dashboard breakpoint rules apply from the first visible frame.
 
 ### Recent Interaction Decisions
@@ -52,6 +52,7 @@ HomeCook is a responsive cooking-onboarding and recipe dashboard prototype. The 
 - Default servings uses eight radio-style option cards instead of a dropdown so it participates in auto-progress.
 - The review recipe area uses preference-based category tabs and a two-card carousel instead of a single forced starter.
 - Review recipe cards change saved-state copy from `Save recipe` to `Added to your grocery list` after the user saves, while keeping the check icon and pressed state.
+- Saved recipes generate grocery-list items from their recipe ingredient data. The dashboard exposes that list as `Grocery list` beside saved recipes on both mobile and desktop.
 - The saved-recipe confirmation renders as a thin top banner above the review recipes and plan, with no decorative circles, shadow, or large card treatment.
 - Saving the starter recipe reveals a small cook-day nudge with `Tonight`, `Tomorrow`, `This weekend`, and `Next week`; `Tomorrow` is the default.
 - Opening the dashboard from review does not require saving a recipe. The welcome screen appears immediately and fades into the final dashboard; no review screen, intro panel, completion toast, or old two-column dashboard layout should flash during the handoff.
@@ -73,7 +74,7 @@ HomeCook is a responsive cooking-onboarding and recipe dashboard prototype. The 
 - Dashboard uses:
   - Left nav with `Onboarding flow`, `UX rationale`, and reset affordance.
   - Main recipe/filter content.
-  - Right saved-recipes dock collapsed by default and opened by the vertical `Saved` handle.
+  - Bottom-right dock collapsed by default with two launch options: `Saved recipes` and `Grocery list`.
 
 ### Tablet
 
@@ -89,8 +90,8 @@ HomeCook is a responsive cooking-onboarding and recipe dashboard prototype. The 
 - Onboarding keeps the hamburger menu available and does not show dashboard tabs before profiling is complete.
 - Onboarding option groups are responsive: `<360px` keeps one card per row; `360px–767px` uses two columns so four-option prompts become a 2x2 grid.
 - Review step order is intentionally mobile-specific: intro copy, recipe carousel, then `Your first dinner plan`. The animated cooking illustration is hidden on mobile review to reduce vertical churn and avoid a decorative frame before recipes.
-- Dashboard uses two tabs: `Dashboard` and `Saved recipes`.
-- Saved recipes are shown as a mobile tab instead of a right-side dock.
+- Dashboard uses three tabs: `Dashboard`, `Saved recipes`, and `Grocery list`.
+- Saved recipes and grocery items are shown as mobile tabs instead of a right-side dock.
 
 ## Onboarding Flow
 

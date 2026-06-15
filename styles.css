@@ -2109,6 +2109,12 @@ main {
   padding: var(--space-2);
 }
 
+.saved-dock-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
 .saved-dock-toggle {
   display: flex;
   align-items: center;
@@ -2140,6 +2146,14 @@ main {
   box-shadow: 0 12px 26px rgba(35, 42, 40, 0.1);
 }
 
+.saved-dock-toggle.active {
+  border-color: color-mix(in srgb, var(--basil) 58%, var(--line));
+  background:
+    radial-gradient(circle at 92% 12%, rgba(239, 191, 86, 0.18), transparent 34%),
+    linear-gradient(135deg, var(--basil-dark), var(--basil));
+  color: white;
+}
+
 .saved-dock-toggle > * {
   display: block;
   min-width: 0;
@@ -2154,6 +2168,10 @@ main {
   font-weight: 900;
 }
 
+.saved-dock-toggle.active strong {
+  color: white;
+}
+
 .saved-dock-toggle span,
 .saved-dock-toggle .saved-dock-count,
 .saved-dock-toggle .toggle-count {
@@ -2165,6 +2183,11 @@ main {
   font-size: 0.82rem;
   font-weight: 850;
   white-space: nowrap;
+}
+
+.saved-dock-toggle.active span {
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
 }
 
 .saved-panel {
@@ -2211,6 +2234,84 @@ main {
   background: #fffefa;
 }
 
+.grocery-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.grocery-panel-header {
+  align-items: start;
+}
+
+.grocery-panel-header p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 650;
+}
+
+.grocery-panel-header > span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--sage);
+  color: var(--basil-dark);
+  font-size: 0.82rem;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.grocery-list {
+  display: grid;
+  gap: 8px;
+}
+
+.grocery-item {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  padding: 12px;
+  border: 1px solid color-mix(in srgb, var(--line) 82%, white);
+  border-radius: var(--radius-sm);
+  background: #fffefa;
+}
+
+.grocery-check {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--basil) 14%, white);
+  color: var(--basil-dark);
+}
+
+.grocery-check svg {
+  width: 16px;
+  height: 16px;
+}
+
+.grocery-item strong,
+.grocery-item span {
+  display: block;
+}
+
+.grocery-item strong {
+  color: var(--ink);
+  font-size: 0.96rem;
+  line-height: 1.2;
+}
+
+.grocery-item div > span {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
 .mobile-dashboard-tabs {
   display: none;
   gap: 6px;
@@ -2232,6 +2333,8 @@ main {
   background: transparent;
   color: var(--muted);
   font-weight: 850;
+  line-height: 1.12;
+  text-align: center;
 }
 
 .mobile-dashboard-tabs button.active,
@@ -3108,7 +3211,7 @@ main {
     top: 72px;
     z-index: 18;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     margin-bottom: var(--space-1);
   }
 
@@ -6903,8 +7006,9 @@ main img[src*="food-icons-celebration"] {
   .mobile-dashboard-tabs button,
   .mobile-dashboard-tabs [role="tab"] {
     min-height: 40px;
-    padding-inline: 10px;
-    font-size: 0.84rem;
+    padding-inline: 8px;
+    font-size: 0.78rem;
+    line-height: 1.08;
   }
 
   .filter-panel,
@@ -8203,6 +8307,28 @@ body[data-onboarding-status="complete"] .dashboard-recipe-grid .recipe-content h
     box-shadow: none;
   }
 
+  body[data-onboarding-status="complete"] > .saved-dock .saved-dock-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding: 8px;
+  }
+
+  body[data-onboarding-status="complete"] > .saved-dock .saved-dock-actions .saved-dock-toggle {
+    min-height: 50px;
+    border: 1px solid color-mix(in srgb, var(--basil) 18%, white);
+    border-radius: 14px;
+    padding: 9px 10px;
+    font-size: 0.86rem;
+  }
+
+  body[data-onboarding-status="complete"] > .saved-dock .saved-dock-actions .saved-dock-toggle.active {
+    background:
+      radial-gradient(circle at 92% 12%, rgba(239, 191, 86, 0.16), transparent 34%),
+      linear-gradient(135deg, var(--basil-dark), var(--basil));
+    color: white;
+  }
+
   body[data-onboarding-status="complete"] > .saved-dock .saved-dock-toggle > *,
   body[data-onboarding-status="complete"] > .saved-dock.is-collapsed .saved-dock-toggle > *,
   body[data-onboarding-status="complete"] > .saved-dock:not(.is-open) .saved-dock-toggle > * {
@@ -8214,7 +8340,7 @@ body[data-onboarding-status="complete"] .dashboard-recipe-grid .recipe-content h
   }
 
   body[data-onboarding-status="complete"] > .saved-dock .saved-panel {
-    max-height: calc(min(640px, 100vh - 72px) - 54px);
+    max-height: calc(min(640px, 100vh - 72px) - 66px);
     overflow: auto;
     border: 0;
     border-top: 1px solid color-mix(in srgb, var(--line) 80%, white);
